@@ -156,13 +156,43 @@ local function Translate(msg)
 
     local lowered = ToLower(normalized)
 
-    -- Preprocess: "<number><к>" is Russian gold-shorthand for "<number>K"
-    -- thousand (e.g. "5к" = 5 000, "4.5 к" = 4 500). Without this rule the
-    -- standalone "к" token falls through to its dictionary meaning "to",
-    -- which produces "WTS item for 4.5 to" instead of "WTS item for 4.5K".
-    -- Cyrillic "к" = bytes \208\186 (after ToLower the uppercase "К" has
-    -- already been folded to lowercase so we only need the lowercase form).
-    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\186", "%1K")
+    -- ------------------------------------------------------------------
+    -- Numeric shorthand preprocessors
+    -- ------------------------------------------------------------------
+    -- Russian chat shortens common suffixes onto numbers without spaces:
+    --   "5к"   = 5 000 gold          -> "5K"
+    --   "20г"  = 20 gold             -> "20g"
+    --   "1дд"  = 1 dps               -> "1 dps"
+    --   "2хил" = 2 healers           -> "2 healers"
+    --   "3танк"= 3 tanks             -> "3 tanks"
+    --
+    -- WORD-BOUNDARY RULE: we must NOT swallow the first Cyrillic letter of
+    -- a longer word. In "28 крита" the raw regex `(%d+)%s*к` would match
+    -- "28 к" + eat the "к" of "крита", turning it into "28Kрита" — bug
+    -- reported from real chat. Fix: require that the character following
+    -- the suffix is either end-of-string, whitespace, ASCII punctuation,
+    -- OR anything that is NOT a Cyrillic letter lead byte (\208/\209) and
+    -- NOT an alphanumeric. We apply it with two gsub passes per suffix:
+    -- (a) in-string where the follow byte is anchor-safe, (b) end-of-line.
+    --
+    -- Cyrillic bytes used below:
+    --   к = \208\186      г = \208\179
+    --   дд lower = \208\180\208\180
+    --   хил lower = \209\133\208\184\208\187
+    --   танк lower = \209\130\208\176\208\189\208\186
+    --
+    -- "<num>к" -> "<num>K"  (thousand)
+    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\186([^%w\208\209])", "%1K%2")
+    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\186$",               "%1K")
+    -- "<num>г" -> "<num>g"  (gold) - same boundary rule
+    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\179([^%w\208\209])", "%1g%2")
+    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\179$",               "%1g")
+    -- "<num>дд" -> "<num> dps"
+    lowered = lowered:gsub("(%d)\208\180\208\180",                   "%1 dps")
+    -- "<num>хил" / "<num>хилл" -> "<num> healer"
+    lowered = lowered:gsub("(%d)\209\133\208\184\208\187\208\187?",  "%1 healer")
+    -- "<num>танк" -> "<num> tank"
+    lowered = lowered:gsub("(%d)\209\130\208\176\208\189\208\186",   "%1 tank")
 
     local withPh, subs = ApplyPhrases(lowered)
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)

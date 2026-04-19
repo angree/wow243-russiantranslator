@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] - 2026-04-19
+
+### Fixed
+- **Gold-shorthand preprocessor no longer eats into following words.**
+  v0.5 converted `28 крита` (28 crit) into `28Kрита` because the regex
+  `(%d+)%s*к` matched the leading `к` of `крита`. Fixed with a word-boundary
+  constraint: the suffix is only consumed if the next byte is not a Cyrillic
+  letter or ASCII word character.
+
+### Added
+- **Numeric shorthand preprocessors extended**:
+  - `20г` → `20g` (gold single-letter shorthand, same boundary rule as `к`).
+  - `1дд` / `2дд` / `3дд` … → `1 dps` / `2 dps` / `3 dps`.
+  - `1хил` / `2хилл` → `1 healer` / `2 healers`.
+  - `1танк` / `2танк` → `1 tank` / `2 tank`.
+- **Dictionary gaps filled from real v0.4 chat session** (WoWChatLog_004): 50+
+  new entries covering the words that fell through — modal verbs and
+  particles (`может`, `мб`, `пусть`, `возможно`, `возможность`), pronouns
+  (`кому`, `который`, `которая`, `них`, `него`), conjunctions (`чтоб`,
+  `чем`, `помимо`), verbs (`убить`, `видеть`, `дают`, `лежит`, `кажется`,
+  `воспринимай`, `подумал`, `убрали`), nouns (`администрация`, `гробница`,
+  `топики`, `чате`, `пиво`, `язык`, `удача`), time (`суток`, `порой`),
+  affective (`скорей`, `англ`, `удачи`), laughter-length variants, and
+  insult/slur placeholders for completeness.
+- **Explicit pre-baked gold shortcuts** for common amounts: `20г`, `10г`,
+  `50г`, `100г`, `500г`, `1к`..`100к`.
+
+### Coverage
+After v0.6.0 the live chat log from WoWCircle TBC Global channel reaches
+**98 %** translation coverage at the Cyrillic-token level (323 tokens,
+318 hits, remaining 5 are player nicknames).
+
 ## [0.5.0] - 2026-04-19
 
 ### Added

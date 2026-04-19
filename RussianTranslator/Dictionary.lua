@@ -1078,6 +1078,74 @@ ns.WORDS = {
     ["в теме"]="in the know", ["не в теме"]="clueless",
     ["по ходу"]="seems like", ["походу"]="seems like",
     ["бомбит"]="raging", ["бомба"]="bomb",
+
+    -- ================================================================
+    -- Log-004 additions (real misses on v0.5 on WoWCircle TBC Global)
+    -- ================================================================
+    ["может"]="maybe", ["кому"]="to whom", ["пусть"]="let",
+    ["гляди"]="look", ["язык"]="language",
+    ["стяни"]="pull off (vulgar)", ["суток"]="24h",
+    ["некий"]="some", ["чтоб"]="so that", ["чтобы"]="so that",
+    ["администрации"]="admin team", ["администрация"]="administration",
+    ["мут"]="mute",
+    ["возможность"]="ability", ["возможности"]="abilities",
+    ["которая"]="which", ["который"]="which", ["которое"]="which", ["которые"]="which",
+    ["первой"]="first", ["второй"]="second",
+    ["мб"]="maybe",
+    ["убрали"]="removed", ["убрать"]="remove", ["убираю"]="removing",
+    ["возможно"]="maybe",
+    ["воспринимай"]="perceive",
+    ["порой"]="sometimes",
+    ["кажется"]="seems", ["казалось"]="seemed",
+    ["чем"]="than",
+    ["пиву"]="to beer", ["пиво"]="beer",
+    ["помимо"]="besides",
+    ["подумал"]="thought", ["подумала"]="thought", ["подумали"]="thought",
+    ["видеть"]="to see", ["увидеть"]="to see",
+    ["чате"]="chat", ["чат"]="chat",
+    ["лежит"]="is there", ["лежат"]="are there",
+    ["него"]="him", ["неё"]="her", ["них"]="them",
+    ["гробнице"]="tombs", ["гробница"]="tomb",
+    ["дают"]="give", ["даёт"]="gives", ["давали"]="gave", ["дают же"]="but they give",
+    ["убить"]="kill", ["убивать"]="to kill",
+    ["скорей"]="sooner", ["скорее"]="sooner",
+    ["англ"]="English", ["англию"]="English", ["англа"]="English",
+    ["топики"]="forum threads", ["топик"]="topic",
+    ["бс"]="BS (premium?)",  -- server-specific shorthand, ambiguous
+    ["ов"]="of (from)",      -- often truncation of "из"
+    ["призват"]="summon",    -- truncated призвать
+    ["ьпо"]="(typo по)",     -- common typo from the log
+    ["20г"]="20g", ["10г"]="10g", ["50г"]="50g", ["100г"]="100g", ["500г"]="500g",
+    ["1к"]="1K", ["2к"]="2K", ["3к"]="3K", ["4к"]="4K", ["5к"]="5K",
+    ["10к"]="10K", ["20к"]="20K", ["50к"]="50K", ["100к"]="100K",
+
+    -- Chat laughter variants of varying lengths
+    ["ахахаха"]="hahaha", ["ахахахаха"]="hahaha",
+    ["ахахахахаха"]="hahaha", ["ахахаххаха"]="hahaha",
+    ["ахахахаххаха"]="hahaha", ["ахх"]="ha", ["ахаха"]="haha",
+
+    -- Insults and derogatory terms seen in log (translated for completeness)
+    ["хохлушку"]="(slur)", ["хохол"]="(slur)", ["хохлы"]="(slur)",
+    ["пидорасят"]="(vulgar)", ["пидорас"]="(slur)",
+    ["телочка"]="(slur for woman)",
+
+    -- Extra common verbs and pronouns spotted
+    ["собирал"]="gathering", ["собираем"]="gathering", ["собирать"]="to gather",
+    ["убирает"]="removes", ["убирают"]="remove",
+    ["зашёл"]="entered", ["заходи"]="come in", ["заходите"]="come in",
+    ["его"]="his/him", ["ей"]="her",
+    ["с нами"]="with us", ["без нас"]="without us",
+    ["в сборе"]="gathered", ["все в сборе"]="all here",
+
+    -- Server quality / nostalgia words
+    ["мунка"]="Moonwell (slang)", ["мунку"]="Moonwell",
+    ["незервинга"]="Netherwing (gen)",
+    ["незервинг"]="Netherwing",
+
+    -- Small fixes
+    ["ыыы"]="hmmm", ["ыы"]="hm",
+    ["ппцз"]="damn",
+    ["удачи"]="good luck", ["удача"]="luck",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).
