@@ -67,15 +67,15 @@ writes "на плащу" / "on the cloak").
 ## [0.7.1] - 2026-04-19
 
 ### Fixed
-- **Removed `@WoW` from author credit strings.** The author string
-  `"Grzegorz Korycki (Poczwarka @WoW)"` was being interpreted by GitHub
-  as an `@WoW` user-mention, auto-linking release notes, the README and
-  commit descriptions to `github.com/wow` — an unrelated GitHub account
-  who had nothing to do with this project. Every release published so
-  far was notifying that stranger. Replaced with `"(Poczwarka)"` and
-  retro-edited all six existing release notes (v0.4.0..v0.7.0) to strip
-  the mention. No functional changes; source, README, TOC author field,
-  and in-game startup credit all updated.
+- **Removed an accidental user-mention from the author credit strings.**
+  The author credit previously contained an at-symbol followed by the
+  literal text `"WoW"`, which GitHub interpreted as a user mention and
+  auto-linked to an unrelated GitHub account (username: `wow`). That
+  stranger was being notified on every release and every render of the
+  README. Credit is now simply `"(Poczwarka)"`. All six previous
+  release notes were retro-edited to strip the mention, and source,
+  README, TOC author field, and in-game startup credit were all updated.
+  No functional changes.
 
 ## [0.7.0] - 2026-04-19
 
