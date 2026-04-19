@@ -383,11 +383,30 @@ end
 local function InitDB()
     RT_DB = RT_DB or {}
     db = RT_DB
-    if db.enabled     == nil then db.enabled     = true  end
-    if db.showOrig    == nil then db.showOrig    = true  end
-    if db.debug       == nil then db.debug       = false end
-    if db.maxSessions == nil then db.maxSessions = 50    end
+    if db.enabled      == nil then db.enabled      = true  end
+    if db.showOrig     == nil then db.showOrig     = true  end
+    if db.debug        == nil then db.debug        = false end
+    if db.autoChatLog  == nil then db.autoChatLog  = true  end  -- /chatlog on login
+    if db.maxSessions  == nil then db.maxSessions  = 50    end
     db.sessions = db.sessions or {}
+end
+
+-- Turn on /chatlog so WoW dumps every chat line to
+-- <WoW>\Logs\WoWChatLog.txt. 2.4.3 doesn't remember the flag between
+-- sessions, so without this the user has to retype /chatlog every login
+-- (and loses the current session's buffer if they forget).
+-- LoggingChat() with no args returns the current state on 2.4.3.
+local function EnsureChatLog()
+    if type(LoggingChat) ~= "function" then
+        Log("chatlog", { ok = false, reason = "LoggingChat API missing" })
+        return false
+    end
+    local already = LoggingChat()
+    if not already then
+        LoggingChat(true)
+    end
+    Log("chatlog", { ok = true, was_on = already and true or false })
+    return true
 end
 
 local function RegisterFilters()
@@ -480,6 +499,7 @@ local function CmdHelp()
     Msg("  /rt on | off         - enable/disable translation")
     Msg("  /rt orig             - toggle showing original next to translation")
     Msg("  /rt debug            - toggle per-message debug prints in chat")
+    Msg("  /rt chatlog on|off   - toggle auto /chatlog at login (default on)")
     Msg("  /rt status           - show current settings + counters")
     Msg("  /rt dump             - session stats + top unknowns")
     Msg("  /rt log [N]          - print last N activity-log rows (default 20)")
@@ -505,6 +525,21 @@ SlashCmdList["RT"] = function(input)
     elseif cmd == "debug" then
         db.debug = not db.debug
         Msg("debug = " .. tostring(db.debug))
+    elseif cmd == "chatlog" then
+        local arg = (rest or ""):lower()
+        if arg == "on" or arg == "" then
+            db.autoChatLog = true
+            EnsureChatLog()
+            Msg("auto /chatlog = on (persists across sessions via SavedVariables)")
+        elseif arg == "off" then
+            db.autoChatLog = false
+            if type(LoggingChat) == "function" then LoggingChat(false) end
+            Msg("auto /chatlog = off")
+        else
+            local now = (type(LoggingChat) == "function") and LoggingChat() and "logging" or "not logging"
+            Msg(("auto /chatlog setting = %s; WoW currently %s"):format(
+                tostring(db.autoChatLog), now))
+        end
     elseif cmd == "dump" then
         CmdDump()
     elseif cmd == "log" then
@@ -518,9 +553,14 @@ SlashCmdList["RT"] = function(input)
         db.sessions = {}; InitSession()
         Msg("all sessions cleared")
     elseif cmd == "status" then
-        Msg(("enabled=%s  showOrig=%s  debug=%s  sessions=%d"):format(
+        local chatlog_now = "n/a"
+        if type(LoggingChat) == "function" then
+            chatlog_now = LoggingChat() and "on" or "off"
+        end
+        Msg(("enabled=%s  showOrig=%s  debug=%s  autoChatLog=%s  chatlog-now=%s  sessions=%d"):format(
             tostring(db.enabled), tostring(db.showOrig),
-            tostring(db.debug), #db.sessions))
+            tostring(db.debug), tostring(db.autoChatLog),
+            chatlog_now, #db.sessions))
         if session then
             Msg(("current: seen=%d translated=%d filterCalls=%d"):format(
                 session.messagesSeen, session.messagesTranslated, session.filterCalls))
@@ -547,9 +587,13 @@ f:SetScript("OnEvent", function(self, event, arg1)
     elseif event == "PLAYER_LOGIN" then
         InitSession()
         local ok, fail = RegisterFilters()
+        local chatlog = "off"
+        if db.autoChatLog then
+            if EnsureChatLog() then chatlog = "on" end
+        end
         Msg("|cffffcc00made by Grzegorz Korycki (Poczwarka)|r")
-        Msg(("loaded (session %s). filters: ok=%d fail=%d. Type /rt help."):format(
-            session.started, ok, fail))
+        Msg(("loaded (session %s). filters=%d chatlog=%s. /rt help"):format(
+            session.started, ok, chatlog))
     elseif event == "PLAYER_LOGOUT" then
         if session then
             session.ended = date("%Y-%m-%d_%H-%M-%S")

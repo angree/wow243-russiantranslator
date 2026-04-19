@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.2] - 2026-04-19
+
+### Added
+- **Auto-enable `/chatlog` on every login.** On WoW 2.4.3 the
+  `/chatlog` state is not persisted between sessions, so every
+  relog/reboot the flag turns off. Miss it and the whole session's
+  chat buffer is lost. The addon now calls `LoggingChat(true)` from
+  its `PLAYER_LOGIN` handler so the log is always capturing without
+  you having to remember.
+- New slash command `/rt chatlog on|off` to toggle the behaviour (the
+  setting is stored in `SavedVariables` as `db.autoChatLog`,
+  default **on**).
+- `/rt status` now shows both the persisted setting and the live state
+  of the WoW chat logger (`autoChatLog=true  chatlog-now=on`).
+- Startup banner displays `chatlog=on|off` so you can see at a glance
+  that it's active.
+
+The `/chatlog` output lands in
+`<WoW install>\Logs\WoWChatLog.txt`. On 2.4.3 the file is buffered —
+it fully flushes on clean logout or `/reload`. If your client crashes,
+lines written since the last flush are lost (unavoidable; buffering is
+on the engine side).
+
 ## [0.8.1] - 2026-04-19
 
 ### Added
