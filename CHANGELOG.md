@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.0] - 2026-04-19
+
+### Added — full grammatical-case coverage
+
+Russian has 6 cases (nominative, genitive, dative, accusative,
+instrumental, prepositional) × 2 numbers × 3 genders. A given noun can
+appear in chat in up to ~12 different surface forms. A pure
+word-lookup dictionary therefore needs every form as a separate entry
+or it misses half of incoming text. This release fills in the missing
+case forms for every high-frequency category:
+
+- **Instances/raids**: full declension for Karazhan, Gruul,
+  Magtheridon, Hyjal, Serpentshrine, The Eye, Zul'Aman, Arcatraz,
+  Botanica, Mechanar, Ramparts, Mana-Tombs, Magisters' Terrace,
+  Underbog, Slave Pens, Sethekk Halls, Steamvault.
+- **Classes** (sg+pl, all cases): mage, hunter, paladin, warlock,
+  shaman, priest, rogue, warrior, druid — dative/instrumental/
+  prepositional forms that were missing (магу, магом, маге, магах,
+  хантом, пале, друиду, разбойником, and so on).
+- **Roles**: tank, healer in all cases (танку, танком, танке,
+  танкам, хилу, хилом, хиле…).
+- **Gear slots**: cloak, weapon, ring, shield, armor, helm, pants,
+  belt, boots, gloves, shoulders, bracers, neck, trinket — genitive
+  (плаща, щита, брони), dative (плащу, щиту, броне), instrumental
+  (плащом, щитом, бронёй), prepositional (плаще, щите, броне).
+- **Stats**: strength, agility, intellect, stamina, crit, haste, hit,
+  spell power, resistance, rating — all cases.
+- **Key verbs** (top 20): быть, идти, делать, мочь, знать, хотеть,
+  видеть, слышать, помогать/помочь, дать, купить/покупать,
+  продать/продавать, искать, найти, ждать, говорить/сказать,
+  писать/написать, думать, помнить, ходить, брать/взять, убить,
+  играть, качаться — all past-tense forms (m/f/pl), 1st/2nd/3rd
+  person present, imperative, future.
+- **Adjectives**: good, bad, cool, new, old, big, small, strong, weak
+  — full declension (genitive, dative, instrumental, prepositional).
+- **Numerals**: 1-10, 20, 30, 50, 100, 1000 — all cases (одного,
+  двух, трёх, пяти, десяти, ста, тысячи, тысяче…).
+- **Pronouns**: instrumental forms that were missed (мною, тобою,
+  нами, собой, себе).
+- **Time words**: час, день, неделя, месяц, год — all cases
+  (часу, часом, часе, дню, неделе, месяце, году…).
+- **Quest/game nouns**: quest, book, key, mob, boss — all cases.
+- **Money**: gold, silver, stack — all cases.
+
+### Dictionary size
+
+Grew from **3261 → 3814 entries** (+553). File is ~140 KB. Load-time
+and memory impact still below every measurable threshold — a fully
+loaded `GetAddOnMemoryUsage()` reports under 1 MB for the whole
+addon. Practical limit of the architecture is around 20 000 entries
+before anything slows down; we're at 19 %.
+
+### Coverage
+
+All six existing chat logs still at **98 %** coverage. Benefit of the
+new case forms is future-facing: the dictionary now no longer misses
+common inflected forms players type in context (e.g. `магом` when a
+player says "иду магом" / "going as a mage", `плащу` when someone
+writes "на плащу" / "on the cloak").
+
 ## [0.7.1] - 2026-04-19
 
 ### Fixed

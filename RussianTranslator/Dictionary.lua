@@ -1850,6 +1850,435 @@ ns.WORDS = {
     ["кару"]="Karazhan",  -- accusative missing in v0.6.2
     ["выбирайте"]="choose", ["выбирай"]="choose", ["выбери"]="choose",
     ["выбираем"]="we choose",
+
+    -- =================================================================
+    -- Full case-form coverage (v0.8.0)
+    -- Russian declines nouns through 6 cases × 2 numbers. Without all
+    -- forms a dictionary-based translator misses half of what players
+    -- type. Below: systematic coverage for the high-frequency categories.
+    -- Cases: Nom (кто?что?) / Gen (кого?чего?) / Dat (кому?чему?) /
+    --        Acc (кого?что?) / Ins (кем?чем?) / Prep (о ком/чём?)
+    -- =================================================================
+
+    -- ---- INSTANCES (raids + 5-mans) full declension ----
+    -- Karazhan (fem. like кара/кары/каре/кару/карой/каре)
+    ["каре"]="in Karazhan", ["карой"]="with Karazhan", ["карах"]="in Karazhans",
+    ["каражан"]="Karazhan", ["каражану"]="to Karazhan",
+    ["каражаном"]="with Karazhan",
+    -- Gruul (masc. animate: груул/груула/груулу/груула/груулом/грууле)
+    ["груулу"]="to Gruul", ["груулом"]="with Gruul", ["грууле"]="at Gruul",
+    -- Magtheridon (masc.)
+    ["магтеридону"]="to Magtheridon", ["магтеридоном"]="with Magtheridon",
+    ["магтеридоне"]="at Magtheridon",
+    ["магтера"]="Magtheridon", ["магтеру"]="Magtheridon",
+    ["магтером"]="Magtheridon", ["магтере"]="Magtheridon",
+    -- Hyjal (masc.)
+    ["хиджалу"]="to Hyjal", ["хиджалом"]="with Hyjal", ["хиджале"]="at Hyjal",
+    -- Black Temple (abbreviation, doesn't decline — but "бтшка" does)
+    ["бтшке"]="at Black Temple", ["бтшки"]="Black Temple",
+    -- Serpentshrine
+    ["серпенту"]="to Serpentshrine", ["серпенте"]="at Serpentshrine",
+    -- Eye / The Eye (око / глаз)
+    ["оку"]="to The Eye", ["оком"]="with The Eye", ["оке"]="at The Eye",
+    ["глаза"]="The Eye", ["глазу"]="to The Eye", ["глазом"]="with The Eye",
+    -- Zul'Aman (masc.)
+    ["зуля"]="Zul'Aman", ["зулю"]="to Zul'Aman", ["зулем"]="with Zul'Aman",
+    ["зуле"]="at Zul'Aman",
+    ["зульамана"]="Zul'Aman", ["зульаману"]="to Zul'Aman",
+    ["зульамане"]="at Zul'Aman", ["зульаманом"]="with Zul'Aman",
+    -- Ramparts (fem. pl: рампы/рамп/рампам/рампы/рампами/рампах)
+    ["рамп"]="Ramparts", ["рампам"]="to Ramparts",
+    ["рампами"]="with Ramparts", ["рампах"]="in Ramparts",
+    -- Blood Furnace (bф - доесn't decline; пекло крови / печи крови)
+    ["пекла"]="of Blood Furnace", ["печи"]="Blood Furnace",
+    -- Shattered Halls — Russian: "Разрушенные Залы"
+    ["шхе"]="in Shattered Halls",
+    -- Shadow Labs
+    ["шме"]="in Shadow Labs",
+    -- Mana-Tombs
+    ["мту"]="Mana-Tombs", ["мтом"]="with Mana-Tombs", ["мте"]="at Mana-Tombs",
+    ["мт-ах"]="in Mana-Tombs",
+    -- Arcatraz
+    ["арку"]="Arcatraz", ["аркой"]="with Arcatraz", ["арке"]="at Arcatraz",
+    ["аркатраза"]="of Arcatraz", ["аркатразу"]="to Arcatraz",
+    ["аркатразе"]="at Arcatraz", ["аркатразом"]="with Arcatraz",
+    -- Botanica (fem.)
+    ["ботанике"]="at Botanica", ["ботанику"]="to Botanica",
+    ["ботаникой"]="with Botanica", ["ботаники"]="Botanica (gen)",
+    -- Mechanar (masc.)
+    ["механара"]="Mechanar (gen)", ["механару"]="to Mechanar",
+    ["механаре"]="at Mechanar", ["механаром"]="with Mechanar",
+    -- Sethekk Halls
+    ["сетов"]="Sethekks", ["сетам"]="to Sethekk",
+    ["сетками"]="with Sethekks", ["сетках"]="at Sethekks",
+    -- Steamvault
+    ["паровому"]="to Steamvault", ["паровым"]="with Steamvault",
+    ["паровом"]="at Steamvault",
+    -- Magisters' Terrace
+    ["магтерасе"]="at Magisters' Terrace", ["магтерасу"]="to Magisters' Terrace",
+    -- Underbog / Slave Pens in declension
+    ["нижетопи"]="Underbog (gen)", ["нижетопью"]="with Underbog",
+    ["загона"]="of Slave Pens", ["загону"]="to Slave Pens",
+    ["загоне"]="at Slave Pens",
+
+    -- ---- CLASSES (full masc. animate declension for singular/plural) ----
+    -- Mage: маг/мага/магу/мага/магом/маге, маги/магов/магам/магов/магами/магах
+    ["магу"]="to mage", ["магом"]="with mage", ["маге"]="at mage",
+    ["магам"]="to mages", ["магами"]="with mages", ["магах"]="at mages",
+    -- Hunter: хант
+    ["ханту"]="to hunter", ["хантом"]="with hunter", ["ханте"]="at hunter",
+    ["хантам"]="to hunters", ["хантами"]="with hunters", ["хантах"]="at hunters",
+    ["хантов"]="hunters (gen)", ["ханты"]="hunters", ["хантеру"]="to hunter",
+    ["хантером"]="with hunter", ["хантере"]="at hunter",
+    -- Paladin: паль/паладин
+    ["палю"]="to paladin", ["палем"]="with paladin", ["пале"]="at paladin",
+    ["палям"]="to paladins", ["палями"]="with paladins", ["палях"]="at paladins",
+    ["палу"]="to paladin", ["палом"]="with paladin",
+    ["паладином"]="with paladin", ["паладине"]="at paladin",
+    ["паладинам"]="to paladins", ["паладинами"]="with paladins",
+    ["паладинах"]="at paladins",
+    -- Warlock: лок
+    ["локу"]="to warlock", ["локом"]="with warlock", ["локе"]="at warlock",
+    ["локам"]="to warlocks", ["локами"]="with warlocks", ["локах"]="at warlocks",
+    ["варлоку"]="to warlock", ["варлоком"]="with warlock",
+    ["варлоке"]="at warlock", ["варлоки"]="warlocks",
+    ["варлоков"]="warlocks", ["варлокам"]="to warlocks",
+    -- Shaman: шам/шаман
+    ["шаму"]="to shaman", ["шамом"]="with shaman", ["шаме"]="at shaman",
+    ["шамам"]="to shamans", ["шамами"]="with shamans", ["шамах"]="at shamans",
+    ["шаманом"]="with shaman", ["шамане"]="at shaman", ["шаманов"]="shamans",
+    ["шаманам"]="to shamans", ["шаманами"]="with shamans", ["шаманах"]="at shamans",
+    -- Priest: прист
+    ["присту"]="to priest", ["пристом"]="with priest", ["присте"]="at priest",
+    ["пристам"]="to priests", ["пристами"]="with priests", ["пристах"]="at priests",
+    ["пристов"]="priests",
+    -- Rogue: ро/рога/рожка/разбойник
+    ["рогу"]="to rogue", ["рогой"]="with rogue", ["роге"]="at rogue",
+    ["рогам"]="to rogues", ["рогами"]="with rogues", ["рогах"]="at rogues",
+    ["разбойнику"]="to rogue", ["разбойником"]="with rogue",
+    ["разбойнике"]="at rogue", ["разбойники"]="rogues",
+    ["разбойников"]="rogues", ["разбойникам"]="to rogues",
+    -- Warrior: варик/воин
+    ["варику"]="to warrior", ["вариком"]="with warrior", ["варике"]="at warrior",
+    ["варикам"]="to warriors", ["вариками"]="with warriors",
+    ["воина"]="warrior", ["воину"]="to warrior", ["воином"]="with warrior",
+    ["воине"]="at warrior", ["воинов"]="warriors",
+    ["воинам"]="to warriors", ["воинами"]="with warriors",
+    -- Druid: друид
+    ["друиду"]="to druid", ["друидом"]="with druid", ["друиде"]="at druid",
+    ["друидов"]="druids", ["друидам"]="to druids", ["друидами"]="with druids",
+    ["друидах"]="at druids",
+
+    -- ---- ROLES full declension ----
+    -- Tank: танк/танка/танку/танка/танком/танке
+    ["танку"]="to tank", ["танком"]="with tank", ["танке"]="at tank",
+    ["танкам"]="to tanks", ["танками"]="with tanks", ["танках"]="at tanks",
+    -- Healer: хил/хила/хилу/хила/хилом/хиле
+    ["хилу"]="to healer", ["хилом"]="with healer", ["хиле"]="at healer",
+    ["хилам"]="to healers", ["хилами"]="with healers", ["хилах"]="at healers",
+    -- DPS (indeclinable acronym, covered)
+    -- Hunter, etc. already above
+
+    -- ---- GEAR SLOTS full declension ----
+    -- Cloak: плащ (masc): плащ/плаща/плащу/плащ/плащом/плаще
+    ["плащу"]="to cloak", ["плащом"]="with cloak", ["плаще"]="at cloak",
+    ["плащи"]="cloaks", ["плащей"]="cloaks (gen)",
+    -- Weapon: оружие (neut): оружие/оружия/оружию/оружие/оружием/оружии
+    ["оружию"]="to weapon", ["оружием"]="with weapon", ["оружии"]="at weapon",
+    -- Ring: кольцо (neut)
+    ["кольцу"]="to ring", ["кольцом"]="with ring", ["кольце"]="at ring",
+    ["колец"]="rings (gen)", ["кольцам"]="to rings", ["кольцами"]="with rings",
+    -- Shield: щит
+    ["щита"]="shield (gen)", ["щиту"]="to shield", ["щитом"]="with shield",
+    ["щите"]="at shield", ["щитов"]="shields", ["щиты"]="shields",
+    -- Armor: броня (fem.)
+    ["брони"]="armor (gen)", ["броне"]="at armor", ["броню"]="armor (acc)",
+    ["бронёй"]="with armor", ["броней"]="with armor",
+    -- Helmet: шлем
+    ["шлема"]="helm (gen)", ["шлему"]="to helm", ["шлемом"]="with helm",
+    ["шлеме"]="at helm", ["шлемы"]="helms", ["шлемов"]="helms (gen)",
+    -- Legs/pants: штаны (pl tantum)
+    ["штанам"]="to pants", ["штанами"]="with pants", ["штанах"]="at pants",
+    -- Belt: пояс
+    ["пояса"]="belt (gen)", ["поясу"]="to belt", ["поясом"]="with belt",
+    ["поясе"]="at belt", ["пояса"]="belts", ["поясов"]="belts",
+    -- Boots: боты/сапоги
+    ["ботам"]="to boots", ["ботами"]="with boots", ["ботах"]="on boots",
+    ["ботов"]="of boots",
+    ["сапог"]="boots (gen)", ["сапогам"]="to boots", ["сапогами"]="with boots",
+    ["сапогах"]="in boots",
+    -- Gloves: перчи/перчатки
+    ["перчам"]="to gloves", ["перчами"]="with gloves", ["перчах"]="on gloves",
+    ["перчаток"]="gloves (gen)", ["перчаткам"]="to gloves",
+    ["перчатками"]="with gloves", ["перчатках"]="on gloves",
+    -- Shoulders: плечи/наплечи
+    ["плечам"]="to shoulders", ["плечами"]="with shoulders", ["плечах"]="on shoulders",
+    ["наплечам"]="to shoulders", ["наплечами"]="with shoulders",
+    -- Bracers: наручи/браслеты
+    ["наручам"]="to bracers", ["наручами"]="with bracers", ["наручах"]="on bracers",
+    ["браслетам"]="to bracers", ["браслетами"]="with bracers",
+    ["браслетах"]="on bracers",
+    -- Amulet/neck: амулет
+    ["амулета"]="neck (gen)", ["амулету"]="to neck", ["амулетом"]="with neck",
+    ["амулете"]="at neck",
+    -- Trinket: тринкет/тринька
+    ["тринкета"]="trinket (gen)", ["тринкету"]="to trinket", ["тринкетом"]="with trinket",
+    ["триньке"]="at trinket", ["тринькой"]="with trinket",
+
+    -- ---- STATS full declension ----
+    -- Strength: сила/силы/силе/силу/силой/силе (fem)
+    ["силы"]="strength (gen)", ["силе"]="at strength", ["силу"]="strength",
+    ["силой"]="with strength", ["силах"]="at strengths",
+    -- Agility: ловкость (fem on ь)
+    ["ловкостью"]="with agility", ["ловкостям"]="to agilities",
+    -- Intellect: интеллект (masc.)
+    ["интеллекта"]="intellect (gen)", ["интеллекту"]="to intellect",
+    ["интеллектом"]="with intellect", ["интеллекте"]="at intellect",
+    ["инту"]="to int", ["интом"]="with int", ["инте"]="at int",
+    -- Stamina: стамина (fem.)
+    ["стамины"]="stamina (gen)", ["стамине"]="at stamina", ["стамину"]="stamina",
+    ["стаминой"]="with stamina",
+    -- Crit: крит (masc.)
+    ["криту"]="to crit", ["критом"]="with crit", ["крите"]="at crit",
+    -- Haste: хаст
+    ["хаста"]="haste (gen)", ["хасту"]="to haste", ["хастом"]="with haste",
+    ["хасте"]="at haste",
+    -- Hit: хит
+    ["хита"]="hit (gen)", ["хиту"]="to hit", ["хитом"]="with hit", ["хите"]="at hit",
+    -- Spell power: спелл
+    ["спеллу"]="to spellpower", ["спеллом"]="with spellpower", ["спелле"]="at spellpower",
+    -- Resistance: резист
+    ["резиста"]="resist (gen)", ["резисту"]="to resist", ["резистом"]="with resist",
+    ["резисте"]="at resist",
+    ["сопротивления"]="resistance", ["сопротивлению"]="to resistance",
+    ["сопротивлением"]="with resistance", ["сопротивлении"]="at resistance",
+    -- Rating: рейт
+    ["рейта"]="rating (gen)", ["рейту"]="to rating", ["рейтом"]="with rating",
+    ["рейте"]="at rating",
+    ["рейтинга"]="rating (gen)", ["рейтингу"]="to rating",
+    ["рейтингом"]="with rating", ["рейтинге"]="at rating",
+
+    -- ---- MONEY & UNITS ----
+    -- Gold: голд/золото
+    ["голды"]="gold (gen)", ["голду"]="to gold", ["голдом"]="with gold",
+    ["золота"]="gold (gen)", ["золоту"]="to gold", ["золотом"]="with gold",
+    ["золоте"]="in gold",
+    -- Silver / copper
+    ["сильва"]="silver (gen)", ["сильву"]="to silver",
+    -- Stack
+    ["стака"]="stack", ["стаку"]="to stack", ["стаком"]="with stack",
+
+    -- ---- KEY VERBS — top 20 full conjugation ----
+    -- быть: "to be"
+    ["будучи"]="being",
+    -- идти: "to go"
+    ["шёл"]="went (m)", ["шла"]="went (f)", ["шли"]="went (pl)",
+    -- делать: "to do"
+    ["делала"]="did (f)", ["делали"]="did (pl)",
+    -- мочь: "to be able"
+    ["могло"]="could (n)",
+    -- знать: "to know"
+    ["знала"]="knew (f)", ["знали"]="knew (pl)", ["знал"]="knew (m)",
+    -- хотеть: "to want"
+    ["хочется"]="want to", ["хотелось"]="wanted",
+    -- видеть: "to see"
+    ["видят"]="they see",
+    -- слышать: "to hear"
+    ["слышат"]="they hear", ["слышала"]="heard (f)", ["слышали"]="heard (pl)",
+    -- помогать / помочь
+    ["помогаю"]="I help", ["помогают"]="help",
+    ["помоги же"]="help please", ["помогал"]="helped (m)",
+    ["помогала"]="helped (f)", ["помогали"]="helped (pl)",
+    -- дать: "to give"
+    ["даёт"]="gives", ["даём"]="we give",
+    -- купить/покупать
+    ["куплен"]="bought", ["купленный"]="bought",
+    ["покупаешь"]="you buy", ["покупают"]="they buy",
+    ["покупал"]="was buying (m)", ["покупала"]="was buying (f)",
+    -- продать/продавать
+    ["продался"]="sold", ["продадут"]="will sell",
+    ["продавал"]="was selling", ["продавала"]="was selling (f)",
+    -- искать: "to search"
+    ["искала"]="was looking (f)", ["искали"]="were looking (pl)",
+    ["ищите"]="search", ["искать"]="to search",
+    -- найти: "to find"
+    ["найдем"]="we'll find", ["найдёте"]="you'll find", ["найдут"]="they'll find",
+    ["нашёл"]="found (m)",
+    -- ждать: "to wait"
+    ["ждала"]="waited (f)", ["ждали"]="waited (pl)",
+    ["ждёшь"]="you wait", ["ждите же"]="please wait",
+    -- говорить / сказать
+    ["говорил"]="was saying (m)", ["говорила"]="was saying (f)",
+    ["говорили"]="were saying (pl)",
+    ["скажем"]="we'll say", ["скажут"]="they'll say", ["сказано"]="said",
+    -- писать / написать
+    ["писал"]="was writing (m)", ["писала"]="was writing (f)",
+    ["писали"]="were writing (pl)", ["напишем"]="we'll write",
+    ["напишите"]="write (formal)", ["напишут"]="they'll write",
+    -- думать
+    ["думаем"]="we think", ["думают"]="they think",
+    ["думал"]="thought (m)", ["думала"]="thought (f)", ["думали"]="thought (pl)",
+    -- помнить
+    ["помнили"]="remembered (pl)", ["помнят"]="they remember",
+    ["помнила"]="remembered (f)",
+    -- ходить
+    ["ходил"]="went (m)", ["ходила"]="went (f)", ["ходили"]="went (pl)",
+    ["ходит"]="goes", ["ходят"]="they go", ["ходи"]="go",
+    -- брать / взять
+    ["беру"]="I take", ["берём"]="we take", ["возьмите"]="take",
+    ["брал"]="was taking (m)", ["брала"]="was taking (f)",
+    -- убить / убивать
+    ["убивал"]="was killing (m)", ["убивала"]="was killing (f)",
+    ["убивали"]="were killing (pl)", ["убьёшь"]="you'll kill",
+    ["убиваем"]="we kill", ["убил бы"]="would kill",
+    -- играть
+    ["играл"]="played (m)", ["играла"]="played (f)", ["играли"]="played (pl)",
+    ["поиграл"]="played", ["поиграть"]="to play",
+    -- качаться
+    ["качались"]="were leveling (pl)", ["качалась"]="was leveling (f)",
+    ["качался"]="was leveling (m)", ["покачался"]="leveled",
+    -- писать в ЛС
+    ["пишешь"]="you write",
+
+    -- ---- ADJECTIVES — common ones get basic declension ----
+    -- хороший (good, masc): хороший/хорошего/хорошему/хорошего/хорошим/хорошем
+    ["хорошего"]="good (gen)", ["хорошему"]="to good", ["хорошим"]="with good",
+    ["хорошем"]="at good",
+    -- плохой
+    ["плохого"]="bad (gen)", ["плохому"]="to bad", ["плохим"]="with bad",
+    ["плохом"]="at bad",
+    -- крутой
+    ["крутого"]="cool (gen)", ["крутому"]="to cool", ["крутым"]="with cool",
+    ["крутом"]="at cool",
+    -- новый
+    ["нового"]="new (gen)", ["новому"]="to new", ["новым"]="with new",
+    ["новом"]="at new", ["новом же"]="in new",
+    -- старый
+    ["старого"]="old (gen)", ["старому"]="to old", ["старым"]="with old",
+    ["старом"]="at old",
+    -- большой
+    ["большого"]="big (gen)", ["большому"]="to big", ["большим"]="with big",
+    ["большом"]="at big",
+    -- маленький
+    ["маленького"]="small (gen)", ["маленькому"]="to small", ["маленьким"]="with small",
+    ["маленьком"]="at small",
+    -- сильный
+    ["сильного"]="strong (gen)", ["сильному"]="to strong", ["сильным"]="with strong",
+    ["сильном"]="at strong",
+    -- слабый
+    ["слабого"]="weak (gen)", ["слабому"]="to weak", ["слабым"]="with weak",
+
+    -- ---- PRONOUNS full cases (patch holes) ----
+    ["мною"]="by me", ["тобою"]="by you",
+    ["нами"]="by us",
+    ["собой"]="by self", ["себе"]="to self",
+    ["им же"]="they", ["ей же"]="to her", ["ему же"]="to him",
+
+    -- ---- NUMERALS full forms ----
+    ["одного"]="one (gen)", ["одному"]="to one", ["одним"]="with one", ["одном"]="at one",
+    ["двух"]="two (gen)", ["двум"]="to two", ["двумя"]="with two",
+    ["трёх"]="three (gen)", ["трём"]="to three", ["тремя"]="with three",
+    ["четырёх"]="four (gen)", ["четырём"]="to four", ["четырьмя"]="with four",
+    ["пяти"]="five (gen)", ["пятью"]="with five",
+    ["шести"]="six (gen)", ["шестью"]="with six",
+    ["семи"]="seven (gen)", ["семью"]="with seven",
+    ["восьми"]="eight (gen)", ["восемью"]="with eight",
+    ["девяти"]="nine (gen)", ["девятью"]="with nine",
+    ["десяти"]="ten (gen)", ["десятью"]="with ten",
+    ["двадцати"]="20 (gen)", ["тридцати"]="30 (gen)",
+    ["пятидесяти"]="50 (gen)", ["ста"]="100 (gen)",
+    ["тысячи"]="1000 (gen)", ["тысяче"]="to 1000", ["тысячу"]="1000 (acc)",
+    ["тысячей"]="with 1000",
+
+    -- ---- KEY NOUNS: friends/people ----
+    ["другом"]="with friend", ["друге"]="at friend",
+    ["друзей"]="friends (gen)", ["друзьям"]="to friends", ["друзьями"]="with friends",
+    ["друзьях"]="at friends",
+    ["ребятам"]="to guys", ["ребятами"]="with guys", ["ребятах"]="about guys",
+    ["пацанам"]="to guys", ["пацанами"]="with guys", ["пацанах"]="about guys",
+    ["народу"]="to folks", ["народом"]="with folks", ["народе"]="at folks",
+
+    -- ---- LOCATION & MOVEMENT ----
+    ["городу"]="to city", ["городом"]="with city", ["городе"]="in city",
+    ["городов"]="cities", ["городам"]="to cities", ["городах"]="in cities",
+    ["локации"]="location (gen/pl)", ["локацию"]="location (acc)",
+    ["локацией"]="with location",
+    ["данжу"]="to dungeon", ["данжем"]="with dungeon", ["данже"]="at dungeon",
+    ["инсту"]="to instance", ["инстом"]="with instance", ["инсте"]="at instance",
+    ["рейду"]="to raid", ["рейдом"]="with raid", ["рейде"]="in raid",
+    ["рейдам"]="to raids", ["рейдами"]="with raids", ["рейдах"]="in raids",
+    ["пати"]="party",
+
+    -- ---- TIME ----
+    ["часу"]="to hour", ["часом"]="with hour", ["часе"]="at hour",
+    ["часам"]="to hours", ["часами"]="with hours", ["часах"]="at hours",
+    ["дню"]="to day", ["днем"]="by day", ["днях"]="days",
+    ["недели"]="week (gen)", ["неделе"]="at week", ["неделю"]="week (acc)",
+    ["неделей"]="with week", ["недель"]="weeks (gen)",
+    ["месяцу"]="to month", ["месяцем"]="with month", ["месяце"]="in month",
+    ["года"]="year (gen)", ["году"]="to year", ["годом"]="with year", ["годе"]="at year",
+    ["лет"]="years",
+
+    -- ---- QUEST / GAME ----
+    ["квесту"]="to quest", ["квестом"]="with quest", ["квесте"]="at quest",
+    ["квестам"]="to quests", ["квестами"]="with quests", ["квестах"]="in quests",
+    ["книгу"]="book", ["книгой"]="with book",
+    -- книги, книге already there
+    ["ключа"]="key (gen)", ["ключу"]="to key", ["ключом"]="with key", ["ключе"]="at key",
+    ["ключи"]="keys", ["ключей"]="keys (gen)",
+    ["моба"]="mob (gen)", ["мобу"]="to mob", ["мобом"]="with mob", ["мобе"]="at mob",
+    ["мобов"]="mobs (gen)", ["мобам"]="to mobs", ["мобами"]="with mobs",
+    ["босса"]="boss (gen)", ["боссу"]="to boss", ["боссом"]="with boss",
+    ["боссе"]="at boss", ["боссы"]="bosses", ["боссов"]="bosses",
+    ["боссам"]="to bosses", ["боссами"]="with bosses",
+
+    -- ---- GUILD / STATUS ----
+    ["гильдией"]="with guild", ["гильдиях"]="in guilds", ["гильдиям"]="to guilds",
+    ["гильдиями"]="with guilds", ["гильдий"]="guilds (gen)",
+    ["аккаунта"]="account (gen)", ["аккаунту"]="to account",
+    ["аккаунтом"]="with account", ["аккаунте"]="at account",
+    ["сервера"]="server (gen)", ["серверу"]="to server", ["сервером"]="with server",
+
+    -- ---- ENCHANT / CRAFT ----
+    ["энчанта"]="enchant (gen)", ["энчанту"]="to enchant", ["энчантом"]="with enchant",
+    ["гема"]="gem (gen)", ["гему"]="to gem", ["гемом"]="with gem", ["геме"]="at gem",
+    ["гемов"]="gems (gen)", ["гемам"]="to gems", ["гемами"]="with gems",
+
+    -- ---- MONEY COMPOUNDS ----
+    ["донатом"]="with donation", ["донату"]="to donation",
+    ["бонусу"]="to bonus", ["бонусом"]="with bonus", ["бонусе"]="at bonus",
+
+    -- ---- COMMON CHAT TIME/ASPECT EXPRESSIONS ----
+    ["скорее"]="faster", ["раньше всех"]="first",
+    ["позже всех"]="last",
+    ["этим же"]="with this",
+
+    -- ---- WOW-SPECIFIC (zones already handled, adding missing forms) ----
+    ["шаттрате"]="in Shattrath", ["шаттрату"]="to Shattrath",
+    ["шаттратом"]="with Shattrath",
+    ["ормрожара"]="of Orgrimmar",
+    ["штормграду"]="to Stormwind", ["штормградом"]="with Stormwind",
+    ["оргриммару"]="to Orgrimmar", ["оргриммаром"]="with Orgrimmar",
+    ["даларану"]="to Dalaran", ["дараланом"]="with Dalaran",
+    ["экзодаром"]="with Exodar", ["экзодаре"]="at Exodar",
+
+    -- ---- BADGES / JUSTICE ----
+    ["баджами"]="with badges", ["баджам"]="to badges", ["баджах"]="in badges",
+
+    -- ---- ATTUNEMENT ----
+    ["атюна"]="attunement (gen)", ["атюну"]="to attunement",
+    ["атюне"]="at attunement",
+    ["аттюна"]="attunement (gen)", ["аттюну"]="to attunement",
+    ["аттюнам"]="to attunements", ["аттюнах"]="at attunements",
+
+    -- ---- TOKENS / LOOT ----
+    ["токена"]="token (gen)", ["токену"]="to token", ["токеном"]="with token",
+    ["токене"]="at token", ["токены"]="tokens", ["токенов"]="tokens (gen)",
+    ["токен"]="token",
+    ["лута"]="loot (gen)", ["луту"]="to loot", ["лутом"]="with loot", ["луте"]="at loot",
+
+    -- ---- "НАДО" verb forms ----
+    ["надоело"]="bored of", ["надоели"]="fed up with",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).
