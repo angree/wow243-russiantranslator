@@ -14,15 +14,46 @@ local UNKNOWN_COLOR = "|cffffa040"      -- orange, untranslated tokens kept as c
 local UNKNOWN_RESET = "|r"
 local LOG_CAP       = 400               -- max log rows kept per session
 
+-- Chat events we filter. Covers every player-visible channel in WoW 2.4.3.
+-- Grouped for readability; Blizzard fires these instead of a single unified
+-- event because different channels carry different metadata (language,
+-- channel index, raid warning flag, etc.).
 local CHAT_EVENTS = {
-    "CHAT_MSG_SAY", "CHAT_MSG_YELL",
-    "CHAT_MSG_PARTY", "CHAT_MSG_RAID", "CHAT_MSG_RAID_LEADER", "CHAT_MSG_RAID_WARNING",
-    "CHAT_MSG_GUILD", "CHAT_MSG_OFFICER",
-    "CHAT_MSG_WHISPER", "CHAT_MSG_WHISPER_INFORM",
+    -- Local / proximity
+    "CHAT_MSG_SAY",                 -- /say
+    "CHAT_MSG_YELL",                -- /yell
+
+    -- Group chat
+    "CHAT_MSG_PARTY",               -- /p  (also used for party-leader on 2.4.3)
+    "CHAT_MSG_RAID",                -- /r
+    "CHAT_MSG_RAID_LEADER",         -- raid leader messages
+    "CHAT_MSG_RAID_WARNING",        -- /rw
+
+    -- Guild
+    "CHAT_MSG_GUILD",               -- /g  (gchat)
+    "CHAT_MSG_OFFICER",             -- /o  (officer chat)
+
+    -- Private messages
+    "CHAT_MSG_WHISPER",             -- /w incoming
+    "CHAT_MSG_WHISPER_INFORM",      -- /w outgoing (your own whispers echoed)
+
+    -- Battlegrounds (added for v0.6.1 — was the only big gap)
+    "CHAT_MSG_BATTLEGROUND",        -- /bg
+    "CHAT_MSG_BATTLEGROUND_LEADER", -- BG leader
+
+    -- Custom numbered channels: General (1), Trade (2), LocalDefense (22),
+    -- Global (6 on many private servers), etc.
     "CHAT_MSG_CHANNEL",
-    "CHAT_MSG_EMOTE", "CHAT_MSG_TEXT_EMOTE",
-    "CHAT_MSG_MONSTER_SAY", "CHAT_MSG_MONSTER_YELL",
-    "CHAT_MSG_MONSTER_WHISPER", "CHAT_MSG_MONSTER_EMOTE",
+
+    -- Emotes
+    "CHAT_MSG_EMOTE",
+    "CHAT_MSG_TEXT_EMOTE",
+
+    -- NPC speech
+    "CHAT_MSG_MONSTER_SAY",
+    "CHAT_MSG_MONSTER_YELL",
+    "CHAT_MSG_MONSTER_WHISPER",
+    "CHAT_MSG_MONSTER_EMOTE",
 }
 
 -- ---------------------------------------------------------------------------

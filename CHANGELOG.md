@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.1] - 2026-04-19
+
+### Added
+- Registered `CHAT_MSG_BATTLEGROUND` and `CHAT_MSG_BATTLEGROUND_LEADER`.
+  Battleground chat (`/bg`) was the only public channel not covered.
+  All other channels (Say, Yell, Party, Raid, Raid-Leader, Raid-Warning,
+  Guild, Officer, Whisper-in, Whisper-out, numbered channels like Global
+  and Trade, Emotes, NPC speech) were already filtered — the addon just
+  looked "Global-only" because that channel carries ~95 % of public chat
+  traffic on a typical Russian TBC server.
+
 ## [0.6.0] - 2026-04-19
 
 ### Fixed
