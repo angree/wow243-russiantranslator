@@ -2279,6 +2279,43 @@ ns.WORDS = {
 
     -- ---- "НАДО" verb forms ----
     ["надоело"]="bored of", ["надоели"]="fed up with",
+
+    -- =================================================================
+    -- Log-007 (rolling WoWChatLog.txt) gap fills
+    -- =================================================================
+    ["больше"]="more", ["меньше"]="less",    -- were missing in single form
+    ["русич"]="Russian (folksy)", ["русичи"]="Russians", ["русичей"]="Russians (gen)",
+    ["русичам"]="to Russians",
+    ["сумануть"]="to summon", ["сумани"]="summon me", ["сумань"]="summon me",
+    ["сумани меня"]="summon me",
+    ["можете"]="you (pl) can", ["можем"]="we can",
+    ["жднм"]="wait (typo: ждём)", ["ждем"]="we wait", ["ждёмс"]="waiting",
+    ["пох"]="don't care (vulgar)", ["похер"]="don't care (vulgar)",
+    ["похую"]="don't give a fuck (vulgar)",
+    ["передавать"]="to pass/transfer", ["передать"]="to pass",
+    ["передаю"]="I'm passing", ["передал"]="passed (m)",
+    ["передала"]="passed (f)", ["передали"]="passed (pl)",
+    ["передадим"]="we'll pass",
+    ["че"]="what",                -- alongside "чё", "чо"
+    ["бич"]="loser (slang)", ["бичи"]="losers (slang)",
+    ["бичей"]="losers (gen)", ["бичам"]="to losers",
+    ["пиздец"]="fucked up (vulgar)", ["пиздецу"]="to disaster (vulgar)",
+    ["пиздеца"]="of disaster (vulgar)",
+
+    -- Common vocative / filler particles also seen in logs
+    ["слыш"]="hey/listen (slang)", ["слышь"]="hey/listen (slang)",
+    ["ёмаё"]="oh my", ["ёпт"]="damn", ["ёпрст"]="damn (euphemism)",
+    ["ептыть"]="damn",
+
+    -- A few more high-frequency adverbs / connectors
+    ["ниже"]="below", ["выше"]="above",
+    ["среди"]="among",
+    ["сразу"]="immediately", ["тотчас"]="at once",
+    ["постоянно"]="constantly", ["редко же"]="rarely",
+
+    -- Misc verb forms
+    ["возьмёмся"]="let's take", ["беритесь"]="take",
+    ["увидимся"]="see you", ["увидимся позже"]="see you later",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).

@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.3] - 2026-04-19
+
+### Added
+Continuation of the live WoWCircle TBC session (rolling `WoWChatLog.txt`,
+440 Russian lines, 248 unique). Starting coverage was **97 %**; after
+this release it is **98 %** and the only remaining unknowns are player
+nicknames.
+
+- `больше`, `меньше` (were somehow missing in bare form)
+- `русич`, `русичи`, `русичей` — colloquial "Russian"
+- `сумануть`, `сумани` — summon (infinitive + imperative variants)
+- `можете`, `можем` — verb "can" (you-pl, we) — complementing the
+  existing `может`, `могу`, `можешь`, `могут`
+- `ждем`, `ждёмс`, `жднм` (typo variant) — "we wait"
+- `пох`, `похер`, `похую` — vulgar "don't care" variants
+- `передавать`, `передать` + all past-tense forms — "to pass"
+- `че` — what (alongside existing `чё` / `чо`)
+- `бич`, `бичи`, `бичей` — "loser" slang
+- `пиздец` + cases — vulgar "disaster"
+- Filler particles: `слыш`, `слышь`, `ёмаё`, `ёпт`, `ёпрст`, `ептыть`
+- Minor adverbs: `ниже`, `выше`, `среди`, `сразу`, `тотчас`, `постоянно`
+
 ## [0.8.2] - 2026-04-19
 
 ### Added
