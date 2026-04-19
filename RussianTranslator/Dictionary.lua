@@ -444,6 +444,244 @@ ns.PHRASES = {
     -- A few more polite common patterns
     ["пиши в личку"]="whisper me",
     ["кто может пж"]="who can please",
+
+    -- =================================================================
+    -- Log-006 additions: difficulty slang, instance-specific idioms,
+    -- attunements, quest names, item names, schedule lingo.
+    -- =================================================================
+
+    -- Heroic / normal / reserve slot phrases (extremely frequent on TBC)
+    ["нужен танк хил дпс"]="need tank healer dps",
+    ["нужен танк, хил"]="need tank, healer",
+    ["нужен танк, хил, дпс"]="need tank, healer, dps",
+    ["нужен танк хил"]="need tank healer",
+    ["ласт слот"]="last slot",
+    ["ласту слот"]="last slot",
+    ["штаны рез"]="pants reserved",
+    ["штаны резерв"]="pants reserved",
+    ["штаны в рез"]="pants reserved",
+    ["рез штаны"]="pants reserved",
+    ["перчи рез"]="gloves reserved",
+    ["плащ рез"]="cloak reserved",
+    ["оружие рез"]="weapon reserved",
+    ["сум к ласту"]="summon to last boss",
+    ["к ласту"]="to last boss",
+    ["сум в конец"]="summon to end",
+    ["на ласта"]="for the last boss",
+    ["рампы гер"]="Ramparts (heroic)",
+    ["рампы дейлик"]="Ramparts daily",
+    ["рампы дейли"]="Ramparts daily",
+    ["рампы нм"]="Ramparts (normal)",
+    ["рампы норм"]="Ramparts (normal)",
+    ["бф гер"]="Blood Furnace (heroic)",
+    ["бф нм"]="Blood Furnace (normal)",
+    ["шх гер"]="Shattered Halls (heroic)",
+    ["шх нм"]="Shattered Halls (normal)",
+    ["шм гер"]="Shadow Labs (heroic)",
+    ["шм нм"]="Shadow Labs (normal)",
+    ["паровое нм"]="Steamvault (normal)",
+    ["паровое гер"]="Steamvault (heroic)",
+    ["ссц гер"]="Serpentshrine",
+    ["узилище гер"]="Arcatraz (heroic)",
+    ["узилище нм"]="Arcatraz (normal)",
+    ["узилищер"]="Arcatraz (heroic)",
+    ["на гер"]="for heroic",
+    ["на нм"]="for normal",
+    ["за репой"]="for rep",
+    ["за репу"]="for rep",
+    ["за реп"]="for rep",
+    ["за 2 баджа"]="for 2 badges",
+    ["за баджи"]="for badges",
+    ["2 баджа в месяц"]="2 badges a month",
+    ["баджа месяца"]="badges a month",
+    ["скип ран"]="skip run",
+    ["ран скип"]="skip run",
+    ["нормалы и геры"]="normals and heroics",
+    ["не сдались нормалы"]="nobody wants normals",
+    ["не сдались геры"]="nobody wants heroics",
+
+    -- Guild chat / recruitment
+    ["в ги"]="in guild (guild-chat)",
+    ["в гилде"]="in guild",
+    ["в гильдию"]="to guild",
+    ["помогаем одеваем"]="we help, gear you up",
+    ["помогаем одеваем подсказываем"]="we help, gear, advise",
+    ["связь обязательная"]="communication required",
+    ["связь дискорд"]="discord required",
+    ["для походов в рейды"]="for raid attendance",
+    ["по доп"]="for extras",
+    ["по доп вопросам"]="for additional questions",
+    ["вопросам в пм"]="questions in PM",
+    ["рейды с"]="raids from",
+    ["сбор в"]="gather at",
+    ["сбор в 19:00"]="gather at 19:00",
+    ["статик шамы локи присты палы маги"]="static shamans warlocks priests paladins mages",
+    ["ищет опытных игроков"]="looking for experienced players",
+    ["для усиления гильдии"]="to strengthen the guild",
+    ["для уcиления гильдии"]="to strengthen the guild", -- typo variant (latin 'c')
+    ["эффективного прохождения"]="effective clears",
+    ["прохождения санвела"]="Sunwell progression",
+    ["с атюном на бт"]="with BT attunement",
+    ["с аттюном на бт"]="with BT attunement",
+    ["с барабанами"]="with drums",
+    ["атюн на бт"]="BT attunement",
+    ["аттюн на бт"]="BT attunement",
+    ["аттюн нужен"]="need attunement",
+    ["ци рейт"]="CY rating",
+
+    -- Weekly schedule
+    ["с пн по пт"]="Mon through Fri",
+    ["сб и вс"]="Sat and Sun",
+    ["пн по чт"]="Mon through Thu",
+    ["с пн по чт"]="Mon through Thu",
+    ["пн-чт"]="Mon-Thu",
+    ["пн чт"]="Mon-Thu",
+    ["сб-вс"]="Sat-Sun",
+    ["по иркутскому времени"]="Irkutsk time",
+    ["по иркутскому"]="Irkutsk time",
+    ["иркутскому времени"]="Irkutsk time",
+    ["по московскому времени"]="Moscow time",
+
+    -- Quests / attunements seen in log
+    ["прикосновение занзила"]="Touch of Zanzil (quest)",
+    ["как выполнить"]="how to complete",
+    ["не могу сдать"]="can't turn in",
+    ["сдать не могу"]="can't turn in",
+    ["квест не сдаётся"]="quest won't turn in",
+    ["в журнале пишет"]="journal says",
+    ["в журнале"]="in the log",
+    ["всё что нужно купил"]="bought everything needed",
+    ["за дейлик"]="for the daily",
+    ["ключ за дейлик"]="daily key",
+    ["пропал из сумки"]="disappeared from bag",
+    ["было у кого такое"]="anyone had this",
+    ["за кв"]="for quest",
+    ["на разбойника"]="for rogue",
+
+    -- Item names (Russian ruRU localisations -> English item names)
+    ["туз из колоды зверей"]="Ace of Beasts",
+    ["колода зверей"]="Darkmoon Deck: Beasts",
+    ["фолиант сотворения воды"]="Tome of Conjure Water",
+    ["изначальная мощь"]="Primal Might",
+    ["ткань пустоты"]="Netherweave Cloth",
+    ["руническая ткань"]="Runecloth",
+    ["ездовой хлыст назана"]="Nazan's Riding Crop",
+    ["ездовой хлыст"]="riding crop",
+
+    -- Zones (ruRU -> enUS)
+    ["сёрные топи"]="Swamp of Sorrows",
+    ["серные топи"]="Swamp of Sorrows",
+    ["в сёрные топи"]="to Swamp of Sorrows",
+    ["алый монастырь"]="Scarlet Monastery",
+    ["монастырь алого"]="Scarlet Monastery",
+    ["алого ордена"]="of the Scarlet Order",
+    ["на кладбище"]="at Graveyard (SM)",
+    ["лабиринты иглошкуры"]="Razorfen Kraul",
+    ["иглошкуры"]="Razorfen Kraul",
+    ["барренс"]="Barrens", ["в барренсе"]="in Barrens",
+
+    -- Arena / team search
+    ["ищу напа в свою тиму"]="LF partner for my team",
+    ["в свою тиму"]="for my team",
+    ["свою тиму"]="my team",
+
+    -- Complaints / rants
+    ["задолбали спамить"]="tired of spam",
+    ["задолбали своим"]="tired of your",
+    ["гавно спамом"]="shit spam",
+    ["спамить ги"]="spam guild",
+    ["чат для 1300 онлайна"]="chat for 1300 online",
+    ["не готов к такому"]="not ready for such",
+    ["наплыву беженцев"]="influx of refugees",
+
+    -- LFG shortcuts
+    ["нужно 2 дд"]="need 2 dps",
+    ["нужно 3 дд"]="need 3 dps",
+    ["нужно 1 дд"]="need 1 dps",
+    ["надо 2 дд"]="need 2 dps",
+    ["надо 3 дд"]="need 3 dps",
+    ["надо 1 дд"]="need 1 dps",
+    ["дд ищу"]="LF dps",
+    ["на бг"]="for BG",
+
+    -- Attunement / travel / summon
+    ["в инвизе пробежать"]="run in stealth",
+    ["в инвизе"]="in stealth",
+    ["в стелс"]="in stealth",
+    ["пробежать до"]="run to",
+    ["открой портал в"]="open portal to",
+    ["портал в аутленд"]="portal to Outland",
+    ["портал в каменор"]="portal to Stonard",
+    ["порт в каменор"]="port to Stonard",
+    ["порт в аутленд"]="port to Outland",
+
+    -- Enchanting questions
+    ["кто чарит"]="who can enchant",
+    ["кто чарнет"]="who can enchant",
+    ["кто чарит на"]="who enchants for",
+    ["12 агилы"]="12 agility",
+    ["9 выносливости"]="9 stamina",
+    ["процент к бегу"]="% run speed",
+    ["к бегу"]="to run speed",
+    ["небольшой процент"]="small percent",
+    ["15 меткости"]="15 hit",
+    ["15 меткости заклинания"]="15 spell hit",
+    ["меткости заклинания"]="spell hit",
+    ["на перчи"]="on gloves",
+
+    -- Recruitment ad templates
+    ["розыск:"]="WANTED:",
+    ["разыскивается"]="wanted",
+    ["разыскиваетсяч"]="wanted",
+
+    -- Asking/meta
+    ["гм тут"]="GM here?",
+    ["гм есть"]="any GM",
+    ["гм если тут"]="GM if here",
+    ["свяжись пожалуйста"]="please contact",
+    ["ищу данжи"]="looking for dungeons",
+    ["как тут данжи искать"]="how to find dungeons",
+    ["данжи искать"]="find dungeons",
+    ["данжи искаться"]="dungeon finder",
+    ["данжи искались"]="dungeons were found",
+    ["сервер мертвый"]="server is dead",
+    ["сервер лагает"]="server is lagging",
+    ["сервак лагает"]="server is lagging",
+
+    -- "Ордена Алого" etc
+    ["монастырь алого ордеан"]="Scarlet Monastery",
+
+    -- Idioms often seen
+    ["все реально"]="it's all doable",
+    ["было бы желание"]="if you want it",
+    ["остальное в рейдах"]="the rest from raids",
+    ["чаще всего"]="most often",
+    ["есть вариант"]="there's an option",
+    ["для ленивых"]="for the lazy",
+    ["попроси портал"]="ask for a portal",
+    ["пробеги по всем"]="run to all",
+    ["делать быстро"]="to do quickly",
+
+    -- Hint/teach phrases
+    ["чаще всего в ги"]="usually in guild",
+    ["чаще всего в гильдии"]="usually in guild",
+    ["в лфг можно"]="via LFG you can",
+    ["долго будешь искать"]="you'll search long",
+    ["бывает долго"]="sometimes takes long",
+
+    -- Arena rating phrases
+    ["рег 2с"]="reg 2v2",
+    ["рег 3с"]="reg 3v3",
+    ["рег 5с"]="reg 5v5",
+    ["high reit"]="high rating",
+
+    -- Helheim guild ad
+    ["приоритет в новых людях"]="priority for new players",
+    ["на сервере"]="on the server",
+    ["шмот не важен"]="gear doesn't matter",
+    ["для малых лвл"]="for low levels",
+    ["мы ценим"]="we value",
+    ["ценим новых игроков"]="we value new players",
 }
 
 -- ---------------------------------------------------------------------------
@@ -1357,6 +1595,261 @@ ns.WORDS = {
     ["обязательно"]="definitely", ["непременно"]="for sure",
     ["примерно"]="about", ["ровно"]="exactly",
     ["около"]="around",
+
+    -- ================================================================
+    -- Log-006 single-token additions
+    -- ================================================================
+
+    -- Difficulty slang (very common)
+    ["гер"]="heroic", ["геры"]="heroics", ["геров"]="heroics", ["гере"]="heroic",
+    ["нормалы"]="normals", ["нормалку"]="normal", ["нормалке"]="normal",
+    ["нм"]="(normal)",
+    ["дейлик"]="daily", ["дейлики"]="dailies",
+
+    -- Dungeon: Узилище (prison, used colloquially for Arcatraz on ruRU servers)
+    ["узилище"]="Arcatraz",  -- context-dependent; Arcatraz is the prison-themed dungeon
+    ["узилищер"]="Arcatraz (heroic)",
+
+    -- Summon / slot / reserve
+    ["сум"]="summon", ["сумм"]="summon", ["саммон"]="summon",
+    ["ласт"]="last", ["ласта"]="last boss", ["ласту"]="last boss",
+    ["слот"]="slot", ["слоты"]="slots", ["слотов"]="slots",
+    ["штаны"]="pants", ["штанов"]="pants", ["штанки"]="pants",
+    ["рез"]="reserved", ["резерв"]="reserved", ["резерва"]="reserved",
+    ["скип"]="skip", ["скипаем"]="skipping",
+    ["ран"]="run",
+    ["репа"]="rep", ["репой"]="rep", ["репы"]="rep", ["репу"]="rep", ["репе"]="rep",
+
+    -- Days of the week (short Russian)
+    ["пн"]="Mon", ["вт"]="Tue", ["ср"]="Wed", ["чт"]="Thu",
+    ["пт"]="Fri", ["сб"]="Sat", ["вс"]="Sun",
+    ["пнд"]="Mon", ["чтв"]="Thu",
+    ["выходной"]="day off", ["выходные"]="weekend",
+
+    -- Moscow / Irkutsk time
+    ["иркутскому"]="Irkutsk", ["иркутское"]="Irkutsk", ["иркутск"]="Irkutsk",
+    ["моск"]="Moscow", ["москв"]="Moscow",
+
+    -- Guild short / communication
+    ["ги"]="guild", ["гы"]="guild", ["гилде"]="guild", ["гилду"]="guild",
+    ["связь"]="communication", ["обязательная"]="required", ["обязательный"]="required",
+    ["дискорд"]="Discord", ["дискорда"]="Discord",
+    ["доп"]="extra", ["доп."]="extra",
+    ["вопросам"]="questions", ["вопроса"]="question", ["вопрос"]="question",
+    ["походов"]="trips", ["поход"]="trip", ["походы"]="trips",
+    ["помогаем"]="we help", ["помогают"]="they help",
+    ["одеваем"]="we gear up", ["подсказываем"]="we advise",
+    ["шамы"]="shamans", ["присты"]="priests",
+
+    -- Arena-rating class shorthands
+    ["ршам"]="resto shaman", ["рдру"]="resto druid",
+    ["рпал"]="resto paladin", ["рприст"]="disc priest",
+    ["энх"]="enhancement", ["энха"]="enhancement",
+    ["фрост маг"]="frost mage",
+
+    -- Quest / journal / accept / turn-in
+    ["сдать"]="turn in", ["сдаёт"]="turns in", ["сдают"]="they turn in",
+    ["сдаётся"]="gets turned in", ["сдал"]="turned in",
+    ["выполнить"]="complete", ["выполнено"]="completed", ["выполнен"]="completed",
+    ["выполнила"]="completed", ["выполнили"]="completed",
+    ["журнале"]="journal", ["журнал"]="journal", ["журнала"]="journal",
+    ["пропал"]="disappeared", ["пропала"]="disappeared", ["пропали"]="disappeared",
+    ["искать"]="to search", ["искаться"]="to be found", ["искались"]="were found",
+    ["найти"]="to find", ["нашли"]="found",
+    ["закроют"]="will close", ["закрыли"]="closed", ["закрыт"]="closed",
+    ["баджи"]="badges", ["баджа"]="badges", ["баджей"]="badges",
+    ["месяца"]="month", ["месяц"]="month", ["месяцев"]="months",
+
+    -- Instance helpers
+    ["атюн"]="attunement", ["аттюн"]="attunement", ["аттюны"]="attunements", ["атюны"]="attunements",
+    ["атюном"]="attunement", ["аттюном"]="attunement",
+    ["барабаны"]="drums", ["барабанами"]="drums",
+    ["санвела"]="Sunwell", ["санвел"]="Sunwell",
+    ["каменор"]="Stonard",
+    ["шатрах"]="in Shattrath", ["шатра"]="Shattrath",
+    ["аутленд"]="Outland", ["аутленда"]="Outland", ["аутлэнд"]="Outland",
+
+    -- Verbs
+    ["помочь"]="to help", ["помощь"]="help",
+    ["идти"]="to go", ["идёт"]="goes", ["идут"]="they go",
+    ["бежать"]="to run", ["пробежать"]="run through", ["пробегать"]="run through",
+    ["пробеги"]="run through", ["пробежит"]="will run",
+    ["сумануться"]="get summoned", ["сумануться?"]="get summoned",
+    ["поднять"]="raise/level", ["поднимать"]="to raise",
+    ["думали"]="thought", ["думаем"]="we think",
+    ["вступаешь"]="you join", ["вступай"]="join",
+    ["ищешь"]="you search", ["ищу7"]="LF",
+    ["было"]="was", ["бывает"]="happens",
+    ["чаще"]="more often", ["всего"]="of all / in total",
+    ["кем"]="whom (with)",
+
+    -- Gear / chat slang
+    ["ткань"]="cloth", ["ткани"]="cloth",
+    ["руническая"]="runic",
+    ["изначальная"]="primal", ["изначальный"]="primal",
+    ["фолиант"]="tome", ["фолианта"]="tome",
+    ["сотворения"]="of conjuring", ["сотворение"]="conjure",
+    ["воды"]="water", ["вода"]="water",
+    ["мощь"]="might", ["мощи"]="might",
+    ["туз"]="ace",
+    ["колода"]="deck", ["колоды"]="deck",
+    ["зверей"]="beasts", ["зверь"]="beast",
+    ["пустоты"]="void", ["пустоту"]="void",
+    ["хлыст"]="crop/whip", ["хлыста"]="crop",
+    ["ездовой"]="riding", ["ездовая"]="riding",
+    ["назана"]="Nazan", ["назан"]="Nazan",
+
+    -- Enchanting verbs
+    ["чарит"]="enchants", ["чарнет"]="enchants", ["чарил"]="enchanted",
+    ["инчант"]="enchant", ["инчатер"]="enchanter", ["инчантер"]="enchanter",
+
+    -- Stats shorthand
+    ["агилы"]="agility", ["агила"]="agility", ["агилу"]="agility",
+    ["меткости"]="hit", ["меткость"]="hit",
+    ["заклинания"]="spell", ["заклинаний"]="spells",
+    ["выносливости"]="stamina", ["выносливость"]="stamina",
+    ["небольшой"]="small", ["небольшая"]="small",
+    ["браслетов"]="bracers", ["браслеты"]="bracers", ["браслет"]="bracer",
+
+    -- Common chat verbs/phrases
+    ["спамить"]="to spam", ["спамом"]="spam", ["спам"]="spam",
+    ["задолбали"]="fed up", ["задолбал"]="fed up",
+    ["гавно"]="shit", ["говно"]="shit", ["хрень"]="junk", ["херь"]="crap",
+    ["игнорировать"]="ignore", ["игнор"]="ignore",
+    ["дружно"]="together",
+    ["толку"]="use/benefit", ["толк"]="sense",
+    ["обьядиниться"]="unite", ["обьядинится"]="unite", -- typo variants
+    ["объединиться"]="unite", ["объединитесь"]="unite",
+    ["лидеров"]="leaders", ["лидера"]="leader", ["лидер"]="leader",
+    ["эго"]="ego",
+    ["своим"]="own", ["своими"]="own", ["своими своим"]="own",
+    ["ядиница"]="unit (typo)", ["ядиноличник"]="loner (typo)",
+    ["единица"]="unit", ["единоличник"]="loner",
+    ["сёрные"]="sulfur (typo of серные)", ["серные"]="sulfur",
+    ["топи"]="swamps",
+    ["желающие"]="volunteers", ["желающий"]="volunteer",
+    ["мертвый"]="dead", ["метвый"]="dead (typo)",
+    ["онлайна"]="online",
+    ["шо"]="what", -- Ukrainian variant
+    ["говорить"]="to talk", ["говори"]="speak", ["говорим"]="we talk",
+
+    -- Misc descriptors
+    ["приоритет"]="priority",
+    ["людях"]="people", ["людей"]="people", ["люди"]="people",
+    ["сервере"]="server", ["сервак"]="server (slang)",
+    ["важен"]="important", ["важно"]="important", ["важный"]="important",
+    ["малых"]="small", ["маленьких"]="small",
+    ["бонусы"]="bonuses", ["бонус"]="bonus",
+    ["ценим"]="we value",
+    ["розыск"]="wanted",
+
+    -- Misc verbs
+    ["попроси"]="ask", ["попросить"]="to ask", ["прошу"]="please/I ask",
+    ["просто"]="simply", ["просто"]="just",
+    ["делать"]="to do",
+    ["сказать"]="to say",
+    ["потаскать"]="drag around",
+    ["умничаешь"]="being smart", ["умничай"]="be smart",
+
+    -- Zones/places
+    ["монастырь"]="Scarlet Monastery",
+    ["монастыря"]="Scarlet Monastery",
+    ["кладбище"]="Graveyard",
+    ["лабиринты"]="Labyrinths",
+    ["иглошкуры"]="Razorfen Kraul",
+    ["баресне"]="Barrens (typo)", ["барренс"]="Barrens",
+
+    -- Orders / scarlet
+    ["алого"]="Scarlet", ["алый"]="Scarlet", ["алые"]="Scarlet",
+    ["ордена"]="order", ["ордеан"]="order (typo)", ["орден"]="order",
+    ["рыцари"]="knights", ["рыцарь"]="knight",
+
+    -- Help calls
+    ["элитного"]="elite", ["элитный"]="elite", ["элита"]="elite",
+    ["моба"]="mob", ["мобы"]="mobs",
+
+    -- Inventory
+    ["сумки"]="bag", ["сумку"]="bag",
+
+    -- Misc
+    ["раздел"]="section", ["раздела"]="section",
+    ["крики"]="shouts",
+    ["аттюны"]="attunements",
+    ["вариант"]="option", ["ленивых"]="lazy",
+    ["локация"]="location",
+
+    -- Abbreviations / possessives
+    ["свою"]="my", ["свой"]="my",
+    ["тиму"]="team", ["тима"]="team", ["тимы"]="team",
+
+    -- Mistypes / rare
+    ["свяяжись"]="contact (typo)", ["свяжись"]="contact",
+    ["обьядиниться"]="unite (typo)",
+
+    -- Stuff
+    ["собирает"]="gathers", ["собирается"]="is gathering",
+
+    -- Yes/no variants
+    ["неет"]="nooo", ["даа"]="yesss",
+
+    -- Tech
+    ["гуглит"]="googles", ["гугл"]="google",
+
+    -- Go/other
+    ["гоу"]="go",
+
+    -- Misc adjectives
+    ["опытных"]="experienced", ["опытный"]="experienced",
+    ["эффективного"]="effective", ["эффективный"]="effective",
+    ["прохождения"]="progression", ["прохождение"]="progression",
+    ["усиления"]="strengthening",
+
+    -- Helper fillers
+    ["видимо"]="apparently",
+    ["нафиг"]="whatever", ["нафик"]="whatever",
+    ["сдались"]="needed", -- "не сдались" = "nobody needs"
+
+    -- ---- Final gap-fill from log-006 simulation ----
+    ["можно"]="can", ["можна"]="can",
+    ["нельзя"]="cannot",
+    ["лока"]="warlock (acc)", ["локу"]="warlock",
+    ["св"]="Steamvault",  -- in LFG "СВ норм" = Steamvault normal
+    ["инвиз"]="stealth", ["инвизе"]="in stealth", ["в инвизе"]="in stealth",
+    ["уйти"]="to leave", ["ушел"]="left", ["уходит"]="leaves",
+    ["2х2"]="2v2", ["3х3"]="3v3", ["5х5"]="5v5",
+    ["2на2"]="2v2", ["3на3"]="3v3", ["5на5"]="5v5",
+    ["чет"]="kinda", ["чёт"]="kinda",
+    ["которого"]="whom/which", ["которую"]="which",
+    ["этим"]="this", ["этих"]="these",
+    ["назад"]="ago",
+    ["мосту"]="on the bridge", ["мост"]="bridge", ["моста"]="bridge",
+    ["арен"]="arenas",
+    ["туртлу"]="Turtle WoW", ["туртл"]="Turtle WoW",
+    ["дрочило"]="(vulgar)",
+    ["играют7"]="play?",  -- common typo: Shift+7 = "?" on EN layout
+    ["делать7"]="do?",
+    ["есть7"]="any?",
+    ["играют"]="play",
+    ["4у"]="I have",  -- typo "у меня" -> "4у меня"
+    ["нгадо"]="need (typo)",
+    ["гуглит"]="googles", ["погугли"]="google it",
+    ["льдии"]="guild (truncated)",
+    -- Latin 'c' instead of Cyrillic 'с' — keyboard layout mishap
+    ["cум"]="summon",  -- latin c + cyrillic um
+    ["cумм"]="summon",
+    -- More verb / adjective conjugations
+    ["купил"]="bought (m)", ["купила"]="bought (f)", ["купили"]="bought",
+    ["пишет"]="writes", ["пишут"]="they write",
+    ["вступаешь"]="you join",
+    -- Misc slang
+    ["юип"]="yep",
+    -- Days-of-week full Russian
+    ["понедельник"]="Monday", ["вторник"]="Tuesday", ["среда"]="Wednesday",
+    ["четверг"]="Thursday", ["пятница"]="Friday", ["суббота"]="Saturday",
+    ["воскресенье"]="Sunday",
+    ["кару"]="Karazhan",  -- accusative missing in v0.6.2
+    ["выбирайте"]="choose", ["выбирай"]="choose", ["выбери"]="choose",
+    ["выбираем"]="we choose",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).

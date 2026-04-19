@@ -224,6 +224,14 @@ local function Translate(msg)
     lowered = lowered:gsub("(%d)\209\133\208\184\208\187\208\187?",  "%1 healer")
     -- "<num>танк" -> "<num> tank"
     lowered = lowered:gsub("(%d)\209\130\208\176\208\189\208\186",   "%1 tank")
+    -- "<num>рейт" -> "<num> rating"  (e.g. "1712рейт")
+    lowered = lowered:gsub("(%d+)\209\128\208\181\208\185\209\130",  "%1 rating")
+    -- "<num>мин" -> "<num> min"
+    lowered = lowered:gsub("(%d+)\208\188\208\184\208\189",          "%1 min")
+    -- "<num>сек" -> "<num> sec"
+    lowered = lowered:gsub("(%d+)\209\129\208\181\208\186",          "%1 sec")
+    -- "<num>лвл" -> "<num> lvl"
+    lowered = lowered:gsub("(%d+)\208\187\208\178\208\187",          "%1 lvl")
 
     local withPh, subs = ApplyPhrases(lowered)
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)

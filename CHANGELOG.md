@@ -4,6 +4,69 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.7.0] - 2026-04-19
+
+### Coverage
+Fresh WoWCircle TBC session (log 006, 2248 lines, ~230 unique Russian
+messages with very different themes from previous logs — guild-chat
+recruiting, heroic-dungeon LFG, attunement questions, schedule posts,
+Russian-localised quest/item names, complaints about spam). Starting
+coverage was **71 %** (710/991 Cyrillic tokens covered); after this
+release it is **98 %** (697/710 tokens, remaining 13 are mostly
+player nicknames). Dictionary grew from 2361 → **3261 entries**
+(698 phrases + 2563 words).
+
+### Added
+- **Difficulty-mode slang**: `гер`/`геры` (heroic), `нормалы`/`нм`/`нормалку`
+  (normal), `дейлик` (daily). These are the dominant way Russian TBC
+  players tag LFG posts, previously falling through as unknown.
+- **Loot / raid-roster idioms**: `ласт`/`ласта`/`ласту` (last boss),
+  `сум к ласту` (summon to last), `слот`, `штаны рез`/`штаны резерв`
+  (pants reserved), `перчи рез`, `плащ рез`, `ласт слот`.
+- **Instance-with-mode phrases**: `рампы гер`, `рампы нм`, `бф гер`,
+  `шх гер`, `шм гер`, `паровое нм`, `паровое гер`, `узилище гер`,
+  `узилищер` (Arcatraz heroic).
+- **Weekly-schedule vocabulary**: days of week short (пн, вт, ср, чт, пт,
+  сб, вс) and full (понедельник..воскресенье), `сб и вс`, `с пн по пт`,
+  `пн-чт`, `выходной`, `сбор в 19:00`, `по иркутскому времени`,
+  `по московскому времени`.
+- **Quest-flow phrases** seen in log: `прикосновение занзила`
+  (Touch of Zanzil), `как выполнить`, `сдать не могу`, `квест не сдаётся`,
+  `в журнале пишет`, `за дейлик`, `ключ за дейлик`.
+- **Russian-localised item names**: `туз из колоды зверей` (Ace of
+  Beasts), `фолиант сотворения воды` (Tome of Conjure Water),
+  `изначальная мощь` (Primal Might), `ткань пустоты` (Netherweave Cloth),
+  `руническая ткань` (Runecloth), `ездовой хлыст назана` (Nazan's Riding
+  Crop).
+- **Russian-localised zone names**: `сёрные топи` (Swamp of Sorrows),
+  `алый монастырь` / `монастырь алого` (Scarlet Monastery), `на кладбище`
+  (SM Graveyard wing), `лабиринты иглошкуры` (Razorfen Kraul),
+  `баресне`/`барренс` (Barrens), `каменор` (Stonard).
+- **Attunement talk**: `атюн`/`аттюн` + case forms, `атюн на бт`
+  (BT attunement), `с барабанами` (with drums), `прохождения санвела`
+  (Sunwell progression), `для уcиления гильдии` (latin-'c' typo
+  variant included).
+- **Guild-recruit boilerplate**: `помогаем одеваем подсказываем`, `связь
+  обязательная (дискорд)`, `для походов в рейды`, `по доп. вопросам в пм`,
+  `приоритет в новых людях`, `шмот не важен`, `мы ценим`.
+- **Complaint vocabulary**: `задолбали спамить ги`, `гавно-спам`, `эго
+  гильд лидеров`, `обьядиниться`/`объединиться`, `игнорировать`,
+  `сервак лагает`, `не готов к наплыву беженцев`.
+- **Arena-rating team search**: `ищу напа в свою тиму`, short class tags
+  `ршам`/`рдру`/`рпал`/`энх`/`энха`.
+
+### Added (preprocessors in Core.lua)
+- `<num>рейт` → `<num> rating`  (e.g. `1712рейт` → `1712 rating`)
+- `<num>мин` → `<num> min`
+- `<num>сек` → `<num> sec`
+- `<num>лвл` → `<num> lvl`
+  (complementing existing `<num>к/г/дд/хил/танк` preprocessors.)
+
+### Fixed
+- Missing `кару` (Karazhan accusative) — common in "кто на кару".
+- Disambiguated `можно`, `лока`, `св`, `инвиз`, `уйти` that were falling
+  through as unknowns.
+
 ## [0.6.2] - 2026-04-19
 
 ### Fixed
