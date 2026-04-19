@@ -4,7 +4,7 @@ A pure-Lua Russian → English chat translator for **World of Warcraft 2.4.3** (
 
 > **Target client**: WoW 2.4.3 only. The addon uses the chat-filter signature, saved-variables flush timing, and secure-code rules specific to TBC. It will not work on Wrath/Cataclysm/MoP classic, retail, or post-3.0 private servers without changes.
 
-![version](https://img.shields.io/badge/version-0.4.0-blue)
+![version](https://img.shields.io/badge/version-0.5.0-blue)
 ![interface](https://img.shields.io/badge/interface-20400-orange)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
@@ -15,9 +15,10 @@ On a Russian-speaking TBC private server, 80–90 % of public-channel chat is in
 ## Features
 
 - **Rewrites incoming chat** across every channel (`CHAT_MSG_SAY`, `CHAT_MSG_YELL`, `CHAT_MSG_PARTY`, `CHAT_MSG_RAID*`, `CHAT_MSG_GUILD`, `CHAT_MSG_OFFICER`, `CHAT_MSG_WHISPER*`, `CHAT_MSG_CHANNEL`, `CHAT_MSG_EMOTE*`, `CHAT_MSG_MONSTER_*`).
-- **Bundled dictionary** seeded from real Global-channel chat on a live Russian TBC server:
-  - ~140 multi-word phrases (e.g. `ведет набор активных игроков` → *recruiting active players*, `ХС 5/5 БТ 7/9` → *Hyjal 5/5 BT 7/9*).
-  - ~440 single-word tokens — every TBC 5-man and raid, class/role abbreviations (`хил`, `танк`, `дд`, `шп`, `ферал`, …), LFG/LFM idioms (`нид`, `инв`, `го`, `ищу`, `ренд`), trade (`куплю`, `продам`, `стак`, `голд`), common slang (`ппц`, `бугров`, `мусорнулся`, `шиза`) and closed-class words (pronouns, prepositions, conjunctions, numerals).
+- **Bundled dictionary** with **2360+ entries** seeded from real Global-channel chat on a live Russian TBC server, then expanded with parallel research across Russian-English dictionaries, Russian WoW forums, and broader Russian WoW community content:
+  - ~400 multi-word phrases (e.g. `ведет набор активных игроков` → *recruiting active players*, `ХС 5/5 БТ 7/9` → *Hyjal 5/5 BT 7/9*, `в сердце разрушителя душ` → *Heart of the Soul-Destroyer (quest)*).
+  - ~1950 single-word tokens — every TBC 5-man and raid with all Russian short-forms, class/role/spec abbreviations (`хил`, `танк`, `шп`, `ферал`, `фростик`, `ретрик`, `холик`, `элька`, `афлик`, `деструктор`, …), LFG/LFM idioms (`нид`, `инв`, `го`, `ищу`, `ренд`), trade (`куплю`, `продам`, `стак`, `голд`), common slang (`ппц`, `бугров`, `мусорнулся`, `шиза`, `ору`, `жесть`, `кринж`, `топчик`), Russian zone/city names with grammatical cases (`штормграда`, `оргриммаре`, `каражане`), conjugated verbs (`я иду`, `пришёл`, `сделаю`, `будет`, `хочешь`), all common adjectives/adverbs/pronouns/prepositions/numerals.
+- **Gold shorthand handling**: `5к`, `4.5 к`, `500к` are recognised as thousand-shorthand and rendered as `5K`, `4.5K`, `500K` — not mistranslated as the preposition "к" (to).
 - **Automatic CP1251 detection** — many Russian private servers still ship chat in Windows-1251 rather than UTF-8. The addon sniffs and normalises on the fly so the same pipeline works regardless of encoding.
 - **Orange-highlighted untranslated tokens** — any Cyrillic word the dictionary did not match is kept in the original Cyrillic in orange, so readability doesn't collapse to mojibake when the dictionary is short.
 - **Per-session activity log** in `SavedVariables` — encodings seen, unknown token frequencies with sample context, filter call counts. Everything you need to grow the dictionary iteratively.

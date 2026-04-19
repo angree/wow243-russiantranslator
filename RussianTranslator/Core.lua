@@ -155,6 +155,15 @@ local function Translate(msg)
     if enc == "ascii" then return nil end
 
     local lowered = ToLower(normalized)
+
+    -- Preprocess: "<number><к>" is Russian gold-shorthand for "<number>K"
+    -- thousand (e.g. "5к" = 5 000, "4.5 к" = 4 500). Without this rule the
+    -- standalone "к" token falls through to its dictionary meaning "to",
+    -- which produces "WTS item for 4.5 to" instead of "WTS item for 4.5K".
+    -- Cyrillic "к" = bytes \208\186 (after ToLower the uppercase "К" has
+    -- already been folded to lowercase so we only need the lowercase form).
+    lowered = lowered:gsub("(%d[%d%.,]*)%s*\208\186", "%1K")
+
     local withPh, subs = ApplyPhrases(lowered)
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)
         return (TranslateToken(tok, normalized))

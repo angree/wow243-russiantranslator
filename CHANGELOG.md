@@ -4,7 +4,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.4.0] - 2026-04-19
+## [0.5.0] - 2026-04-19
+
+### Added
+- Major dictionary expansion: **2361 entries** (409 phrases + 1952 words), up
+  from 586 in v0.4.0 — a ~4x increase. Harvested in parallel by three
+  research agents:
+  - **General Russian-English vocabulary**: conjugated verbs in common forms
+    (я иду, пришёл, сделаю), everyday adjectives with all grammatical forms,
+    adverbs, pronouns in all cases, numerals 1–1000, time words, chat slang
+    (хз, имхо, норм, збс, ща, юзать), internet reactions (ору, жесть, кринж,
+    топчик, жиза), and emotional/insult vocabulary common in MMO chat.
+  - **Russian WoW TBC forum slang**: class/spec abbreviations (фростик,
+    ретрик, холик, протик, элька, энха, рестик, афлик, деструктор, мункин,
+    совунья), instance shorthand variants (шатхол, маналей, муни, маркнар),
+    server economy terms (буст, бустер, прем, примка, донат, реалманы,
+    пинкод), PvP/arena slang (бурст, кайт, контроль, кц, ммр, глад).
+  - **Broader Russian WoW web content**: Russian localised zone names
+    (Запределье, Нордскол, Калимдор, Штормград, Оргриммар, Даларан,
+    Шаттрат, Награнд, Зангартопь), Russian-language spell names players
+    shorthand (полимаг, молния цепью, удар в спину), professions and ranks
+    (алхимик, кузнец, ювелир, пошив, кожевник, горное дело), combat
+    call-outs (вайп, трай, клир, фокус огонь, не стой в огне).
+- Grammatical-case coverage for high-frequency WoW nouns (штормграда/
+  штормграде, оргриммара/оргриммаре, каражана/каражане/каре/кары).
+
+### Fixed
+- **Number + "к" is now translated as "K" thousand-shorthand** (e.g.
+  "продам за 5к" → "WTS for 5K", "4.5 к голда" → "4.5K gold"). Previously
+  the single-token "к" fell through to its preposition meaning "to",
+  producing nonsense like "WTS for 4.5 to". Implemented as a pre-token
+  regex replacement in the translation pipeline.
+- **Standalone "за" now defaults to "for"** instead of "Zul'Aman". The
+  Zul'Aman sense is already covered by phrases like "го за" and "кто на за",
+  so the common trade sense ("за 5к" = "for 5K") now translates correctly.
+
+
 
 ### Added
 - Comprehensive starter dictionary seeded from real Global-channel chat logs
