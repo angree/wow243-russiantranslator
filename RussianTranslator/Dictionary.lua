@@ -318,6 +318,132 @@ ns.PHRASES = {
     -- RL misc
     ["реальная жизнь"]="real life", ["ушёл афк"]="went afk", ["пошёл спать"]="going to bed",
     ["настроения нет"]="no mood",
+
+    -- =================================================================
+    -- Log-005 additions — contextual phrases that fix bad word-by-word
+    -- translations (e.g. "может" alone -> "maybe", but "кто может" -> "who can")
+    -- =================================================================
+
+    -- "может" disambiguation — verb "can" vs particle "maybe"
+    ["кто может зачарить"]="who can enchant",
+    ["кто может помочь"]="who can help",
+    ["кто может сделать"]="who can make",
+    ["кто может сводить"]="who can take me",
+    ["кто может"]="who can",
+    ["может помочь"]="can help",
+    ["может сделать"]="can do",
+    ["может зачарить"]="can enchant",
+    ["может сводить"]="can lead",
+    ["может быть"]="maybe",
+
+    -- "с какого" / levels / druid bird
+    ["с какого левела"]="from what level",
+    ["с какого лвл"]="from what lvl",
+    ["с какого уровня"]="from what level",
+    ["какого левела"]="what level",
+    ["какого лвл"]="what lvl",
+    ["с какого"]="from what",
+    ["у друида"]="for druid",
+    ["у мага"]="for mage",
+    ["у варика"]="for warrior",
+    ["у шама"]="for shaman",
+    ["у паля"]="for paladin",
+    ["у прист"]="for priest",
+    ["у ханта"]="for hunter",
+    ["у лока"]="for warlock",
+    ["птица у друида"]="druid flight form",
+    ["птицу у друида"]="druid flight form",
+
+    -- Guild "Дальний Восток" and recruitment phrases
+    ["дальний восток"]="Far East",
+    ["гильдия дальний восток"]="Far East guild",
+    ["примет новых игроков"]="accepts new players",
+    ["примет игроков"]="accepts players",
+    ["новых игроков"]="new players",
+    ["принимает новых"]="accepts new",
+
+    -- Timezone / scheduling
+    ["для тех у кого"]="for those with",
+    ["у кого"]="who has",
+    ["московского времени"]="Moscow time",
+    ["от московского времени"]="from Moscow time",
+    ["до московского времени"]="until Moscow time",
+    ["по московскому"]="by Moscow time",
+    ["мск время"]="MSK time",
+    ["по мск"]="by MSK",
+
+    -- Professional services wanted
+    ["ищу напа"]="LF partner",
+    ["ищу напарника"]="LF partner",
+    ["ищу инженера"]="LF engineer",
+    ["ищу ювелира"]="LF jeweler",
+    ["ищу кожевника"]="LF leatherworker",
+    ["ищу портного"]="LF tailor",
+    ["ищу алхимика"]="LF alchemist",
+    ["ищу кузнеца"]="LF blacksmith",
+    ["ищу повара"]="LF cook",
+    ["ищу начертателя"]="LF scribe",
+    ["нужен инженер"]="need engineer",
+    ["нужен ювелир"]="need jeweler",
+    ["нужен алхимик"]="need alchemist",
+
+    -- Scope / crit (numbers before крита/криты)
+    ["прицел 28 крита"]="28-crit scope",
+    ["прицел 28 криты"]="28-crit scope",
+    ["28 крита"]="28 crit",
+    ["28 криты"]="28 crit",
+
+    -- Instance suffix variants
+    ["паровое нормал"]="Steamvault (normal)",
+    ["паровое норм"]="Steamvault (normal)",
+    ["паровое хс"]="Steamvault (heroic)",
+    ["паровое хк"]="Steamvault (heroic)",
+    ["танк хил в паровое"]="tank healer in Steamvault",
+
+    -- "сосать" complaints (vulgar losing slang)
+    ["лол сосать"]="lol suck",
+    ["сосать на"]="suck for",
+
+    -- Crafting mat slang
+    ["мой реги"]="my regs",
+    ["мои реги"]="my regs",
+    ["мой мат"]="my mats",
+    ["мои маты"]="my mats",
+
+    -- wtb with slash
+    ["wtb/куплю"]="WTB",
+    ["куплю/wtb"]="WTB",
+    ["wts/продам"]="WTS",
+    ["продам/wts"]="WTS",
+
+    -- Boot enchant shorthand
+    ["стамина+бег"]="stamina + run speed",
+    ["стам+бег"]="stam + run speed",
+    ["стамина и бег"]="stamina and run speed",
+    ["ловкость+бег"]="agility + run speed",
+
+    -- boty: disambiguate the "bots" sense so "boots" default stays
+    ["боты пишут"]="bots write",
+    ["все боты"]="all bots",
+    ["все боты пишут"]="all bots write",
+    ["нет все боты"]="no all bots",
+    ["боты онлайн"]="bots online",
+    ["боты везде"]="bots everywhere",
+
+    -- Gaming / arena count
+    ["10 игр"]="10 games",
+    ["на 10 игр"]="for 10 games",
+    ["на 5 игр"]="for 5 games",
+    ["на 20 игр"]="for 20 games",
+    ["100 игр"]="100 games",
+
+    -- "Polze тут" style pings
+    ["тут ?"]="here?",
+    ["тут?"]="here?",
+
+    -- A few more polite common patterns
+    ["пиши в личку"]="whisper me",
+    ["кто может пж"]="who can please",
 }
 
 -- ---------------------------------------------------------------------------
@@ -692,7 +818,11 @@ ns.WORDS = {
     ["примка"]="buff item",
     ["прем"]="premium", ["реалманы"]="real money", ["реалы"]="real money", ["реал"]="irl money",
     ["рубли"]="rubles", ["бакс"]="buck", ["пинкод"]="pin code",
-    ["бот"]="bot", ["боты"]="bots", ["ботовод"]="botter",
+    -- боты is ambiguous: usually "boots" (gear slang) in LFG/trade chat,
+    -- occasionally "bots" (pejorative for bot-farmers) in complaint chat.
+    -- Default to "boots" here; the "bots" sense is picked up by phrases
+    -- ("боты пишут", "все боты" — see PHRASES above).
+    ["бот"]="bot", ["ботовод"]="botter",
     ["читер"]="cheater", ["чит"]="cheat", ["читы"]="cheats", ["читерить"]="cheat", ["античит"]="anticheat",
     ["мультачить"]="multibox", ["мультак"]="multiboxer",
     ["админ"]="admin", ["админа"]="admin", ["администрация"]="admin",
@@ -1146,6 +1276,87 @@ ns.WORDS = {
     ["ыыы"]="hmmm", ["ыы"]="hm",
     ["ппцз"]="damn",
     ["удачи"]="good luck", ["удача"]="luck",
+
+    -- ================================================================
+    -- Log-005 single-token additions
+    -- ================================================================
+    -- Compass / "Far East" guild parts
+    ["дальний"]="far", ["дальняя"]="far", ["дальнее"]="far", ["дальние"]="far",
+    ["восток"]="east", ["востока"]="east", ["востоке"]="east",
+    ["запад"]="west", ["север"]="north", ["юг"]="south",
+
+    -- Recruitment verbs
+    ["примет"]="accepts", ["принимает"]="accepts", ["принимаем"]="recruiting",
+    ["принимают"]="accept", ["принимай"]="accept",
+
+    -- Pronouns / determiners missed earlier
+    ["новых"]="new", ["новый"]="new", ["нового"]="new", ["новые"]="new", ["новая"]="new",
+    ["тех"]="those", ["этих"]="these",
+    ["кого"]="whom", ["кому"]="to whom",
+    ["какого"]="what", ["какому"]="what", ["каких"]="which",
+    ["такого"]="such", ["такому"]="such", ["таких"]="such",
+
+    -- Time nouns
+    ["время"]="time", ["времени"]="time", ["временем"]="with time",
+    ["часов"]="hours", ["минут"]="minutes",
+    ["московского"]="Moscow", ["московское"]="Moscow",
+    ["московский"]="Moscow", ["московскому"]="Moscow",
+
+    -- Professions — inflected forms
+    ["инженер"]="engineer", ["инженера"]="engineer",
+    ["инженеру"]="engineer", ["инженером"]="engineer",
+    ["ювелира"]="jeweler", ["ювелиру"]="jeweler", ["ювелиром"]="jeweler",
+    ["алхимика"]="alchemist", ["алхимику"]="alchemist",
+    ["кузнеца"]="blacksmith", ["кузнецу"]="blacksmith",
+    ["кожевника"]="leatherworker", ["кожевнику"]="leatherworker",
+    ["портного"]="tailor", ["портному"]="tailor",
+    ["повара"]="cook", ["повару"]="cook",
+    ["начертателя"]="scribe", ["начертанием"]="inscription",
+
+    -- Enchant / materials
+    ["зачарить"]="enchant", ["зачарю"]="I'll enchant",
+    ["зачарит"]="will enchant", ["зачаровать"]="to enchant",
+    ["реги"]="regs", ["рега"]="reg", ["регент"]="reagent", ["регенты"]="reagents",
+    ["мат"]="mat", ["маты"]="mats", ["мата"]="mat", ["материалы"]="materials",
+    ["компоненты"]="components",
+
+    -- Level / class / form
+    ["левел"]="level", ["левела"]="level", ["левелов"]="levels", ["левелы"]="levels",
+    ["лвла"]="lvl", ["уровня"]="level",
+    ["птица"]="bird", ["птицу"]="bird", ["птички"]="birds",
+    ["летающая"]="flying", ["летающий"]="flying", ["летающее"]="flying",
+
+    -- Partner / teammate slang
+    ["напа"]="partner", ["напу"]="partner",
+    ["напарник"]="partner", ["напарника"]="partner",
+    ["напарнику"]="partner", ["напарником"]="partner", ["напарники"]="partners",
+
+    -- Gaming nouns
+    ["игр"]="games", ["игра"]="game", ["игре"]="game", ["игры"]="games", ["играм"]="games",
+
+    -- Enchant slots / boot enchant stat
+    ["бег"]="run speed", ["бега"]="run speed",
+    ["к скорости"]="to speed", ["к бегу"]="to run speed",
+
+    -- крит case variants
+    ["криты"]="crit", ["критов"]="crits",
+
+    -- Negative verbs + "suck"
+    ["сосать"]="to suck", ["сосёт"]="sucks", ["сосу"]="I suck",
+    ["отсос"]="suck (vulgar)", ["сосала"]="sucked",
+
+    -- Forum / community
+    ["форум"]="forum", ["форуме"]="forum", ["форума"]="forum",
+    ["пост"]="post", ["поста"]="post", ["постик"]="post",
+    ["тема"]="thread", ["темы"]="threads",
+
+    -- Directional / temporal prepositions (already partial)
+    ["от"]="from", ["до"]="until",
+
+    -- Misc modal / particles
+    ["обязательно"]="definitely", ["непременно"]="for sure",
+    ["примерно"]="about", ["ровно"]="exactly",
+    ["около"]="around",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).

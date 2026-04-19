@@ -4,6 +4,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.6.2] - 2026-04-19
+
+### Fixed
+- **`боты` disambiguated.** A duplicate key was mapping `боты` to "bots"
+  later in the file and overriding the earlier "boots" definition, so
+  `зачарить боты` (enchant boots) came out as "enchant bots". Kept the
+  "boots" default and added phrase overrides `боты пишут`, `все боты`,
+  `боты онлайн`, etc. for the bot-complaint sense.
+
+### Added
+- **Contextual phrases that fix bad word-by-word translations.** Several
+  Russian words are ambiguous in isolation but unambiguous inside common
+  phrases; added phrase entries to pick the correct sense:
+  - `кто может` / `кто может зачарить` / `может помочь` / `может сделать`
+    → "who can" / "who can enchant" / "can help" / "can do" (was landing
+    on "maybe" from the single-token fallback).
+  - `с какого левела` → "from what level" (bare "с" + "какого" + "левела"
+    previously missed).
+  - `птица у друида` → "druid flight form" (literal was "bird at druid").
+  - `дальний восток` → "Far East" (guild name on WoWCircle).
+  - `московского времени` / `от московского времени` → "Moscow time" /
+    "from Moscow time".
+  - `для тех у кого` → "for those with" (three words none of which were in
+    the single-token dictionary in their genitive/dative forms).
+- **LFG professional-services phrases**: `ищу инженера`, `ищу ювелира`,
+  `ищу кожевника`, `ищу портного`, `ищу алхимика`, `ищу кузнеца`,
+  `ищу напа`/`ищу напарника`, and `нужен X` counterparts.
+- **Crit-scope phrases**: `прицел 28 крита` / `прицел 28 криты` →
+  "28-crit scope", plus `28 крита` / `28 криты` as short forms. Handles
+  both crit-count genitive forms used in trade chat.
+- **Instance-suffix phrases** for Steamvault (`паровое нормал`,
+  `паровое норм`, `паровое хс`, `паровое хк`).
+- **Boot-enchant shorthand**: `стамина+бег`, `стам+бег`, `ловкость+бег`
+  → "stamina + run speed" etc. `бег` is dictionary-mapped to "run speed"
+  (boot enchant context) rather than "run" to avoid mistranslation in
+  trade chat.
+- **Misc chat**: `лол сосать`, `сосать на` (vulgar losing slang),
+  `wtb/куплю` and `куплю/wtb` (slash-joined mixed tokens), `мой реги`,
+  `на 10 игр` (arena partner search count).
+- **50+ single-word additions** covering the genitive/dative/instrumental
+  forms missed in log-005: `дальний`, `восток`, `примет`, `новых`, `тех`,
+  `кого`, `кому`, `какого`, `время`, `времени`, `московского`, `инженера`,
+  `ювелира`, `алхимика`, `зачарить`, `реги`, `левела`, `птица`, `напа`,
+  `напарника`, `игр`, `криты`, `бег`, `сосать`, `форум`, `тема`, `пост`
+  and more.
+
+### Coverage
+After v0.6.2, live-chat token coverage on WoWCircle TBC Global is
+**98 %** (338 Cyrillic tokens, 334 hits, 4 remaining are player
+nicknames).
+
 ## [0.6.1] - 2026-04-19
 
 ### Added
