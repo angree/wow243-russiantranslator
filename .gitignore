@@ -20,6 +20,10 @@ releases/*.zip
 *.swo
 *~
 
+# Release-note scratch files
+.release_notes_tmp.md
+*.release_notes.tmp
+
 # OS cruft
 Thumbs.db
 .DS_Store
