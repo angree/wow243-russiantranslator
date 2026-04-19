@@ -513,7 +513,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
     elseif event == "PLAYER_LOGIN" then
         InitSession()
         local ok, fail = RegisterFilters()
-        Msg("|cffffcc00made by Grzegorz Korycki (Poczwarka @WoW)|r")
+        Msg("|cffffcc00made by Grzegorz Korycki (Poczwarka)|r")
         Msg(("loaded (session %s). filters: ok=%d fail=%d. Type /rt help."):format(
             session.started, ok, fail))
     elseif event == "PLAYER_LOGOUT" then

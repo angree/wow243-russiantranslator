@@ -48,7 +48,7 @@ Clone this repo anywhere, then either:
 When you log in, the addon prints:
 
 ```
-[RT] made by Grzegorz Korycki (Poczwarka @WoW)
+[RT] made by Grzegorz Korycki (Poczwarka)
 [RT] loaded (session 2026-04-19_12-34-56). filters: ok=17 fail=0. Type /rt help.
 ```
 
@@ -142,6 +142,6 @@ Pull requests that add dictionary entries, fix bad translations, or improve pipe
 
 ## Credits
 
-- Built by **Grzegorz Korycki** (Poczwarka @WoW).
+- Built by **Grzegorz Korycki** (Poczwarka).
 - Seeded from live chat on a Russian TBC server — anonymous thanks to every raid-pinger whose `нид хил 1 дд` ended up in the dictionary.
 - Chat-filter signature and several 2.4.3 pitfalls cross-checked against other working TBC addons, notably `Timed` (which correctly uses the TBC-era `function(msg)` filter signature).

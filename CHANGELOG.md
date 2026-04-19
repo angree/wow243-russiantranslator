@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.7.1] - 2026-04-19
+
+### Fixed
+- **Removed `@WoW` from author credit strings.** The author string
+  `"Grzegorz Korycki (Poczwarka @WoW)"` was being interpreted by GitHub
+  as an `@WoW` user-mention, auto-linking release notes, the README and
+  commit descriptions to `github.com/wow` — an unrelated GitHub account
+  who had nothing to do with this project. Every release published so
+  far was notifying that stranger. Replaced with `"(Poczwarka)"` and
+  retro-edited all six existing release notes (v0.4.0..v0.7.0) to strip
+  the mention. No functional changes; source, README, TOC author field,
+  and in-game startup credit all updated.
+
 ## [0.7.0] - 2026-04-19
 
 ### Coverage
