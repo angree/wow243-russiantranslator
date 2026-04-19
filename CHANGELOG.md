@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.1] - 2026-04-19
+
+### Added
+- **Slavic smiley convention** (`)`, `))`, `)))` for happy, `((`, `(((` for
+  sad) is now recognised and rewritten as the Western `:)` / `:(` form.
+  Russian and neighbouring nations drop the leading colon; to an English
+  reader this reads as a stray unmatched parenthesis.
+
+  The transform is paren-pair aware — we count opens vs closes and only
+  treat the excess as smileys. Ordinary parentheticals like
+  `кто на кару (хс)?` are left alone because their parens balance. A
+  leading colon from `:)` / `:))` is respected (no double-prefixing).
+
+  Transforms:
+
+  | Input                                | Output                         |
+  |--------------------------------------|--------------------------------|
+  | `привет)`                            | `привет :)`                    |
+  | `ппц скучно)))`                      | `ппц скучно:)))`               |
+  | `ура))))`                            | `ура:))))`                     |
+  | `жаль(((((`                          | `жаль:(((((`                   |
+  | `что-то не работает (`               | `что-то не работает :(`        |
+  | `(smth) дальше)`                     | `(smth) дальше :)`             |
+  | `(хс) вечером го))`                  | `(хс) вечером го:))`           |
+  | `смотри (это тут)` (balanced)        | unchanged                      |
+  | `lol :))` (already has colon)        | unchanged                      |
+  | `пока ;)` (wink)                     | unchanged                      |
+
 ## [0.8.0] - 2026-04-19
 
 ### Added — full grammatical-case coverage

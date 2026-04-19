@@ -233,6 +233,40 @@ local function Translate(msg)
     -- "<num>лвл" -> "<num> lvl"
     lowered = lowered:gsub("(%d+)\208\187\208\178\208\187",          "%1 lvl")
 
+    -- ------------------------------------------------------------------
+    -- Slavic smiley convention
+    -- ------------------------------------------------------------------
+    -- Russian (and other Slavic) chat drops the colon in :) and writes
+    -- just ) or )))) to express happiness. Sad faces are ((. An English
+    -- reader sees a stray unmatched paren and the message looks broken.
+    --
+    -- Heuristic: count paren pairs. If close > open, the excess ")"s are
+    -- smileys; if open > close, the excess "("s are sad faces. When
+    -- balanced (e.g. normal parenthetical like "кто на кару (хс)?"), we
+    -- leave everything alone.
+    --
+    -- We avoid double-prefixing cases like ":)" -> "::)" by requiring
+    -- the char before a multi-paren run not to be ":" (so the user's
+    -- existing colon is respected).
+    local opens, closes = 0, 0
+    for _ in lowered:gmatch("%(") do opens  = opens  + 1 end
+    for _ in lowered:gmatch("%)") do closes = closes + 1 end
+
+    if closes > opens then
+        -- )) / ))) / )))) runs (skip if already prefixed with ":")
+        lowered = lowered:gsub("([^:])(%)%)+)",                "%1:%2")
+        lowered = lowered:gsub("^(%)%)+)",                     ":%1")
+        -- trailing single ) after letter/cyrillic, with or without space
+        lowered = lowered:gsub("([%w\128-\255])%)%s*$",        "%1 :)")
+        lowered = lowered:gsub("([%w\128-\255])%s+%)%s*$",     "%1 :)")
+    end
+    if opens > closes then
+        lowered = lowered:gsub("([^:])(%(%(+)",                "%1:%2")
+        lowered = lowered:gsub("^(%(%(+)",                     ":%1")
+        lowered = lowered:gsub("([%w\128-\255])%(%s*$",        "%1 :(")
+        lowered = lowered:gsub("([%w\128-\255])%s+%(%s*$",     "%1 :(")
+    end
+
     local withPh, subs = ApplyPhrases(lowered)
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)
         return (TranslateToken(tok, normalized))
