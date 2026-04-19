@@ -1,0 +1,26 @@
+# Personal chat logs used to seed the dictionary — may contain player data,
+# not meant for the public repo.
+WoWChatLog_*.txt
+WoWChatLog.txt
+
+# WoW client working directory, if ever dropped into the repo by mistake.
+WTF/
+Cache/
+Logs/
+Screenshots/
+Interface/
+
+# Built release zips — kept locally; publish via GitHub releases instead.
+releases/*.zip
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS cruft
+Thumbs.db
+.DS_Store
+desktop.ini

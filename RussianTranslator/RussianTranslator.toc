@@ -1,0 +1,9 @@
+## Interface: 20400
+## Title: Russian Translator
+## Notes: Translates incoming Russian chat to English with [Russian] prefix
+## Author: Grzegorz Korycki (Poczwarka @WoW)
+## Version: 0.4.0
+## SavedVariables: RT_DB
+
+Dictionary.lua
+Core.lua
