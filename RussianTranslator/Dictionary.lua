@@ -2590,6 +2590,172 @@ ns.WORDS = {
     -- Misc verb forms
     ["возьмёмся"]="let's take", ["беритесь"]="take",
     ["увидимся"]="see you", ["увидимся позже"]="see you later",
+
+    -- =================================================================
+    -- Log-009 (live WoWChatLog.txt, 394 unique Russian lines, arg/drama
+    -- session with song lyrics, insults, idiomatic Russian, jeer
+    -- phrases, movie/pop-culture references).
+    -- Basic words that were surprisingly missing: наверное, тогда,
+    -- давай, раз, конечно (as standalone), etc.
+    -- =================================================================
+    -- Base common words missing
+    ["наверное"]="probably", ["наверно"]="probably",
+    ["тогда"]="then",
+    ["конечно"]="of course", ["конеш"]="of course",
+    ["давай"]="come on", ["давайте"]="come on (pl)",
+    ["давайся"]="let's go",
+    ["раз"]="once/time", ["разы"]="times", ["разов"]="times (gen)",
+    ["будто"]="as if", ["как будто"]="as if",
+    ["иначе"]="otherwise",
+    ["тихо"]="quietly", ["тихий"]="quiet (m)", ["тихая"]="quiet (f)",
+
+    -- Discord / tech
+    ["дс"]="Discord", ["с дс"]="from Discord", ["в дс"]="on Discord",
+    ["кикнули"]="kicked",  -- plural past
+
+    -- Argument / drama vocabulary (this session had a flame war)
+    ["базар"]="talk (slang)", ["за базар"]="for your talk",
+    ["за свой базар"]="for your words",
+    ["отвечаешь"]="you answer", ["не отвечаешь"]="you don't answer",
+    ["отвечай"]="answer", ["отвечать"]="to answer",
+    ["отевет"]="answer (typo)",
+    ["обещал"]="promised (m)", ["обещала"]="promised (f)", ["обещали"]="promised (pl)",
+    ["гму"]="to GM", ["с гм"]="with GM",
+    ["матерится"]="cursing", ["материться"]="to curse",
+    ["мат"]="profanity",
+    ["разивите"]="typo (develop)", ["развивайте"]="develop",
+    ["куток"]="corner (slang)",
+    ["обиженных"]="offended (gen pl)", ["обиженный"]="offended",
+    ["кидают"]="they throw", ["кидают везде"]="kicked from everywhere",
+    ["раскидаешь"]="you'll throw", ["раскидай"]="throw",
+    ["слабее"]="weaker", ["слабости"]="weakness",
+    ["слабый"]="weak (m)", ["слабая"]="weak (f)",
+    ["вряд"]="hardly", ["ли"]="(question particle)",
+    ["лишний"]="extra", ["лишняя"]="extra (f)",
+    ["доказывает"]="proves", ["доказать"]="to prove", ["доказал"]="proved (m)",
+    ["пу"]="pu (onomatopoeia)",
+    ["ааа"]="aaa", ["аааа"]="aaaa", ["аааааа"]="aaaaaa",
+    ["факты"]="facts", ["факт"]="fact",
+    ["расходимся"]="we're done here",
+    ["сенсации"]="sensation (gen)", ["сенсация"]="sensation",
+    ["не будет"]="won't be",
+    ["причем"]="by the way", ["причём"]="by the way",
+    ["разьеб"]="fuckup (vulgar)", ["разъеб"]="fuckup (vulgar)",
+    ["ждал"]="waited (m)",
+    ["наконец"]="finally", ["наконец-то"]="finally",
+    ["послушать"]="to listen", ["слушать"]="to listen",
+    ["разнос"]="scolding",
+    ["опущенный"]="humiliated", ["опущен"]="humiliated",
+    ["пвешные"]="PvE players", ["пвешник"]="PvE player",
+    ["почитаю"]="I'll read", ["почитать"]="to read",
+    ["рот"]="mouth", ["рота"]="mouth (gen)", ["рту"]="in mouth",
+    ["публично"]="publicly",
+    ["пойму"]="I'll understand", ["поймёшь"]="you'll understand",
+    ["непойму"]="don't understand",
+    ["херовый"]="shitty (m)", ["херовая"]="shitty (f)", ["херово"]="shittily",
+    ["нахуя"]="why the fuck (vulgar)",
+
+    -- Items / gear
+    ["узда"]="bridle", ["узду"]="bridle (acc)",
+    ["белого"]="white (gen)", ["белый"]="white", ["белая"]="white (f)",
+    ["жеребца"]="stallion (gen)", ["жеребец"]="stallion",
+    ["роль"]="role", ["роли"]="roles",
+    ["сундуков"]="chests (gen pl)",
+    ["закинул"]="threw in (m)", ["закинула"]="threw in (f)",
+    ["шекелей"]="shekels (money slang)", ["шекель"]="shekel",
+    ["трансфер"]="transfer", ["трансфера"]="transfer (gen)",
+    ["перса"]="character (gen)", ["перс"]="character",
+    ["с шторма"]="from Storm (server)",
+    ["шторма"]="Storm (server gen)",
+
+    -- Cultural / pop
+    ["фильм"]="movie", ["фильма"]="movie (gen)", ["фильмы"]="movies",
+    ["свадебную"]="wedding (acc f)", ["свадебная"]="wedding (f)",
+    ["вазу"]="vase (acc)", ["ваза"]="vase",
+    ["глянь"]="look (slang imp)",
+    ["река"]="river", ["реки"]="rivers",
+    ["берега"]="shores/banks",
+    ["закате"]="at sunset", ["закат"]="sunset",
+    ["крутые"]="cool (pl)", ["крутой"]="cool",
+    ["неси"]="carry", ["носи"]="carry",
+    ["меня"]="me",
+    ["тебя"]="you",
+    ["имени"]="by name", ["имя"]="name",
+    ["ключевой"]="key (adj)", ["ключевая"]="key (f)",
+    ["водой"]="by water", ["воде"]="in water",
+    ["напои"]="give to drink", ["напоить"]="to give drink",
+    ["позови"]="call", ["позову"]="I'll call",
+    ["грусть"]="sadness", ["печаль"]="sorrow", ["грусть-печаль"]="sadness",
+    ["черкизовский"]="Cherkizovsky (brand)",
+
+    -- More conjugations / forms
+    ["мной"]="by me", ["со мной"]="with me",
+    ["надо же"]="what do you know",
+    ["ясно"]="clear",
+
+    -- Misc
+    ["кстати"]="by the way",
+
+    -- Drama session idioms (still from log-009)
+    ["иди"]="go",
+    ["бы"]="would", ["б"]="would",
+    ["открыть"]="to open", ["открывать"]="to open (imp)",
+    ["открой"]="open", ["открываю"]="I open",
+    ["уф"]="uf (sigh)",
+    ["маньяк"]="maniac", ["маньяка"]="maniac (gen)",
+    ["непристойности"]="indecencies", ["непристойность"]="indecency",
+    ["пики"]="pics", ["пик"]="pic",
+    ["шлет"]="sends", ["шлёт"]="sends", ["шлёшь"]="you send",
+    ["согласился"]="agreed (m)", ["согласилась"]="agreed (f)",
+    ["петушином"]="rooster (slang)",
+    ["словарь"]="dictionary", ["словаря"]="dictionary (gen)",
+    ["впадлу"]="too lazy (slang)", ["впадло"]="too lazy",
+    ["инчат"]="enchant",
+    ["кинули"]="threw (pl)",
+    ["трагедия"]="tragedy", ["трагедия)"]="tragedy",
+    ["тредс"]="Threads (social)", ["тредсе"]="on Threads",
+    ["читал"]="read (m)", ["читала"]="read (f)", ["читали"]="read (pl)",
+    ["путин"]="Putin",
+    ["сдох"]="died (vulgar m)", ["сдохла"]="died (vulgar f)",
+    ["сдохли"]="died (vulgar pl)",
+    ["мах"]="Makh (name)",
+    ["читать"]="to read", ["почитай"]="read (imp)", ["почитайте"]="read (pl imp)",
+    ["прекращайте"]="stop it (pl)", ["прекрати"]="stop",
+    ["создадут"]="will create", ["создадим"]="we'll create",
+    ["оперу"]="Opera (Kara boss)",  -- Big Bad Wolf / Opera Event in Karazhan
+    ["опера"]="Opera (Kara)",
+    ["бурги"]="burgs (slang)", ["бурга"]="burg",
+    ["даже"]="even",
+    ["любым"]="any (inst)", ["любого"]="any (gen)", ["любую"]="any (f acc)",
+    ["любыми"]="any (inst pl)",
+    ["поговорю"]="I'll talk", ["поговорим"]="let's talk",
+    ["забанили"]="banned (pl)", ["забанил"]="banned (m)", ["забанила"]="banned (f)",
+    ["навечно"]="forever", ["навсегда"]="forever",
+    ["вот"]="here's/well",
+    ["тобой"]="by you", ["с тобой"]="with you",
+    ["фуфлометы"]="fakes (slang)", ["фуфломет"]="fake (slang)",
+    ["вся"]="all (f)", ["вся ги"]="whole guild",
+    ["жалуются"]="complaining", ["жалуется"]="complains",
+    ["жалоба"]="complaint", ["жалобы"]="complaints",
+    ["баганный"]="bugged (m)", ["баганная"]="bugged (f)",
+    ["исправьте"]="fix (pl imp)", ["исправь"]="fix",
+    ["исправить"]="to fix",
+    ["инфа"]="info",  -- probably dup but safe
+    ["на форуме"]="on forum",  -- phrase-ish
+
+    -- Misc high-freq
+    ["ги"]="guild (slang short)",  -- already had, reinforcing
+    ["оперу"]="Opera Event",
+    ["отдам"]="I'll give",
+    ["никому"]="to nobody",
+    ["многие"]="many",
+    ["мало кто"]="few",
+    ["никто не"]="nobody",
+
+    -- "Если б" conditional
+    ["если б"]="if only", ["если бы"]="if",
+    ["было бы"]="would be",
+    ["я б"]="I would", ["я бы"]="I would",
 }
 
 -- Prebuilt list of phrase keys sorted by length descending (byte length).

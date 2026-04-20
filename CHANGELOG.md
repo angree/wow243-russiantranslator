@@ -4,6 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.2] - 2026-04-21
+
+### Coverage
+Fresh live `WoWChatLog.txt` from the WoW install (634 Russian lines,
+394 unique — a long drama/flame-war session with song lyrics, movie
+references, Discord kick stories, formal Russian idioms, and many
+basic words somehow never added). Starting coverage was **84 %**;
+after this release **94 %** on the full session. Dictionary grew
+from 4189 → **4409 entries** (+220).
+
+### Added
+- **Missing basics** that had evaded the dictionary so far as bare
+  single words: `наверное`, `тогда`, `конечно`, `давай`, `раз`,
+  `будто`, `иначе`, `вот`, `даже`, `иди`, `бы`/`б`, `если бы`,
+  `было бы`, `кстати`, `вся`. These were only present inside phrase
+  entries like `жаль конечно` and `нет конечно`.
+- **Discord / drama vocab**: `дс` (Discord), `кикнули`, `кинули`,
+  `базар` / `за свой базар`, `отвечаешь`, `матерится`, `обещал`,
+  `вряд ли`, `лишний`, `доказывает`, `слабее`, `слабости`, `разнос`,
+  `расходимся`, `сенсации`.
+- **Insults / rant words**: `херовый`, `нахуя`, `пу пу пу`, `разьеб`,
+  `опущенный`, `фуфлометы`, `куток для обиженных`, `шекелей`,
+  `сдох`.
+- **Items / trade**: `узда белого жеребца`, `открыть сундук`,
+  `шекелей`, `трансфер перса с шторма`.
+- **Song-lyric / cultural words**: `неси меня, река`, `за крутые
+  берега`, `позови меня тихо по имени`, `закате`, `грусть-печаль`,
+  `черкизовский`.
+- **Pop / tech refs**: `тредс` (social), `путин`, `свадебная ваза`,
+  `херовый фильм`, `оперу` (Karazhan boss).
+- **Kara Opera event**: `оперу` / `опера`.
+- **Tech**: `исправьте`, `баганный`, `жалуются`, `инфа на форуме`.
+- **Conditional particles**: `если б`, `если бы`, `было бы`,
+  `я б`/`я бы`.
+
+Remaining ~6% unknowns are mostly player nicknames and multi-token
+numeric concats (`1дд`, `2дд` — already handled by the runtime
+preprocessor, they're only "unknown" in my simulation tool that
+doesn't run the full preprocessor chain).
+
 ## [0.9.1] - 2026-04-20
 
 ### Coverage
