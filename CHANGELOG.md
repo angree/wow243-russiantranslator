@@ -4,6 +4,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.1] - 2026-04-20
+
+### Coverage
+Fresh live log (`C:\Gry\World of WarcraftOLD\Logs\WoWChatLog.txt`,
+335 unique Russian lines, much richer content than previous logs —
+GM moderation messages, quest boss names, longer sentences, more
+formal vocabulary). Starting coverage was **84 %**; after this release
+it is **98 %**. Dictionary grew from 3814 → **4189 entries** (+375).
+
+### Added
+- **Shadow Labs Russian shorthand**: `тем лаб` / `тем лабиринт` /
+  `тёмный лабиринт` → "Shadow Labs". Paired with heroic/normal
+  variants and `в тем лаб` / `в тем лабе` locatives.
+- **Shadow Labs boss**: `бормотун` → "Murmur".
+- **Quest names**: `зулухед измученный` (Zul'jin the Exhausted),
+  `гибель предателя` (Death of the Betrayer — Illidan chain).
+- **Item names**: `посох божественного вливания` (Staff of Infusion),
+  `антикварный сундук` (Antique Chest), `стабилизированный
+  этерниевый прицел` (Stabilized Eternium Scope), `рубашка нежити`
+  (Undead Shirt).
+- **TBC NPCs**: `трала` (Thrall), `келя` (Kael'thas short form).
+- **GM / admin boilerplate** (formal Russian from moderation
+  messages): `уважаемые игроки`, `за использование ненормативной
+  лексики`, `в глобальном чате`, `будут выдаваться муты`, `научитесь
+  общаться уважительно`, `я начну отвечать на ваши вопросы`,
+  `уважаемая администрация`, `гражданин начальник`, `поставленный
+  вопрос`.
+- **Honor cap talk**: `недельный кап`, `кап хонора`, `дальше не
+  капает`, `перестал начисляться`, `какого хуя`, `какого хрена`.
+- **Enchanting services**: `чарю шмот за ваши реги`, `наложение
+  чар`, `чарю бесплатно`.
+- **Arena team shorthand**: `к вару в 2с`, `ршам/хпал/рдру`,
+  `на 10 игр`.
+- **LFG preamble**: `сумон к 3 босу`, `сумон сразу`, `1 дд в`,
+  `к ласт слот`.
+- **Class abbreviation variants**: `хпал` (Holy Paladin), `вару`
+  (warrior dative), `тан` (tank short).
+- **~180 single-word additions** covering the verbs, adjectives,
+  nouns, and case forms seen in this session that weren't in the
+  previous 3814-entry dictionary.
+
 ## [0.9.0] - 2026-04-20
 
 ### Added

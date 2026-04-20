@@ -446,6 +446,129 @@ ns.PHRASES = {
     ["кто может пж"]="who can please",
 
     -- =================================================================
+    -- Log-008 (live WoWChatLog.txt, 335 unique Russian lines)
+    -- =================================================================
+
+    -- Shadow Labs Russian shorthand: "Тем Лаб" = "Тёмный Лабиринт"
+    ["тем лаб"]="Shadow Labs",
+    ["тем лабиринт"]="Shadow Labs",
+    ["тёмный лабиринт"]="Shadow Labs",
+    ["темный лабиринт"]="Shadow Labs",
+    ["тем лаб гер"]="Shadow Labs (heroic)",
+    ["тем лаб нм"]="Shadow Labs (normal)",
+    ["в тем лаб"]="to Shadow Labs",
+    ["в тем лабе"]="in Shadow Labs",
+    -- Shadow Labs bosses
+    ["бормотун"]="Murmur (boss)",
+    ["посланник тьмы"]="Blackheart the Inciter",
+    -- Quest bosses / item names seen in log
+    ["зулухед измученный"]="Zul'jin the Exhausted (quest)",
+    ["зулухед"]="Zul'jin",
+    ["измученный"]="Exhausted (quest adj)",
+    ["гибель предателя"]="Death of the Betrayer (quest)",
+    ["посох божественного вливания"]="Staff of Infusion",
+    ["антикварный сундук"]="Antique Chest",
+    ["стабилизированный этерниевый прицел"]="Stabilized Eternium Scope",
+    ["этерниевый прицел"]="Eternium scope",
+    ["рубашка нежити"]="Undead Shirt",
+    -- Admin / warning boilerplate from GMs
+    ["добрый вечер уважаемые игроки"]="Good evening, dear players",
+    ["уважаемые игроки"]="dear players",
+    ["за использование ненормативной лексики"]="for using profanity",
+    ["ненормативной лексики"]="profanity",
+    ["в глобальном чате"]="in global chat",
+    ["будут выдаваться муты"]="mutes will be issued",
+    ["как только вы научитесь"]="as soon as you learn",
+    ["научитесь общаться"]="learn to communicate",
+    ["общаться уважительно"]="communicate respectfully",
+    ["я начну отвечать"]="I will start answering",
+    ["отвечать на ваши вопросы"]="answer your questions",
+    ["на ваши вопросы"]="your questions",
+    ["уважаемая администрация"]="dear administration",
+    ["гражданин начальник"]="citizen chief",
+    ["поставленный вопрос"]="the question posed",
+    ["ответьте на поставленный вопрос"]="answer the posed question",
+    -- Honor / PvP chatter
+    ["недельный кап"]="weekly cap",
+    ["кап хонора"]="honor cap",
+    ["кап чести"]="honor cap",
+    ["какого хуя"]="what the fuck (vulgar)",
+    ["какого хрена"]="what the hell",
+    ["дальше не капает"]="stops capping",
+    ["перестал начисляться"]="stopped accruing",
+    ["так же как и"]="same as",
+    -- Enchanting services
+    ["чарю шмот"]="I enchant gear",
+    ["за ваши реги"]="for your regs",
+    ["чарю бесплатно"]="I enchant for free",
+    ["наложение чар"]="enchant application",
+    ["наложение чар free"]="enchant free",
+    ["за пм"]="for whisper",
+    -- Arena team shorthand seen in this log
+    ["к вару в 2с"]="to warrior for 2v2",
+    ["в 2с"]="in 2v2",
+    ["в 3с"]="in 3v3",
+    ["на 10 игр"]="for 10 games",
+    ["ршам/хпал/рдру"]="Resto Sham/Holy Pal/Resto Druid",
+    ["ршам хпал рдру"]="Resto Sham + Holy Pal + Resto Druid",
+    -- Dungeon LFG patterns from Shadow Labs
+    ["сумон к 3 босу"]="summon to boss 3",
+    ["сумон к 3 бос"]="summon to boss 3",
+    ["сумон сразу"]="summon right away",
+    ["сумон к ласту"]="summon to last boss",
+    ["к ласт слот"]="to the last slot",
+    ["1 дд в"]="need 1 dps in",
+    ["2 дд в"]="need 2 dps in",
+    ["3 дд в"]="need 3 dps in",
+    -- Other pragmatic sayings
+    ["волшебное слово"]="magic word",
+    ["волшебное слово забыл"]="forgot the magic word",
+    ["регайте арену"]="reg arena",
+    ["регайте арену пацаны"]="reg arena guys",
+    ["еще 6 игр"]="6 more games",
+    ["еще игр"]="more games",
+    ["почисти кэш"]="clear cache",
+    ["все чисто"]="all clean",
+    ["на других сервах"]="on other servers",
+    ["короли войны"]="Kings of War",  -- known guild name on Russian TBC
+    ["победили босса"]="killed the boss",
+    ["реально гильдия"]="really a guild",
+    ["с таким названием"]="with such a name",
+    ["вопрос не в этом"]="that's not the question",
+    ["вопрос в том"]="the question is",
+    ["я сам с собой"]="I'm talking to myself",
+    ["сам с собой базарю"]="talking to myself",
+    ["пойду водить"]="going to run",
+    ["водить трала"]="run Thrall",  -- Orgrimmar NPC
+    ["хил в кару"]="healer for Kara",
+    ["хил в кару быстра"]="healer for Kara, fast",
+    ["в кару 1 дпс"]="1 dps for Kara",
+    ["ищем лока в тк"]="LF warlock for TK",
+    ["с келя"]="with Kael'thas",
+    ["лока в тк с келя"]="warlock for TK with Kael",
+    -- Smoking comments from log
+    ["какой нахуй"]="what the fuck",
+    ["какой нахуй недельный"]="what fucking weekly",
+    ["хонор стопарнулся"]="honor stuck",
+    ["стопарнулся на"]="stuck at",
+    -- Formal/technical chatter
+    ["врятле пиздуй на форум"]="hardly — go post on the forum",
+    ["пиздуй на форум"]="post on the forum (vulgar)",
+    -- Guild recruit (new style seen)
+    ["набор с 70 лвл"]="recruiting from lvl 70",
+    ["с 70 лвл"]="from lvl 70",
+    ["набор закрыт"]="recruitment closed",
+    ["остальных набор закрыт"]="others recruitment closed",
+
+    -- Phrase pattern: "Бота (норм) 1 ДД в пм"
+    ["бота норм"]="Botanica (normal)",
+    ["бота гер"]="Botanica (heroic)",
+
+    -- Greetings / reactions in log
+    ["добрый вечер"]="good evening",
+    ["добрый день"]="good day",
+
+    -- =================================================================
     -- Log-006 additions: difficulty slang, instance-specific idioms,
     -- attunements, quest names, item names, schedule lingo.
     -- =================================================================
@@ -2312,6 +2435,157 @@ ns.WORDS = {
     ["среди"]="among",
     ["сразу"]="immediately", ["тотчас"]="at once",
     ["постоянно"]="constantly", ["редко же"]="rarely",
+
+    -- =================================================================
+    -- Log-008 individual words
+    -- =================================================================
+
+    -- Shadow Labs / dungeon talk
+    ["тем"]="Shadow (Labs)", ["лаб"]="Labs",
+    ["сумон"]="summon", ["сумона"]="summon",
+    ["бос"]="boss", ["босу"]="to boss", ["босом"]="with boss",
+    -- Bota / Bota cases
+    ["бота"]="Botanica", ["боте"]="in Botanica",
+
+    -- TBC NPCs / places
+    ["трала"]="Thrall", ["тралла"]="Thrall", ["тралу"]="to Thrall",
+    ["келя"]="Kael'thas (short)", ["келю"]="Kael'thas",
+    ["бормотун"]="Murmur",
+    ["девы"]="Maidens (Deadmines/realm)",  -- contextual
+    ["дева"]="Maiden",
+
+    -- Honor / PvP
+    ["хонора"]="of honor", ["хонору"]="to honor",
+    ["недельный"]="weekly", ["недельная"]="weekly", ["недельное"]="weekly",
+    ["капает"]="caps", ["капнет"]="will cap", ["капнуло"]="capped",
+    ["стопарнулся"]="stopped", ["стопаришь"]="you stop",
+    ["перестал"]="stopped", ["перестала"]="stopped", ["перестали"]="stopped",
+    ["начисляться"]="accrue", ["начисляет"]="accrues",
+    ["потратил"]="spent", ["потратила"]="spent", ["потратили"]="spent",
+    ["бей"]="hit", ["бейте"]="hit",
+    ["килы"]="kills (slang)",
+
+    -- Admin / formal Russian
+    ["муты"]="mutes", ["мутов"]="mutes (gen)",
+    ["отвечать"]="to answer", ["ответь"]="answer", ["ответьте"]="answer",
+    ["вопросы"]="questions", ["вопросам"]="to questions",
+    ["гражданин"]="citizen", ["гражданка"]="citizen (f)",
+    ["начальник"]="chief", ["начальство"]="the chiefs",
+    ["уважаемая"]="dear (f)", ["уважаемые"]="dear (pl)",
+    ["уважаемый"]="dear (m)", ["уважаемых"]="dear (gen)",
+    ["уважительно"]="respectfully",
+    ["использование"]="use", ["использования"]="of use",
+    ["ненормативной"]="non-normative",
+    ["лексики"]="vocabulary", ["лексика"]="vocabulary",
+    ["глобальном"]="global", ["глобальный"]="global", ["глобальная"]="global",
+    ["выдаваться"]="be given", ["выдают"]="they give out",
+    ["научитесь"]="you'll learn", ["научусь"]="I'll learn",
+    ["научиться"]="to learn",
+    ["общаться"]="to communicate", ["общаемся"]="we communicate",
+    ["начну"]="I'll start", ["начнут"]="they'll start",
+    ["поставленный"]="posed", ["поставленная"]="posed (f)",
+    ["врятле"]="hardly", ["врядли"]="hardly", ["вряд ли"]="hardly",
+    ["пиздуй"]="fuck off (vulgar)", ["пиздуйте"]="fuck off (pl)",
+    ["раздаете"]="you hand out", ["раздают"]="they give out",
+
+    -- Enchanting
+    ["чарю"]="I enchant", ["чаришь"]="you enchant", ["чарят"]="they enchant",
+    ["чарим"]="we enchant",
+    ["наложение"]="application", ["наложения"]="of application",
+    ["бесплатно"]="free", ["бесплатный"]="free",
+
+    -- Items / crafting
+    ["стабилизированный"]="stabilized", ["стабилизированная"]="stabilized (f)",
+    ["этерниевый"]="eternium (adj)", ["этерниум"]="eternium",
+    ["антикварный"]="antique", ["антикварная"]="antique (f)",
+    ["сундук"]="chest", ["сундука"]="chest (gen)", ["сундуке"]="in chest",
+    ["рубашка"]="shirt", ["рубашку"]="shirt (acc)",
+    ["нежити"]="undead (gen)", ["нежить"]="undead",
+    ["посох"]="staff",  -- already have; adding inflected forms
+    ["божественного"]="divine (gen)", ["божественная"]="divine",
+    ["вливания"]="infusion",
+    ["аналог"]="analog/equivalent",
+    ["кузнечка"]="blacksmith (f)", ["кузнечку"]="blacksmith (f, acc)",
+    ["кузнечики"]="blacksmiths (f pl)",
+    ["фуловая"]="fully geared (f)", ["фуловый"]="fully geared",
+
+    -- Misc verbs/nouns
+    ["дальше"]="further", ["дальний"]="far (adj)",
+    ["почисти"]="clean", ["почистите"]="clean (pl)",
+    ["кэш"]="cache", ["кэша"]="cache (gen)",
+    ["водить"]="to run/lead", ["вожу"]="I lead", ["водят"]="they lead",
+    ["побежду"]="I'll win",
+    ["победили"]="won", ["победил"]="won (m)", ["победила"]="won (f)",
+    ["победа"]="victory", ["победу"]="victory (acc)",
+    ["войны"]="war/warriors", ["войну"]="war (acc)",
+    ["короли"]="kings", ["король"]="king", ["королева"]="queen",
+    ["названием"]="named", ["название"]="name", ["названия"]="names",
+    ["названа"]="named (f)", ["назван"]="named (m)",
+    ["быстра"]="fast (slang)",
+    ["других"]="others", ["другими"]="with others", ["другим"]="to others",
+    ["сервах"]="on servers",
+    ["этом"]="this", ["том"]="that",
+    ["таким"]="such (ins)", ["такими"]="such (ins pl)",
+    ["нахуй"]="fuck (vulgar)", ["нахуй?"]="what the fuck",
+    ["хуя"]="vulgar", ["хуй"]="vulgar",
+    ["хуеш"]="bullshit (vulgar)",
+    ["чисто"]="cleanly", ["чистый"]="clean", ["чистая"]="clean",
+
+    -- Chat particles
+    ["ясас"]="yasas (greek hi)", ["эт"]="this (slang)",
+    ["некст"]="next", ["некста"]="next (gen)",
+    ["еще"]="more/still",
+    ["бесу"]="to imp/whim (slang)", ["бесом"]="by imp",
+    ["базарю"]="I chat (slang)", ["базарит"]="chats",
+    ["зондер"]="special", ["команда"]="team/command", ["команде"]="in team",
+
+    -- Formal chat words
+    ["волшебное"]="magic", ["волшебная"]="magic (f)",
+    ["слово"]="word", ["слова"]="words", ["слову"]="to word",
+    ["забыл"]="forgot (m)", ["забыла"]="forgot (f)", ["забыли"]="forgot (pl)",
+    ["предателя"]="of the traitor", ["предатель"]="traitor",
+    ["гибель"]="death/demise", ["гибели"]="of death",
+
+    -- Arena class tags (missing from previous lists)
+    ["хпал"]="holy paladin", ["хпала"]="holy paladin",
+    ["хпалом"]="with holy pal",
+    ["вару"]="to warrior", ["варом"]="with warrior", ["варе"]="at warrior",
+
+    -- Realm / location fragments
+    ["девы"]="Devy (slang/realm)",
+
+    -- Remaining loose ends
+    ["2с"]="2v2", ["3с"]="3v3", ["5с"]="5v5",
+    ["остальных"]="others (gen)", ["остальные"]="others", ["остальное"]="rest",
+    ["закрыт"]="closed", ["закрыта"]="closed (f)", ["закрыто"]="closed (n)",
+    ["регайте"]="reg (imperative pl)", ["региум"]="let's reg",
+    ["фазы"]="phases", ["фазу"]="phase (acc)",
+
+    -- Bug word that appeared
+    ["исполнении"]="performance (prep)", ["исполнение"]="performance",
+
+    -- Last-mile tokens from WoWChatLog.txt
+    ["тан"]="tank (short)",
+    ["поменяю"]="I'll exchange", ["поменяй"]="exchange",
+    ["будьте"]="be (pl)", ["будь"]="be",
+    ["любезный"]="kind (m)", ["любезная"]="kind (f)",
+    ["любезно"]="kindly",
+    ["сення"]="today (slang)", ["сёдня"]="today (slang)",
+    ["ответ"]="answer", ["ответа"]="answer (gen)", ["ответу"]="to answer",
+    ["чи"]="or (Ukr particle)",
+    ["программер"]="programmer", ["программист"]="programmer",
+    ["деняк"]="money (slang)", ["денег"]="money (gen)", ["деньгам"]="to money",
+    ["аррену"]="arena (typo)",
+    ["слабые"]="weak (pl)", ["слабые"]="weak", ["слабых"]="weak (gen)",
+    ["сатира"]="satire",
+    ["ебаная"]="fucking (vulgar f)", ["ебаный"]="fucking (vulgar m)",
+    ["ебать"]="to fuck (vulgar)",
+    ["сфера"]="sphere", ["сферы"]="spheres",
+    ["фаст"]="fast", ["фасту"]="to fast",
+    ["бомжи"]="beggars", ["бомжей"]="beggars (gen)",
+    ["узнать"]="to find out", ["узнаю"]="I'll find out", ["узнал"]="found out",
+    ["трансфер"]="transfer", ["трансфера"]="transfer (gen)",
+    ["пришел"]="came (m)", ["пришла"]="came (f)",
 
     -- Misc verb forms
     ["возьмёмся"]="let's take", ["беритесь"]="take",
