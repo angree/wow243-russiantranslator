@@ -12,6 +12,8 @@ local ORIG_COLOR    = "|cff888888"      -- grey, original cyrillic in (parens)
 local ORIG_RESET    = "|r"
 local UNKNOWN_COLOR = "|cffffa040"      -- orange, untranslated tokens kept as cyrillic
 local UNKNOWN_RESET = "|r"
+local NAME_COLOR    = "|cff88cc88"      -- soft green, identified as player nickname
+local NAME_RESET    = "|r"
 local LOG_CAP       = 400               -- max log rows kept per session
 
 -- Chat events we filter. Covers every player-visible channel in WoW 2.4.3.
@@ -167,9 +169,22 @@ local function RestorePhrases(s, subs)
     end))
 end
 
-local function TranslateToken(token, sampleLine)
+-- isFirstCyrillic: true if this is the FIRST Cyrillic token of the message.
+-- Used for player-name disambiguation: Russian chat often starts with a name
+-- when addressing someone ("Кара, ты где?"). If we've seen that exact string
+-- as a sender in this session it's almost certainly a nickname there, not a
+-- homonym dictionary word. Inside the message the same token is probably a
+-- real word and still gets translated normally.
+local function TranslateToken(token, sampleLine, isFirstCyrillic)
     if token:find("^\1") then return token, true end
     if not HasUtf8Cyrillic(token) then return token, true end
+
+    -- Player-name override, only at message start.
+    if isFirstCyrillic and session and session.knownNames
+       and session.knownNames[token] then
+        return NAME_COLOR .. token .. NAME_RESET, true
+    end
+
     local hit = ns.WORDS[token]
     if hit then return hit, true end
     LogUnknown(token, sampleLine)
@@ -268,8 +283,17 @@ local function Translate(msg)
     end
 
     local withPh, subs = ApplyPhrases(lowered)
+    -- Track whether we've already seen a Cyrillic token — only the first
+    -- one is eligible for the "is this a player name being addressed?"
+    -- check. (Mid-message occurrences default to normal translation.)
+    local seenFirstCyr = false
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)
-        return (TranslateToken(tok, normalized))
+        local isFirst = false
+        if (not seenFirstCyr) and HasUtf8Cyrillic(tok) and not tok:find("^\1") then
+            isFirst = true
+            seenFirstCyr = true
+        end
+        return (TranslateToken(tok, normalized, isFirst))
     end)
     out = RestorePhrases(out, subs)
 
@@ -300,6 +324,21 @@ local function FilterImpl(eventName, msg, ...)
 
     session.messagesSeen = session.messagesSeen + 1
     session.filterCalls  = session.filterCalls + 1
+
+    -- Track sender as a known nickname. The first varg after msg in every
+    -- chat event is the sender name (player nick). Store in lowercase,
+    -- Cyrillic nicks only — ASCII nicks never collide with our dictionary.
+    local sender = (select(1, ...))
+    if type(sender) == "string" and sender ~= "" then
+        -- Strip realm suffix ("Name-Realm" is rare on 2.4.3 but harmless).
+        local bare = sender:match("^([^%-]+)") or sender
+        local low = bare:lower()
+        if ns.DetectCyrillicEncoding(low) ~= "ascii" then
+            -- Store in the same CP1251->UTF-8 normalised form we match tokens in.
+            low = ns.NormalizeCyrillic(low)
+            session.knownNames[low] = (session.knownNames[low] or 0) + 1
+        end
+    end
 
     local enc = ns.DetectCyrillicEncoding(msg)
     local bytes = HexDump(msg, 20)
@@ -372,6 +411,12 @@ local function InitSession()
         unknowns            = {},
         encodingsSeen       = {},
         log                 = {},
+        -- RAM-only roster of Cyrillic nicknames that spoke in this session.
+        -- Keyed by lowercase nick (Cyrillic form). Used to skip translating
+        -- homonyms at message-start — see TranslateToken. Intentionally NOT
+        -- saved to SavedVariables: a nickname that had a Russian alt-meaning
+        -- should be re-proven every session, not inherited forever.
+        knownNames          = {},
     }
     table.insert(db.sessions, session)
     while #db.sessions > (db.maxSessions or 50) do
@@ -505,6 +550,7 @@ local function CmdHelp()
     Msg("  /rt log [N]          - print last N activity-log rows (default 20)")
     Msg("  /rt test <text>      - run a test string through the pipeline")
     Msg("  /rt reregister       - re-register chat filters (diagnostic)")
+    Msg("  /rt names            - list Cyrillic nicks seen this session")
     Msg("  /rt clear            - wipe all stored sessions")
 end
 
@@ -549,6 +595,26 @@ SlashCmdList["RT"] = function(input)
     elseif cmd == "reregister" then
         local ok, fail = RegisterFilters()
         Msg(("re-registered filters ok=%d fail=%d"):format(ok, fail))
+    elseif cmd == "names" then
+        if not session or not session.knownNames then
+            Msg("no session / no names tracked")
+        else
+            local list = {}
+            for name, cnt in pairs(session.knownNames) do
+                list[#list + 1] = { name = name, cnt = cnt }
+            end
+            table.sort(list, function(a, b) return a.cnt > b.cnt end)
+            Msg(("%d cyrillic nicks tracked this session:"):format(#list))
+            local shown = 0
+            for i = 1, #list do
+                Msg(("  %d x  %s"):format(list[i].cnt, list[i].name))
+                shown = shown + 1
+                if shown >= 30 then
+                    Msg(("  ... (%d more)"):format(#list - shown))
+                    break
+                end
+            end
+        end
     elseif cmd == "clear" then
         db.sessions = {}; InitSession()
         Msg("all sessions cleared")
@@ -557,10 +623,14 @@ SlashCmdList["RT"] = function(input)
         if type(LoggingChat) == "function" then
             chatlog_now = LoggingChat() and "on" or "off"
         end
-        Msg(("enabled=%s  showOrig=%s  debug=%s  autoChatLog=%s  chatlog-now=%s  sessions=%d"):format(
+        local nameCount = 0
+        if session and session.knownNames then
+            for _ in pairs(session.knownNames) do nameCount = nameCount + 1 end
+        end
+        Msg(("enabled=%s  showOrig=%s  debug=%s  autoChatLog=%s  chatlog-now=%s  sessions=%d  nicks=%d"):format(
             tostring(db.enabled), tostring(db.showOrig),
             tostring(db.debug), tostring(db.autoChatLog),
-            chatlog_now, #db.sessions))
+            chatlog_now, #db.sessions, nameCount))
         if session then
             Msg(("current: seen=%d translated=%d filterCalls=%d"):format(
                 session.messagesSeen, session.messagesTranslated, session.filterCalls))

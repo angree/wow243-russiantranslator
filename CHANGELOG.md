@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.4] - 2026-04-20
+
+### Added
+- **Session-local nickname roster.** Every `sender` seen in any chat
+  event is recorded in a RAM-only set (`session.knownNames`). When
+  translating, the FIRST Cyrillic token of a message is checked against
+  that set — if it's a known nickname, it's passed through untranslated
+  and rendered in soft green (`|cff88cc88`) to signal "this is a
+  player, not a word". Subsequent Cyrillic tokens in the same message
+  are translated normally, because mid-message occurrences of a
+  nickname-word are usually the real word (e.g. someone with nick
+  `Кара` saying something about `кара` the dungeon later in the line).
+
+  Why: several real WoWCircle TBC nicknames happen to be normal Russian
+  words — `Панацея` (panacea), `Кара` (Karazhan), `Борей` (Boreas),
+  `Мукк` etc. Without this, addressing "Панацея ты где?" would
+  translate as "panacea where are you?" and lose the addressing sense.
+
+  The roster is **intentionally not persisted** — it's rebuilt each
+  session. A nick that coincides with a Russian word should earn its
+  "don't translate" status every session by actually being online.
+
+### Added — new commands
+- `/rt names` — list the tracked nicknames of the current session with
+  talk-counts. Capped at 30 rows on screen.
+- `/rt status` now also reports `nicks=N`.
+
 ## [0.8.3] - 2026-04-19
 
 ### Added
