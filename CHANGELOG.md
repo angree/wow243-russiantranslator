@@ -4,6 +4,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.5] - 2026-04-20
+
+### Added — layered addressee detection
+
+The v0.8.4 nickname recognition only worked for senders who had already
+spoken this session. Real chat doesn't wait: people address nicknames
+that haven't spoken yet, often without a comma. This release layers
+four more rules on top of the sender-roster check so addressing gets
+caught even from the first message of a session.
+
+Rules, applied to the first Cyrillic token of each message, in order
+(first match wins):
+
+1. **In `knownNames`** (sender seen speaking) → nick. *(v0.8.4)*
+2. **First word is itself an address-context token** (a question word
+   like `кто`/`где`/`как` or a 2nd-person pronoun like `ты`) → NOT
+   nick. This stops false positives like "Кто ты" tagging `кто` as a
+   nickname.
+3. **Next token is an address-context word** (`ты`, `вы`, `где`, `дай`,
+   `скажи`, `помоги`, `кинь`, `приди`, `иди`, `пиши`, `жди`, `бери`,
+   `смотри`, `слушай`, `сюда`, and a few dozen more). Catches
+   `Мукк ты где?`, `Кара дай инв`, `Панацея, где?`.
+4. **Vocative punctuation `,` `;` `:` `!` right after first word** AND
+   the first word is NOT a dictionary word. Catches `Мукк, инв дай`.
+   Requires "not in dictionary" to avoid tagging listings like
+   `Кара, БТ, ШХ` as a nickname address.
+5. **First word is not in the dictionary and there IS more content** →
+   nick. Catches unknown-proper-noun at start with continuation.
+
+When any rule fires, the addressee is auto-added to the session roster
+so follow-up messages are recognised by rule 1 directly.
+
+### Test cases (from the simulator)
+
+| Input                          | Detected? | Rule |
+|--------------------------------|-----------|------|
+| `Мукк, инв дай`                | yes       | 4 (punct + unknown) |
+| `Мукк инв дай`                 | yes       | 5 (unknown + continuation) |
+| `Мукк ты где?`                 | yes       | 3 (pronoun after) |
+| `Кара ты где?`                 | yes       | 3 (pronoun, overrides dict) |
+| `Кара сегодня стартует`        | no        | no markers, Кара in dict → Karazhan |
+| `Привет всем`                  | no        | привет in dict, всем not context |
+| `Кто ты`                       | no        | rule 2 early exit (first is context) |
+| `Панацея, где?`                | yes       | 3 (где after punct) |
+| `Панацея спасет мир`           | no        | Панацея in dict, no address signal |
+| `Кара, БТ, ШХ`                 | no        | Кара in dict + listing, rule 4 skipped |
+| `Хрр все сюда`                 | yes       | 5 (unknown word) |
+| `Кара дай инв`                 | yes       | 3 (дай is imperative) |
+| `Мукк: инв дай`                | yes       | 4 (colon) |
+
 ## [0.8.4] - 2026-04-20
 
 ### Added
