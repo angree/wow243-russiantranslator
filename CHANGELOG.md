@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.0] - 2026-04-20
+
+### Added
+- **Interface Options panel.** All four persistent settings are now
+  clickable from WoW's native settings UI:
+    **Esc → Interface → AddOns → Russian Translator**
+  - Enable translation
+  - Show original Cyrillic in parentheses after translation
+  - Auto-enable /chatlog on login
+  - Debug mode (hex dump each message)
+
+  Every checkbox writes directly to the `db.*` field used by the rest of
+  the addon, so clicking one in the panel is equivalent to the matching
+  slash command (`/rt on`, `/rt orig`, `/rt chatlog`, `/rt debug`) and
+  persists to `SavedVariables` the same way — no separate save step.
+- New slash command: **`/rt options`** (alias: `/rt config`) opens the
+  panel directly. Calls `InterfaceOptionsFrame_OpenToCategory` twice to
+  work around the well-known Blizzard single-click bug where the first
+  call opens the root and the second actually selects the category.
+
 ## [0.8.5] - 2026-04-20
 
 ### Added — layered addressee detection

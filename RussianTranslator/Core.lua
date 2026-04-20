@@ -539,6 +539,98 @@ local function EnsureChatLog()
     return true
 end
 
+-- ---------------------------------------------------------------------------
+-- Interface Options panel
+-- ---------------------------------------------------------------------------
+-- Blizzard's Interface Options framework arrived in 2.4 so we can register
+-- a settings panel that shows up under:
+--   Game Menu (Esc) -> Interface -> AddOns -> Russian Translator
+-- All toggles flip a db.* field directly, so every click persists to
+-- SavedVariables on the next /reload or logout — same place the slash
+-- commands write.
+
+local optionsPanel  -- cached so we can re-open via /rt options
+
+local function InitUI()
+    if optionsPanel then return optionsPanel end
+
+    local panel = CreateFrame("Frame")
+    panel.name = "Russian Translator"
+    panel:Hide()
+
+    local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+    title:SetPoint("TOPLEFT", 16, -16)
+    title:SetText("Russian Translator")
+
+    local sub = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    sub:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
+    sub:SetText("Russian -> English chat translator. Settings persist across sessions.")
+
+    -- Helper: make a checkbox wired to a db field. Getter/setter keeps the
+    -- UI and the SavedVariables in sync without needing any refresh logic.
+    local function makeCheckbox(name, label, anchorFrame, yOff, getter, setter)
+        local cb = CreateFrame("CheckButton", "RT_Opt_"..name, panel,
+                               "InterfaceOptionsCheckButtonTemplate")
+        if anchorFrame == panel then
+            cb:SetPoint("TOPLEFT", sub, "BOTTOMLEFT", 0, yOff)
+        else
+            cb:SetPoint("TOPLEFT", anchorFrame, "BOTTOMLEFT", 0, yOff)
+        end
+        local text = _G[cb:GetName() .. "Text"]
+        if text then text:SetText(label) end
+        cb:SetScript("OnShow", function(self)
+            self:SetChecked(getter() and 1 or nil)
+        end)
+        cb:SetScript("OnClick", function(self)
+            setter(self:GetChecked() and true or false)
+        end)
+        return cb
+    end
+
+    local cbEnabled = makeCheckbox("Enabled",
+        "Enable translation",
+        panel, -24,
+        function() return db and db.enabled end,
+        function(v) db.enabled = v; Msg("translation = "..(v and "ON" or "OFF")) end)
+
+    local cbOrig = makeCheckbox("ShowOrig",
+        "Show original Cyrillic in parentheses after translation",
+        cbEnabled, -4,
+        function() return db and db.showOrig end,
+        function(v) db.showOrig = v; Msg("show original = "..tostring(v)) end)
+
+    local cbChatLog = makeCheckbox("ChatLog",
+        "Auto-enable /chatlog on login (writes WoW\\Logs\\WoWChatLog.txt)",
+        cbOrig, -4,
+        function() return db and db.autoChatLog end,
+        function(v)
+            db.autoChatLog = v
+            if v and type(LoggingChat) == "function" and not LoggingChat() then
+                LoggingChat(true)
+            elseif (not v) and type(LoggingChat) == "function" and LoggingChat() then
+                LoggingChat(false)
+            end
+            Msg("auto /chatlog = "..tostring(v))
+        end)
+
+    local cbDebug = makeCheckbox("Debug",
+        "Debug mode (print hex dump of every message to chat)",
+        cbChatLog, -4,
+        function() return db and db.debug end,
+        function(v) db.debug = v; Msg("debug = "..tostring(v)) end)
+
+    -- Footnote
+    local footer = panel:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
+    footer:SetPoint("TOPLEFT", cbDebug, "BOTTOMLEFT", 0, -16)
+    footer:SetText("Tip: type /rt help in chat for all commands, /rt names for the session nickname roster.")
+
+    if type(InterfaceOptions_AddCategory) == "function" then
+        InterfaceOptions_AddCategory(panel)
+    end
+    optionsPanel = panel
+    return panel
+end
+
 local function RegisterFilters()
     local ok = 0
     local fail = 0
@@ -636,6 +728,7 @@ local function CmdHelp()
     Msg("  /rt test <text>      - run a test string through the pipeline")
     Msg("  /rt reregister       - re-register chat filters (diagnostic)")
     Msg("  /rt names            - list Cyrillic nicks seen this session")
+    Msg("  /rt options          - open the options panel (Esc > Interface > AddOns)")
     Msg("  /rt clear            - wipe all stored sessions")
 end
 
@@ -680,6 +773,19 @@ SlashCmdList["RT"] = function(input)
     elseif cmd == "reregister" then
         local ok, fail = RegisterFilters()
         Msg(("re-registered filters ok=%d fail=%d"):format(ok, fail))
+    elseif cmd == "options" or cmd == "config" then
+        local p = optionsPanel or InitUI()
+        -- Blizzard's 2.4 call: InterfaceOptionsFrame_OpenToCategory selects by
+        -- panel OR by name. Called twice to work around a well-known single-
+        -- click bug where the first call opens the root, the second selects.
+        if type(InterfaceOptionsFrame_OpenToCategory) == "function" then
+            InterfaceOptionsFrame_OpenToCategory(p)
+            InterfaceOptionsFrame_OpenToCategory(p)
+        elseif InterfaceOptionsFrame then
+            InterfaceOptionsFrame:Show()
+        else
+            Msg("Interface Options not available on this client.")
+        end
     elseif cmd == "names" then
         if not session or not session.knownNames then
             Msg("no session / no names tracked")
@@ -737,6 +843,7 @@ f:RegisterEvent("PLAYER_LOGOUT")
 f:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
         InitDB()
+        InitUI()
         -- We can't Log() yet (session not created), so print straight to chat.
         self:UnregisterEvent("ADDON_LOADED")
     elseif event == "PLAYER_LOGIN" then
