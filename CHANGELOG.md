@@ -4,6 +4,73 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.3] - 2026-04-21
+
+### Coverage
+Fresh live `WoWChatLog.txt` pulled from the WoW install (1105 Russian
+lines over April 19–21). Starting coverage was **84.2 %** — this window
+opened up three previously-underserved topics: **server-transfer /
+Quick-Start drama** from Turtle-WoW refugees, **render-distance &
+camera-zoom tech QA**, and a **flame war with Karmeli's guild** full
+of anrol/куколд/терпила slang. After this release: **99.45 %**
+on the full session. Dictionary grew **4409 → 4627 entries** (+218).
+
+### Added
+- **Zones & dungeons** missed until now: `Хилсбрад` (Hillsbrad),
+  `Сеттеки` (Sethekk), `ШЛ` (Shadow Labyrinth slang), `Анзу`
+  (Sethekk boss), `Паров/Паро/Паровые` (Steamvault), `Тралмар`,
+  `Оргримаре` (prep case), `Награнде` (prep case), `Разрушенные залы`
+  (Shattered Halls), `Чёрные топи` (Black Morass), `Гробницы маны`
+  (Mana-Tombs), `Нижний город` (Lower City), `Долина Призрачной Луны`
+  (Shadowmoon Valley), `Призрачные земли` (Ghostlands).
+- **Quest / NPC names**: `Уварус` (boss), `Адало` (Adal), `Майден`
+  (Maiden), `Оперы` (Opera gen), `Путь Завоевания`, `Битва у
+  Кровавого Дозора`, `Принеси мне яйцо!`.
+- **Trade item localisations** (ruRU → enUS): `Адамантитовая руда`,
+  `Кориевая руда`, `Слиток оскверненного железа`, `Великая планарная
+  субстанция`, `Рог полярного волка`, `Чароткань`, `Луноткань`,
+  `Тенеткань`, `Большой радужный осколок`, `Демонический кристалл`,
+  `Изначальная жизнь`, `Изначальная луноткань`, `Безжалостные планы`,
+  `Целительная сила природы`, `Животворный рубин`, `Наручи
+  сообразительности`, `Повязки быстрого исцеления`.
+- **Quick-Start paid-service vocabulary**: `быстрый старт`, `быстрого
+  старта`, `фул а2`, `перенос аккаунта`, `оформления`, `заявку`,
+  `подать`, `задонить`, `донате`, `рублей`, `молотушка` (service-
+  pricing discussion), `а4`, `т6`, `свп`.
+- **Render-distance QA thread**: `дальность прорисовки`, `дальность
+  отображения`, `отдаление камеры`, `настройки камеры`, `колёсиком`,
+  `впритык`, `метров`, `объектов`, `мобах`, `прорисовываются`.
+- **Karmeli flame war**: `анрол`, `анролом`, `куколды`, `терпилы`,
+  `мошеничество`, `дешевка`, `лицемерная`, `лживая`, `дилдо`, `шах`,
+  `опущенца`, `кенты`, `садист`, `красава`, `киданул`, `кидала`,
+  `одевала`, `одевали`.
+- **Classes/roles shorthand**: `ппал` (prot paladin), `вар` (warrior),
+  `сова` (moonkin), `рдру` (resto druid), `рпал` (holy paladin),
+  `кроссфрак` (crossfaction).
+- **Acronyms**: `вк` (VK), `нпс` (NPC), `фп` (flight point), `хд` (xD),
+  `рф` (Russia).
+- **~100 verbs** in missing conjugations: `фарм`, `играть`, `вступить`,
+  `похилю`, `танканите`, `принеси`, `подскажите`, `подскажет`, `побил`,
+  `гонять`, `качнулись`, `переносят`, `включил`, `отпишитесь`,
+  `практикует`, `соглашайтесь`, `подтвердить`, `развивай`,
+  `превратимся`, `собирать`, `задонить`, `записать`, `докачаемся`,
+  `приветствуются`, `промолчал`, `проверить`, and many more.
+- **Nouns / adjectives** completing the long tail: `жизнь`, `бой`,
+  `праздник`, `яйцо`, `старт`, `ник`, `группу`, `цепочка`, `урон`,
+  `кристалл`, `крепости`, `видео`, `коленях`, `аккаунта`, `деревни`,
+  `цивилизацию`, `населенную`, `условиях`, `лоулевельные`, `мертвые`,
+  `стабильная`, `готовенькое`, `главное`, `отличных`, and so on.
+
+### Notes
+- Remaining **22 unknowns** after this release are all player nicknames
+  (Молотушка, Кармели, Перкусионист, Павлия, Чилдорик, Дима, Дулма,
+  Флоки, Разор, Макидза, Песюносос, Вазилин, Потаскушка, Райзенов)
+  plus typos (тообй, дикпики, екфтыаук, дняпозови, годд) and urlencoded
+  garbage. Nicknames get caught by the 5-rule addressee detector the
+  moment they speak, so they don't need dictionary entries.
+- Dictionary is now **99.45 %** on this log — essentially the ceiling
+  before diminishing returns take over.
+
 ## [0.9.2] - 2026-04-21
 
 ### Coverage

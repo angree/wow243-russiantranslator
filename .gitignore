@@ -24,6 +24,9 @@ releases/*.zip
 .release_notes_tmp.md
 *.release_notes.tmp
 
+# Coverage analysis scratch output
+coverage_out.txt
+
 # OS cruft
 Thumbs.db
 .DS_Store
