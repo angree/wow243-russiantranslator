@@ -27,6 +27,10 @@ releases/*.zip
 # Coverage analysis scratch output
 coverage_out.txt
 
+# Python cache & ad-hoc audit scripts
+__pycache__/
+quality_audit.py
+
 # OS cruft
 Thumbs.db
 .DS_Store

@@ -143,80 +143,16 @@ local function LogUnknown(token, sampleLine)
 end
 
 -- ---------------------------------------------------------------------------
--- Addressee detection
+-- Nickname handling
 -- ---------------------------------------------------------------------------
--- Figures out whether the first Cyrillic word of a message is a nickname
--- being addressed. Five cascading rules (first match wins):
+-- The ONLY source of truth for "this token is a player nickname" is the
+-- sender field from the chat event itself (FilterImpl, below). Heuristic
+-- promotion from mid-message context was removed in v0.9.4 because it
+-- produced false positives on short Russian function words like `ну`, `за`,
+-- `об`, `ку`, `ах` whenever they appeared before a pronoun or punctuation.
 --
---   1. It's a sender we've seen speaking this session (knownNames roster).
---   2. The first word is ITSELF an address-context token (question word
---      like "кто"/"где"/"как" or 2nd-person pronoun) → NOT a nickname.
---      This stops false positives like "Кто ты" marking "кто" as a nick.
---   3. The very next Cyrillic token is an address-context word (`ты`,
---      `где`, `дай`, `скажи`, etc.). "Мукк ты где?" or "Мукк дай инв".
---   4. Vocative punctuation `,` `;` `:` `!` right after first word, AND
---      first word is NOT a dictionary word (avoids listings like
---      "Кара, БТ, ШХ" being mis-tagged).
---   5. First word is NOT in the dictionary and there IS more content.
---      Unknown-at-start is usually a proper noun / nick.
---
--- If any rule fires, the token is also auto-added to knownNames so future
--- messages in the same session recognise it without re-deriving.
-
-local ADDRESS_CONTEXT = {
-    -- 2nd-person pronouns (someone is talking TO you)
-    ["ты"]=true, ["вы"]=true,
-    ["тебя"]=true, ["тебе"]=true, ["тобой"]=true, ["тобою"]=true,
-    ["вас"]=true, ["вам"]=true, ["вами"]=true,
-    -- question words used in direct address ("Nick, where are you?")
-    ["где"]=true, ["куда"]=true, ["откуда"]=true,
-    ["когда"]=true, ["почему"]=true, ["зачем"]=true,
-    -- common imperatives directed at a single addressee
-    ["дай"]=true, ["дайте"]=true, ["скажи"]=true, ["скажите"]=true,
-    ["помоги"]=true, ["помогите"]=true, ["кинь"]=true, ["киньте"]=true,
-    ["приди"]=true, ["придите"]=true, ["иди"]=true, ["идите"]=true,
-    ["слушай"]=true, ["слушайте"]=true, ["пиши"]=true, ["пишите"]=true,
-    ["жди"]=true, ["ждите"]=true, ["бери"]=true, ["возьми"]=true,
-    ["возьмите"]=true, ["отвечай"]=true, ["ответь"]=true,
-    ["напиши"]=true, ["напишите"]=true, ["забери"]=true, ["принеси"]=true,
-    ["сюда"]=true, ["подойди"]=true,
-    ["стоп"]=true, ["молчи"]=true, ["заткнись"]=true,
-    ["смотри"]=true, ["смотрите"]=true, ["глянь"]=true, ["глянь-ка"]=true,
-    ["вернись"]=true, ["выходи"]=true, ["заходи"]=true,
-    -- question words that work either-or; user must type capital for start
-    ["что"]=true, ["чё"]=true, ["чо"]=true, ["че"]=true,
-    ["кто"]=true, ["какой"]=true, ["какая"]=true, ["какие"]=true,
-    ["сколько"]=true, ["кому"]=true, ["кого"]=true, ["кем"]=true,
-}
-
-local function DetectAddressee(lowered)
-    if not session or not session.knownNames then return nil end
-
-    local s, e = lowered:find("[%w\128-\255]+")
-    if not s then return nil end
-    local firstWord = lowered:sub(s, e)
-    if not HasUtf8Cyrillic(firstWord) then return nil end
-
-    -- Rule 1: seen as sender this session → nick.
-    if session.knownNames[firstWord] then return firstWord end
-    -- Rule 2: first word is itself an address-context token → NOT nick.
-    if ADDRESS_CONTEXT[firstWord] then return nil end
-
-    -- Peek at what follows.
-    local tail = lowered:sub(e + 1)
-    local nextPunct = tail:match("^([,;:!])")
-    local nextWord  = tail:match("^[%p%s]+([%w\128-\255]+)")
-                    or tail:match("^%s*([%w\128-\255]+)")
-    local isCyrNext = nextWord and HasUtf8Cyrillic(nextWord)
-
-    -- Rule 3: next Cyrillic token is an address-context word → nick.
-    if isCyrNext and ADDRESS_CONTEXT[nextWord] then return firstWord end
-    -- Rule 4: vocative punct after, AND first word not in dictionary → nick.
-    if nextPunct and not ns.WORDS[firstWord] then return firstWord end
-    -- Rule 5: unknown word at start, message continues → nick.
-    if not ns.WORDS[firstWord] and tail:match("%S") then return firstWord end
-    return nil
-end
+-- Real WoW character names are min 3 Cyrillic characters; short tokens that
+-- look like nicks aren't nicks, they're prepositions/particles.
 
 -- ---------------------------------------------------------------------------
 -- Translation pipeline
@@ -358,15 +294,6 @@ local function Translate(msg)
         lowered = lowered:gsub("([%w\128-\255])%s+%(%s*$",     "%1 :(")
     end
 
-    -- Detect an addressee BEFORE phrases get substituted. The 5 rules are
-    -- in DetectAddressee(); if any fires we auto-add the word to the
-    -- session roster so follow-up messages are recognised without
-    -- re-running the heuristic.
-    local addressee = DetectAddressee(lowered)
-    if addressee and session and session.knownNames then
-        session.knownNames[addressee] = (session.knownNames[addressee] or 0) + 1
-    end
-
     local withPh, subs = ApplyPhrases(lowered)
     -- Track whether we've already seen a Cyrillic token — only the first
     -- one is eligible for the "is this a player name being addressed?"
@@ -413,15 +340,18 @@ local function FilterImpl(eventName, msg, ...)
     -- Track sender as a known nickname. The first varg after msg in every
     -- chat event is the sender name (player nick). Store in lowercase,
     -- Cyrillic nicks only — ASCII nicks never collide with our dictionary.
+    -- Also: require min 3 Cyrillic letters and reject if the bare name is
+    -- itself a dictionary word (paranoia against malformed sender fields).
     local sender = (select(1, ...))
     if type(sender) == "string" and sender ~= "" then
-        -- Strip realm suffix ("Name-Realm" is rare on 2.4.3 but harmless).
         local bare = sender:match("^([^%-]+)") or sender
         local low = bare:lower()
         if ns.DetectCyrillicEncoding(low) ~= "ascii" then
-            -- Store in the same CP1251->UTF-8 normalised form we match tokens in.
             low = ns.NormalizeCyrillic(low)
-            session.knownNames[low] = (session.knownNames[low] or 0) + 1
+            local _, cyrChars = low:gsub("[\208\209][\128-\191]", "")
+            if cyrChars >= 3 and not ns.WORDS[low] then
+                session.knownNames[low] = (session.knownNames[low] or 0) + 1
+            end
         end
     end
 

@@ -4,6 +4,91 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.4] - 2026-04-22
+
+### Quality-focus release
+Previous version reported 99.45% dictionary coverage but a spot-audit on
+30 random chat lines found only **47% of translations actually read
+naturally** in English. This release goes after the gap.
+
+### Fixed — false-positive 2-letter "nicknames"
+The addressee detector had 5 cascading rules that could promote ANY
+first word of a message into `session.knownNames` (the nickname roster)
+based on context — "next word is a pronoun", "punctuation follows",
+"word not in dictionary". This produced permanent false-positive nicks
+for short Russian function words like `ну`, `за`, `об`, `ку`, `ах`,
+`ой` the moment someone typed "ну ты чего?" or "за что?". Once
+promoted, Rule 1 recognised them on every future message without any
+dictionary check. Result: 2-character "nicknames" that don't exist on
+any WoW server (character names are min 3 chars by Blizzard rules).
+
+**Fix**: removed `DetectAddressee` and its 5-rule heuristic entirely.
+The ONLY source of nicknames now is the `sender` field of the actual
+chat event in `FilterImpl` — i.e. only people who literally speak on
+chat get recognised as nicknames. Added defensive checks in
+`FilterImpl`: min 3 Cyrillic letters, reject if sender is itself a
+dictionary word.
+
+### Fixed — grammar tags leaking into user output
+Dictionary values carrying linguist metadata like `(gen)`, `(acc)`,
+`(slang)`, `(imp pl)`, `(nick/abbr)`, `(realm)` were being written
+verbatim to the translated chat line. Stripped **560 grammatical
+annotations** from values (case, gender, number, style tags). Only
+semantically meaningful parentheticals like `(Kara boss)`, `(heroic)`,
+`(paid svc)` remain.
+
+### Fixed — double "to" in `к N босу`
+`босу` had the translation "to boss", but `к` immediately before
+already renders as "to". Result: `к 4 босу` → "to 4 **to** boss".
+Changed `босу` and `боссу` to bare "boss".
+
+### Added — frame-level idioms (~40 phrases)
+Phrases whose literal word-by-word translation reads as garbage:
+- `должно быть` → "probably" (was "should to be")
+- `причём тут это` → "what does that have to do with this" (was "by the way here this")
+- `уже сделал` → "already done" (was "already did")
+- `в броне` → "in gear" (was "in at armor")
+- `мы ценим` → "we value" (was "we we value")
+- `не вступишь` → "won't you join" (was "not you'll join")
+- `шутки лет на` → "jokes for kids aged" (was "jokes years on/for")
+- `по атюну` → "for attunement" (was "along/via to attunement")
+- `по мск` / `по иркутску` → "MSK" / "Irkutsk time"
+- `по итогу` → "in the end", `по порядку` → "in order"
+- `плевать на`, `мне плевать`, `всем похуй` → "don't care" family
+- `в гробнице маны`, `гробницу маны`, `в разрушенные залы` — instance
+  names with case-forms so the preposition chain reads naturally.
+
+### Added — arena-season gear shorthand
+`а1`, `а2`, `а3`, `а5`, `а6` as single tokens (previously split into
+`а` + digit, rendering as "but2" / "but3"). 15+ in this log.
+
+### Added — fresh log Apr 22 (1353 total lines, +248 new)
+New clusters encountered in this session:
+- **Zul'Gurub mount-farming** (vanilla raid ran by TBC-alt players):
+  `зул гуруб`, `стремительный зульский тигр`, `стремительный ящер
+  раззаши`, `рол` (roll), `маунт/маунтов`, `каражан со скипом`.
+- **Server population debate**: `онлик`, `прайм`, `в праймтайме`,
+  `реальный онлайн`, `реальных`, `нарисованы`, `с лишним`, `по миру`.
+- **Skuf / zoomer slang**: `скуф`, `скуфы`, `скуфье`, `зумерок`,
+  `помечтай`, `хорош болтать`, `скуфы не болтают, они общаются`.
+- **Bot-farming rant vocab**: `хуева куча`, `куча скелетов`,
+  `кусок уебища`, `крабить`, `крабя`, `одеваясь с профы`, `онли`,
+  `удаляли тикет`, `скинул в телегу`.
+- **GM rules boilerplate**: `добрый день`, `уважаемые игроки`,
+  `соблюдайте правила сервера`, `избежать наказаний в виде мута/бана`,
+  `ознакомиться с правилами`, `на нашем сайте`.
+- **Twisted Nether recruit template**: `ведет набор любых уровней`,
+  `взрослый и адекватный коллектив`, `играем в удовольствие`,
+  `без обязательного`.
+- **Misc**: `стальгорн(е)`, `калимдор(у)`, `восточные королевства`,
+  `цитадель адского пламени`, `террокар(е)`, `бластед ленс`,
+  `магическая ткань`, `к элему`, `2ух факторку`, `перенести перса`,
+  `верните мой 2007`, etc.
+
+Dictionary grew **4627 → 5289 entries** (+662 after cleanup & dedup).
+Coverage on the full 1353-line combined log: **99.46%**. Remaining
+27 unknowns are all player nicknames, typos, or URL-encoded garbage.
+
 ## [0.9.3] - 2026-04-21
 
 ### Coverage
