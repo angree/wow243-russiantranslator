@@ -64,7 +64,23 @@ def apply_phrases(s, phrases_sorted):
             s = s.replace(key, " __PH__ ")
     return s
 
-LINE_RE = re.compile(r"\[6\. Global\] ([^:]+): (.+)$")
+# Match every chat format `/chatlog` writes:
+#   `[N. ChannelName] Sender: msg`   (Global/Trade/LFG/LocalDefense, any index, any case)
+#   `[Guild] Sender: msg`            (Guild / Officer / Party / Raid)
+#   `Sender says: msg`               (SAY, including NPC lines — we'll keep Cyrillic-only filter below)
+#   `Sender yells: msg`              (YELL)
+#   `Sender whispers: msg`           (incoming WHISPER)
+LINE_RE = re.compile(
+    r"(?:\[\d+\.\s*[A-Za-zА-Яа-я_]+\]|\[(?:Guild|Officer|Party|Raid|Whisper)\])\s*([^:]+):\s*(.+)$"
+    r"|^\S+\s+\S+\s+([A-Za-zА-Яа-яЁё][\w'\- ]*)\s+(?:says|yells|whispers):\s*(.+)$"
+)
+
+def parse_line(line):
+    m = LINE_RE.search(line)
+    if not m: return None, None
+    if m.group(1):
+        return m.group(1), m.group(2)
+    return m.group(3), m.group(4)
 
 def main():
     phrases, words = load_dict()
@@ -80,10 +96,9 @@ def main():
     raw = LOG.read_bytes().decode("utf-8", errors="replace")
 
     for line in raw.splitlines():
-        m = LINE_RE.search(line)
-        if not m:
+        sender, msg = parse_line(line)
+        if not sender or not msg:
             continue
-        sender, msg = m.group(1), m.group(2)
         if not CYR_ANY.search(msg):
             continue
         russian_lines += 1

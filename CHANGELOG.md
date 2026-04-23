@@ -4,6 +4,90 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.5] - 2026-04-23
+
+### Scope
+Three sub-agents manually reviewed the fresh log section (Apr 22-23,
++4363 new lines including multi-channel chatter: Global, Guild, LFG,
+Whisper, Party, Say). Previous releases only measured coverage on
+`[N. Global]` channel format — the analyzer was missing Guild, NPC
+say-lines, and whispered messages entirely. Rewrote the regex to
+parse every `/chatlog` format; surfaced 761 additional unknowns on
+first pass.
+
+### Added — ~600 new entries across three topical axes
+
+**LFG/raid/instances** (~90 entries):
+- `Auchindoun` short forms (`аукидон`, `аукидоун`, `аукиндон`,
+  `в аучи`), Old Hillsbrad (`хилсбард`/`хилсбрад`), Ata'mal Terrace
+  (`терраса ата'мала`), Magister's Terrace (`в магистер терасе`).
+- Mode combos: `бм норму`, `бм гер`, `залы гер`, `арку на норму`,
+  `в кару с нуля`/`с 0`, `фреш кара`, `каражан со скипом`,
+  `со скипом с девы`.
+- Hellfire Bastions, Gurok the Usurper, Terokk's Legacy, Gruul's
+  Two Skulls, Maggok's Treasure.
+- LFG phrases: `нап в 2с`, `ищу шама рестора`, `рдру/дц с экспой`,
+  `ждем тока тебя`, `сум к боссам`, `маунт рол`, `хила возьмете`.
+- Raid progress: `ХС 5/5 БТ 9/9`, `ССК 5/6`, `ТК 2/4`, `Хиджал 4/5`.
+- Recruit template: `ПВП/ПВЕ Гильдию`, `БГ/Арена/Подземельки`,
+  `расмотрим и другие класы`, `без обязательного РТ`.
+
+**Drama/rant/tech** (~250 entries):
+- Insults: `долбоебы`, `дауны`, `тупорыле`, `придурку`,
+  `пиздюлина`, `хуеля`, `смерд`, `петухи`, `рачьё`, `потужный`,
+  `куколды`, `терпилы`, `дырокуль`.
+- Tech rant: `фризы`, `микрофризы`, `задержка`, `не тянет`,
+  `нагрузки`, `релог`, `скрин в телегу`, `удаляли тикет`,
+  `посекундно`, `прокси`, `випиэн`, `эмулятор`, `нерабочий`.
+- Server names: `тертлвов`, `мунвел(е)`, `стормфордж`, `дессайда`,
+  `вармейн(е)`, `циркул(е)`, `риал`, `блум`, `джуни`.
+- Memes: `челобитную подаешь смерд`, `аз есмь царь`, `верните
+  мой 2007`, `так вот оно че михалыч`, `бургеры жалуются`,
+  `мем свежий`, `за булку хлеба`, `нифига се бурги оживились`.
+- Demographics debates: `иностранцам`, `нац сервер`, `ру клиенте`,
+  `онли рус`, `литерали`, `учат русский/английский`.
+
+**Trade/items/professions** (~150 entries):
+- Gear: `латные перчатки скверны` (Fel Plate Gauntlets),
+  `превращающая рубашка` (Morphing Shirt) + `ночной эльф мужчина`
+  / `дреней женщина` variants, `пояс взрыва`, `поножи седьмого
+  круга`, `дарующий жизнь плащ`.
+- Weapons: `золотой жезл`, `жезл из истинного серебра`,
+  `адамантитовый жезл`.
+- Gems/reagents: `огромный изумруд`, `чародейский фолиант`,
+  `адамантитовый порошок`, `стальной слиток`, `великая астральная
+  субстанция` (Planar Essence synonym), `изначальный огонь`,
+  `изначальная земля`, `толстая узловатая кожа`, `бирюзовый кодо`.
+- Enchants: `формула чар для обуви - проворство кошки`,
+  `зачаровывание плаща - ловкость, II ступень`, `зачаровывание
+  браслетов - интеллект, IV ступень`, `чантеры в лс`, `чарю шмот`,
+  `чарки/чарка` (enchants), `ступень` (rank).
+- Potions: `крепкое зелье тролльей крови`, `большой эликсир
+  силы`, `зелье омоложения`, `гигантский флакон`.
+- Items: `узда белого жеребца`, `ездовой хлыстик`,
+  `икс-ключительная ракета пустоты` (X-51 Nether-Rocket),
+  `чародейский фолиант`, `наследство терокка`.
+
+### Coverage
+On the combined 2575-line multi-channel log: **98.71%**.
+Previous version measured 99.46% but only on the 1353-line
+`[N. Global]` slice. The new number is strictly harder —
+it includes Guild boilerplate, whisper drama, and NPC say-lines.
+
+### Technical
+- `analyze_coverage.py` regex now matches: `[N. Channel]`
+  (any index, any case), `[Guild]/[Party]/[Raid]`, and
+  `Sender says/yells/whispers:` NPC-dialogue lines.
+
+### Metrics
+
+| Metric | v0.9.4 | v0.9.5 |
+|--------|--------|--------|
+| Dictionary entries | 5289 | **6170** |
+| Coverage (Global-only, 1353 lines) | 99.46% | ~99.5% |
+| Coverage (all channels, 2575 lines) | — | **98.71%** |
+| Distinct unknowns (all channels) | — | 122 (mostly nicks) |
+
 ## [0.9.4] - 2026-04-22
 
 ### Quality-focus release
