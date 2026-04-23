@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.6] - 2026-04-23 (evening)
+
+### Added
+Fresh Apr 23 log (+1811 lines, mostly late-evening Leaf-flamewar plus
+trade chatter): ~230 new entries across LFG, gear/enchants, and insult
+categories.
+
+- **Instances**: Arcatraz alt-spelling `алькатрац`, Blackrock short
+  `блек рок`, Coilfang Reservoir full name (`коилфанг резервуаре`),
+  Sanctum (`святилище`), Overlord (`владыка`).
+- **Gems / enchants / craft**: Flame Spessarite (`пламенный
+  спессарит`), Shadow Draenite (`сумрачный дренит`), Insightful
+  Earthstorm Diamond (`провидческий алмаз земной бури`), Wolfshead
+  Helm (`волкоголовый шлем`), Cobrahide Leg Armor (`накладки для
+  поножей из кожи кобры`), meta-gem (`мета/мету`), Mongoose enchant,
+  `линканите` (link me), `чарну` (I'll enchant).
+- **LFG shorthand**: `обычка` (normal mode slang), `пуху` (weapon
+  acc slang), `спдд` (SP dps), `расхитители подземелий` (Dungeon
+  Raiders guild name), `в поисках идола` (looking for idol).
+- **Flame war / insults**: ethnic slurs thread (`хохлушки`, `узбек`,
+  `даги`, `снгшники`, `олбанцы`, `тцк`), vulgar drama (`папочка`,
+  `хуесос`, `далбаебский`, `выблядок`, `пидарасом`, `коврик
+  обоссаный`, `жопой садилась`, `плачешь маленький`), Ukr/Ru guild
+  debate (`укр ги`, `руская ги`, `за орду`, `за альянс`),
+  tech rant (`днище`, `логает`, `роняют`, `блинк криво работает`).
+
+### Metrics
+
+| Metric | v0.9.5 | v0.9.6 |
+|--------|--------|--------|
+| Dictionary entries | 6170 | **6394** |
+| Log lines analyzed | 2575 | 2772 |
+| Coverage | 98.71% | **98.79%** |
+| Distinct unknowns | 122 | 123 (mostly nicks/typos) |
+
 ## [0.9.5] - 2026-04-23
 
 ### Scope
