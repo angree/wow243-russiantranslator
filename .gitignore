@@ -26,6 +26,11 @@ releases/*.zip
 
 # Coverage analysis scratch output
 coverage_out.txt
+forum_coverage.txt
+forum_top_unknowns.txt
+
+# Forum-prose research dumps (copyrighted user posts; kept locally)
+forum_dump/
 
 # Python cache & ad-hoc audit scripts
 __pycache__/

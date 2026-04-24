@@ -4,6 +4,80 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.9] - 2026-04-24 (evening)
+
+### Scope
+**Forum-prose coverage measurement**. 6 parallel sub-agents harvested
+~120,000 Cyrillic characters of real Russian prose from six Moonwell
+forum sections (bug tracker, PvE guides, PvP, professions, news,
+free/addons/creative) into `forum_dump/*.txt`. Built
+`analyze_forum_coverage.py` to run the same pipeline used for chat
+logs on this harvested prose and measure what % of it the translator
+would actually understand.
+
+### Baseline discovery
+On forum prose (~22,000 Cyrillic tokens across 6 sections), the v0.9.8
+dictionary hit only **56.31%** token coverage — a 43-point gap vs
+chat logs (99%). Root cause: forum posts use full grammatical
+sentences with every case inflection (Russian has 6 cases × 2 numbers
+per noun). Chat shorthand bypasses most of these; forum prose doesn't.
+
+### Added — ~550 case-inflected common words + idiom phrases
+- Full declension of high-frequency nouns: `персонаж/персонажа/
+  персонажу/персонажем/персонаже/персонажи/персонажей/персонажам`,
+  same for `профессия, игрок, навык, предмет, рецепт, уровень,
+  команда, версия, камень, камни, срок, момент`, etc.
+- Profession names as phrase entries with case forms: `горное дело/
+  горного дела/горному делу`, same for Blacksmithing / Jewelcrafting
+  / Engineering / Leatherworking / Tailoring / Skinning / First Aid /
+  Fishing / Cooking / Enchanting / Alchemy / Herbalism.
+- Common verb inflections: `получите, получить, должен, требует,
+  позволяет, создавать, изготавливать, использовать, включает,
+  расскажем, добывать, прокачать, воспроизвести, скачать, фармить`.
+- Frequent adjectives/pronouns/connectors: `несколько, другие,
+  некоторые, каждый, весь, сам, который` + case variants.
+- Tutorial/guide prose idioms: `в этом гайде`, `мы расскажем вам`,
+  `должен давать`, `чтобы получить`, `как воспроизвести`,
+  `реферальная система`, `накопительный бонус`, `системное
+  сообщение`, `модель персонажа`, `базе данных`.
+- Forum artifacts (Bartender3 / Ace2 / Aesa / IceHUD addon names
+  preserved; guide-reader meta verbs like `изготавливайте`,
+  `вернитесь`, `найдите`, `откройте`, `выберите`).
+
+### Metrics
+
+| Measurement | Before | After |
+|-------------|--------|-------|
+| Dictionary entries | 7589 | **8325** (+736) |
+| In-game chat coverage (3168 lines) | 99.01% | **99.10%** |
+| Forum prose coverage (22,668 tokens) | 56.31% | **71.69%** |
+| Dict words (single-token) | 5695 | 6348 |
+| Dict phrases (multi-word) | 1894 | 1977 |
+
+### Forum section breakdown
+
+| Section | Tokens | Coverage |
+|---------|--------|----------|
+| Bug tracker | 3,907 | **72.4%** |
+| Free discussion / addons / creative | 1,828 | **70.8%** |
+| News + info | 4,996 | **69.2%** |
+| Professions | 3,484 | **71.3%** |
+| PvE guides | 5,187 | **73.0%** |
+| PvP / arena | 3,266 | **73.6%** |
+
+### Why not 98.5%+ as requested
+Forum prose has an asymptotic long tail: after this pass **4,348
+distinct tokens remain unknown**, but they occur only 1-4 times each
+across the corpus. Each further percentage point costs roughly 100
+dictionary entries at this point (vs ~40 per point in the first pass).
+Reaching 98% on forum prose would take another ~2700 entries; realistic
+target is 85-90% in 2-3 more harvest cycles.
+
+The 99% figure we report on chat logs is honest for that use case —
+in-game chatter is the primary target for the addon. Forum-prose
+coverage grew to **71.7%** in one release, and will keep climbing
+on each iteration cycle.
+
 ## [0.9.8] - 2026-04-24
 
 ### Scope
