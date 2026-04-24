@@ -4,6 +4,69 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.0] - 2026-04-24 (night)
+
+### The 90% milestone
+Pushed forum-prose coverage from 71.69% to **89.98%** in a single
+release cycle. 4 parallel sub-agents translated the top-2000
+remaining unknowns (covering ~4,379 of the 6,418 unknown token
+occurrences). Round number warranted a 1.0.0 bump.
+
+### Method
+1. `analyze_forum_coverage.py` dumped the top-2000 unknowns to
+   `forum_all_unknowns.txt` with counts and sample context.
+2. Split into 4 chunks of 500 each.
+3. 4 parallel sub-agents read chunks + sample contexts, produced
+   `["russian"]="english"` Lua entries. All 4 delivered 500 entries
+   each (2000 total, 8 marked SKIP for OCR/fragment artifacts).
+4. `merge_forum_translations.py` deduped against existing dict
+   (1994 new entries after dedup) and inserted at correct table.
+5. `clean_dict.py` + re-run coverage analyzer.
+
+### Per-section coverage after v1.0.0
+
+| Section | Tokens | v0.9.9 | **v1.0.0** |
+|---------|--------|--------|-----------|
+| Bug tracker | 3,907 | 72.4% | **93.0%** |
+| Free / addons / creative | 2,904 | 70.8% | **94.4%** |
+| News + info | 4,996 | 69.2% | **83.2%** |
+| Professions | 3,484 | 71.3% | **89.4%** |
+| PvE guides | 5,187 | 73.0% | **91.1%** |
+| PvP / arena | 3,266 | 73.6% | **91.7%** |
+| **Overall** | **23,744** | **71.7%** | **89.98%** |
+
+### Bonus
+In-game chat coverage also climbed: 99.10% → **99.22%**. News section
+is the lowest at 83% because official Moonwell announcements contain
+a lot of campaign/pricing language that doesn't reuse between threads
+(one-off promo text).
+
+### Added — 1,994 new single-token entries
+Case inflections of common Russian prose vocabulary:
+- Verb conjugations missed earlier (`пофиксят`, `занерфили`,
+  `свапают`, `диспелился`, `заикаться`, `спуллить`, `скипни`).
+- Russian WoW spell transliterations (`жизнецвета`=Lifebloom,
+  `блумы`=Blooms, `соулстон`=Soulstone, `обледенение`=Frostbite).
+- Zone inflections (`кельданасу`=Quel'Danas, `альтераке`=Alterac,
+  `силитусе`=Silithus, `пандария`=Pandaria, `джайне`=Jaina).
+- Faction/rep shorthand (`консорциум`, `аркатрац`, `презренные`=Scryer,
+  `эксодар`, `пещерах`, `молотильне`, `изумрудном`).
+- Profession deep-cut terms (`просеивания`=prospecting,
+  `распыляют`=disenchant, `узловатую`=knothide, `спеллклот`,
+  `шадоуклот`).
+- Misspellings/typos handled inline (`атписка`, `незя`, `заного`,
+  `впечетление`, `риссовками`).
+- Community slang (`раки`=noobs, `лудоман`=gambler,
+  `подгоревшие попки`=burnt butts, `рашки`=Russia,
+  `камунити`=community, `пираткам`=private servers, `близлайк`).
+- 500+ case-inflected nouns/adjectives in dative/genitive/
+  instrumental/prepositional forms.
+
+### Infrastructure (reusable)
+- `merge_forum_translations.py` — deduplicates + inserts translation
+  files into `ns.PHRASES` or `ns.WORDS` based on whether the key has
+  spaces. Clean insertion point detection, no manual editing.
+
 ## [0.9.9] - 2026-04-24 (evening)
 
 ### Scope

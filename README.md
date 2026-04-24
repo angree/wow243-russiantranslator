@@ -4,9 +4,10 @@ A pure-Lua Russian → English chat translator for **World of Warcraft 2.4.3** (
 
 > **Target client**: WoW 2.4.3 only. The addon uses the chat-filter signature, saved-variables flush timing, and secure-code rules specific to TBC. It will not work on Wrath/Cataclysm/MoP classic, retail, or post-3.0 private servers without changes.
 
-![version](https://img.shields.io/badge/version-0.9.9-blue)
+![version](https://img.shields.io/badge/version-1.0.0-blue)
 ![coverage](https://img.shields.io/badge/live_chat_coverage-99%25-brightgreen)
-![entries](https://img.shields.io/badge/dictionary-8325_entries-informational)
+![forum](https://img.shields.io/badge/forum_prose-90%25-brightgreen)
+![entries](https://img.shields.io/badge/dictionary-10319_entries-informational)
 ![interface](https://img.shields.io/badge/interface-20400-orange)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
