@@ -22,7 +22,13 @@ def load_dict():
     phrases = {}
     words = {}
     pair_re = re.compile(r'\["([^"]+)"\]\s*=\s*"([^"]*)"')
-    for p in [DICT, DICT.parent / "Dictionary_Full.lua"]:
+    files = [DICT]
+    files.extend(sorted(DICT.parent.glob("Dictionary_Full_*.lua")))
+    # Also support legacy monolith during transition
+    legacy = DICT.parent / "Dictionary_Full.lua"
+    if legacy.exists():
+        files.append(legacy)
+    for p in files:
         if not p.exists():
             continue
         text = p.read_text(encoding="utf-8")

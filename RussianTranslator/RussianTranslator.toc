@@ -2,9 +2,18 @@
 ## Title: Russian Translator
 ## Notes: Translates incoming Russian chat to English with [Russian] prefix
 ## Author: Grzegorz Korycki (Poczwarka)
-## Version: 1.6.0
+## Version: 1.6.1
 ## SavedVariables: RT_DB
 
 Dictionary.lua
-Dictionary_Full.lua
+Dictionary_Full_01.lua
+Dictionary_Full_02.lua
+Dictionary_Full_03.lua
+Dictionary_Full_04.lua
+Dictionary_Full_05.lua
+Dictionary_Full_06.lua
+Dictionary_Full_07.lua
+Dictionary_Full_08.lua
+Dictionary_Full_09.lua
+Dictionary_Full_10.lua
 Core.lua
