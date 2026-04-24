@@ -273,6 +273,66 @@ local function Lemmatize(tok)
     return nil
 end
 
+-- ---------------------------------------------------------------------------
+-- Perfectivizing-prefix stripper
+-- ---------------------------------------------------------------------------
+-- Russian has ~16 prefixes that make an imperfective verb perfective:
+--   писать → написать, подписать, переписать, записать, списать, …
+-- Each prefixed form is a distinct verb but shares the base meaning.
+-- Storing every prefix×base combination is wasteful; instead, strip the
+-- prefix and look up the imperfective root.
+--
+-- Ordered longest-first to avoid premature shorter-match (e.g. "перепис..."
+-- must match "пере-" not "пе-").
+--
+-- Safety: only strip if the remainder is a dictionary verb (translation
+-- starts with "to " or "I " or similar verb pattern). Otherwise return nil
+-- — prevents misfire on non-verbs like погода (weather, not a verb).
+local PERFECTIVIZING_PREFIXES = {
+    "перед", "разо", "подо", "надо", "обо", "ото", "изо", "вос",
+    "пере", "разу", "пред", "вне", "под", "над", "при", "про",
+    "раз", "рас", "воз", "вос", "низ", "нис", "ото",
+    "вы", "за", "на", "по", "от", "об", "до", "из", "ис", "со",
+    "у", "о", "в", "с",
+}
+
+local function IsVerbGloss(s)
+    -- Cheap heuristic: does this English string look like a verb definition?
+    if not s or s == "" then return false end
+    -- Infinitive "to ..."
+    if s:sub(1, 3) == "to " then return true end
+    -- 1st-person "I ..."
+    if s:sub(1, 2) == "I " then return true end
+    -- English past-tense / gerund endings
+    if s:match("ing$") or s:match("ed$") or s:match("s$") then return true end
+    return false
+end
+
+local function TryPerfectivePrefix(tok)
+    -- Skip tokens that are too short to hold a prefix + 4-char stem.
+    if #tok < 8 then return nil end
+    for i = 1, #PERFECTIVIZING_PREFIXES do
+        local pfx = PERFECTIVIZING_PREFIXES[i]
+        local pl = #pfx
+        if tok:sub(1, pl) == pfx then
+            local remainder = tok:sub(pl + 1)
+            if #remainder >= 6 then  -- min 3 Cyrillic letters in base
+                -- Direct hit on base
+                local hit = ns.WORDS[remainder]
+                if hit and IsVerbGloss(hit) then
+                    return hit
+                end
+                -- Inflected base → lemmatize it
+                local lem = Lemmatize(remainder)
+                if lem and IsVerbGloss(lem) then
+                    return lem
+                end
+            end
+        end
+    end
+    return nil
+end
+
 -- isFirstCyrillic: true if this is the FIRST Cyrillic token of the message.
 -- Used for player-name disambiguation: Russian chat often starts with a name
 -- when addressing someone ("Кара, ты где?"). If we've seen that exact string
@@ -295,6 +355,10 @@ local function TranslateToken(token, sampleLine, isFirstCyrillic)
     -- Lemmatization fallback: strip case endings and try again.
     local lemma_hit = Lemmatize(token)
     if lemma_hit then return lemma_hit, true end
+
+    -- Perfectivizing-prefix fallback: strip prefix, look up base verb.
+    local prefix_hit = TryPerfectivePrefix(token)
+    if prefix_hit then return prefix_hit, true end
 
     LogUnknown(token, sampleLine)
     -- Keep the original Cyrillic so the user can still read the word, but

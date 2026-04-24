@@ -60,6 +60,42 @@ def lemmatize(tok, words):
                 return words[cand]
     return None
 
+
+# Perfectivizing prefix stripper — mirrors Core.lua TryPerfectivePrefix.
+PERFECTIVIZING_PREFIXES = [
+    "перед", "разо", "подо", "надо", "обо", "ото", "изо", "вос",
+    "пере", "разу", "пред", "вне", "под", "над", "при", "про",
+    "раз", "рас", "воз", "вос", "низ", "нис",
+    "вы", "за", "на", "по", "от", "об", "до", "из", "ис", "со",
+    "у", "о", "в", "с",
+]
+
+
+def _is_verb_gloss(s):
+    if not s:
+        return False
+    if s.startswith("to ") or s.startswith("I "):
+        return True
+    if s.endswith(("ing", "ed", "s")):
+        return True
+    return False
+
+
+def try_perfective_prefix(tok, words):
+    if len(tok) < 4:
+        return None
+    for pfx in PERFECTIVIZING_PREFIXES:
+        if tok.startswith(pfx):
+            remainder = tok[len(pfx):]
+            if len(remainder) >= 3:
+                hit = words.get(remainder)
+                if hit and _is_verb_gloss(hit):
+                    return hit
+                lem = lemmatize(remainder, words)
+                if lem and _is_verb_gloss(lem):
+                    return lem
+    return None
+
 def normalize(s):
     return s.translate(TR).lower()
 
@@ -135,6 +171,8 @@ def main():
             if t in words:
                 pass
             elif lemmatize(t, words) is not None:
+                pass
+            elif try_perfective_prefix(t, words) is not None:
                 pass
             else:
                 unknown_ctr[t] += 1

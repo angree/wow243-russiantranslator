@@ -4,6 +4,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.5.0] - 2026-04-25 — triple feature drop (research-guided)
+
+Deep-research agent produced a 42-source report at
+`docs/RESEARCH_STATE_OF_ART.md`. Top 3 HIGH-ROI recommendations
+executed in parallel in this release:
+
+### 1. Perfectivizing-prefix stripper
+Added `TryPerfectivePrefix()` in Core.lua (+ Python mirror). Strips 36
+Russian perfective/directional prefixes (пере-, разо-, на-, по-, за-,
+вы-, у-, в- etc.) and re-looks up the remainder. Safety: only accepts
+if remainder translates to a verb (starts with "to "/"I ", or ends in
+-ing/-ed/-s). Prevents misfire on non-verbs like погода.
+
+### 2. Kaikki.org Russian Wiktionary ingestion (+350k entries)
+Sub-agent streamed 13 per-POS JSONL files (~810 MB over the wire),
+parsed 439,814 entries, wrote 374,816 dedup'd `russian|english` pairs.
+Merger filtered meta-glosses, capped English length, non-destructive
+vs existing dict. License: CC-BY-SA + attribution.
+
+### 3. TBC emulator DB (cmangos/tbc-db) ingestion (+45k WoW names)
+Sub-agent parsed `locales_item/creature/quest/gameobject.sql`, joined
+with English templates. 46,674 game-canonical ruRU→enUS pairs;
++3,446 words + 41,754 phrases added (mostly multi-word item names).
+
+### Metrics
+
+| | v1.4.2 | v1.5.0 |
+|---|---|---|
+| Dict entries | 30,279 | **425,584** |
+| Words | 28,301 | 372,078 |
+| Phrases | 1,978 | **53,506** |
+| File size | 1.1 MB | **22.8 MB** |
+| Chat coverage | 98.80% | **99.05%** |
+| Honest unique-msg | 97.93% | **98.46%** |
+| Messages 100% translated | 94.1% | **95.3%** |
+
+### Trade-offs
+22.8 MB Lua file is 20× larger than before. /reload time will be
+measurably longer (est. 1-3 s vs ~200 ms). Memory: ~40-50 MB in-client
+vs prior ~3 MB. Within typical heavy-addon budget. If unacceptable,
+kaikki can be pruned to top-100k most-frequent.
+
+## [1.4.2] - 2026-04-25 — late openrussian_7 full delivery
+Background retry agent delivered the full 2893 pairs (vs 247 earlier).
++2514 entries after dedup. Dict 27,765 → 30,279.
+
+## [1.4.1] - 2026-04-25 — lemmatizer holes + annotation leak strip
+Fixed lemmatizer missing imperative (-ай→-ать), reflexive imperative
+(-йся→-ться), proper reflexive 3pl (-ются→-ться), and irregular
+(`-огла→-очь` for помочь). Stripped (nick/meme), (m), (f), (pl), (gen)
+from values. Fixed сотка='are'→'hundred'. Added base forms for 11
+tokens from user screenshots.
+
 ## [1.4.0] - 2026-04-25 — closed 20k gap, UX fix for Cyrillic nicks
 
 ### Two changes
