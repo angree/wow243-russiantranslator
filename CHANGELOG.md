@@ -4,6 +4,128 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.8] - 2026-04-24
+
+### Scope
+Moved beyond in-game chat logs for the first time. Five parallel
+sub-agents read the Moonwell server forum (https://forum.moonwell.su)
+section-by-section (Bug tracker / Support / PvE guides / PvP guides /
+Professions 1-375 / News / Addons / Free discussion) and harvested
+~850 new dictionary entries.
+
+### Fixed
+- **Phrase-table bug (retrospective)**: 145 multi-word entries that were
+  accidentally added to `ns.WORDS` in v0.9.7 (where Lua can never match
+  them — tokens don't contain spaces) moved back into `ns.PHRASES`.
+  Python coverage analyzer was already treating them as phrases by
+  key-shape, so reported coverage stayed accurate; but in-game they
+  were silently ignored. Now live.
+
+### Added — ~850 entries from forum harvest
+
+**Bug tracker / Support** (~85):
+- Account-ban dispute language (`аккаунт заблокирован без объяснения`,
+  `незаконно полученные предметы`, `намеренное мошенничество`),
+  ticket flow (`создал заявку`, `рассматривается в течение 24 часов`),
+  donate currency (`коины/коинов`, `пополнение баланса`, `задонатить`),
+  bug templates (`багрепорт`, `воспроизведение бага`,
+  `последовательность действий`, `официальные источники`), ticket
+  verbs (`исправлено/подтверждено/отклонено`).
+
+**PvE / Raid guides** (~120):
+- Boss names with ruRU→enUS: Warp Splinter (`узлодревень`), Sa'at,
+  Thespia, Zereketh, Pathaleon, Medivh/Khadgar/Alturus/Andormu (Kara
+  attunement NPCs), Thrall, Broodlord Lashlayer, Nefarian, Onyxia,
+  Ragnaros, Majordomo.
+- Zones: Durnholde Keep, Tirisfal Glades, Azshara, Tanaris, Stratholme,
+  Ahn'Qiraj, Coilfang Reservoir, Old Hillsbrad Foothills, Deadwind
+  Pass, Master's Cellar.
+- Attunement chain language: `цепочка допуска`, `фрагмент ключа`,
+  `страж фрагмента`, `хозяйский ключ`, `поиск ключа`, `собрать
+  фрагменты`. Kara quest chain by step (`Arcane Disturbances`,
+  `Dalaran Intrigue`, `Master's Touch`, `Master's Lair`, etc.).
+- Raid mechanics: `квинтэссенция` (Eternal Quintessence), `ваншот`,
+  `спавнится`, `элитники`, `репутация/репати`, `тп лоремин`,
+  `под растой` (bloodlust), `3-4 окна` (raid IDs).
+- DBM-speak: `ставится череп`, `таймер для кика`, `анонс для диспела`.
+- Naxx T3 quarter names (paucii/chumnyi/quarter-of-undead).
+
+**PvP / Arena** (~95):
+- Team comps: RMP, TSG, colda-tima, dvoynye khily, разрушпал
+  (ret-pal comp), sploshnoy drulya (beastcleave).
+- BG tactics: `перенос флага`, `дроп флага`, `фри пот` (Free Action
+  Potion), `банка на иммунку`, `приммейт регнуть`, `переливать рейтинг`.
+- Arena seasons: `а2/а3/а4` as gear tiers, `арена поинты`, `скип
+  сезона`, `топ-8 ладдера`, `инфляция рейтинга`.
+- Meta slang: `близзлайк`, `дизбаланс`, `мейн`, `нерфануть`,
+  `кореши/корешами`, `халява`.
+
+**Professions (crafting 1-375)** (~180):
+- Mining: all ore/bar tiers (Copper→Khorium), deposits/veins, gems.
+- Herbalism: full vanilla+TBC herb list (Peacebloom→Fel Lotus).
+- Skinning: leather tiers, Clefthoof, Cobra Scales.
+- Blacksmithing: Sharpening/Grinding stones, Fel Iron Plate set,
+  Felsteel gear, weightstones.
+- Leatherworking: Armor Kits, Nightscape set, Wicked Leather,
+  Drums of Battle/War/Speed.
+- Tailoring: Netherweave cloth/bag/robe line, Soulcloth, Runecloth Bag.
+- Enchanting: full dust/essence/shard ladder + all enchant-slot names.
+- Alchemy: Major protection potions, Cauldrons, Philosopher's Stone.
+- Jewelcrafting: all basic and cut gems (Draenite/Moonstone/Blood Garnet
+  /Peridot/etc.), Nightseye, Talasite, Skyfire/Earthstorm Diamond.
+- Engineering: Blasting Powders, Fel Iron Bombs, Goggles, Flying
+  Machine/Turbo.
+- Cooking: 30+ recipe names incl. Ravager Dog, Clefthoof Ribs,
+  Captain Rumsey's Lager, Warp Burger, Delicious Chocolate Cake.
+- Fishing: schools, bait, poles (Seth's Graphite Pole).
+- First Aid: all bandage tiers.
+
+**News / Events / Addons** (~100):
+- Patch-note verbs: `исправлен/добавлен/реализовано/переделан/
+  выкатили/конвертирован/вступит в силу/впоследствии/пренерф/
+  постнерф`.
+- Maintenance: `технические работы/техработы`, `откат базы`,
+  `реалмлист`, `недоступен`.
+- Event names: Darkmoon Faire, Midsummer, Winter Veil, Lunar Festival,
+  Love is in the Air, Children's Week, Brewfest, Hallow's End,
+  Pirate Invasion, Edge of Madness.
+- Paid services: `пвп гир`, `илвл/итемлевел`, `инчанты`, `премиум
+  аккаунт`, `кастомные сундуки`, `трансмог`.
+- Addon name transliterations (for chatter about UI): Decursive,
+  Recount, Omen, Bartender, DBM, AtlasLoot, Auctionator, Bagnon,
+  QuestHelper, Cartographer, HealBot, Clique, XPerl, Mapster,
+  TitanPanel, Chatter, Postal.
+- Forum slang: `лохи/лох`, `зашквар`, `потеряйтесь`, `залетай`,
+  `зарубимся`, `олд`, `обновки`, `розыгрыш`, `телеграм`.
+
+### Metrics
+
+| Metric | v0.9.7 | v0.9.8 |
+|--------|--------|--------|
+| Dictionary entries total | 6739 | **7589** (+850) |
+| Single-token entries | 5382 | 5695 |
+| Multi-word phrase entries | 1358 | **1894** |
+| Coverage (in-game log) | 99.01% | 99.00% |
+
+Coverage on chat logs stays flat by design — these additions are
+aimed at forum posts and crafting/raid chatter that doesn't show up
+in Global chat volumes. The ~850 new entries directly expand domain
+coverage (forum comprehension, profession pricing, guide-reading) by
+an estimated 10-15 percentage points for those use cases.
+
+### Source threads (sample citations)
+- Bug tracker: topic/4512 (account ban), topic/4348 (items breaking),
+  topic/4311 (gold calc), topic/4300 (pet AI), topic/4236 (Alterac).
+- PvE guides: topic/1734 (Kara attunement), topic/647 (Black Qiraji
+  Crystal), topic/702 (Naxx T3 recycling), topic/645 (Eternal
+  Quintessence), topic/2067 (DBM Moonwell).
+- PvP: topic/4120 (arena season), topic/594 (rated BG), topic/2760
+  (rated BG A3), topic/4360 (cross-faction), topic/3848 (arena bug).
+- Professions: all of topic/2054, 2100-2111 (full 1-375 guides).
+- News/Addons: topic/1619 (maintenance), topic/1936 (patch), topic/537
+  (connect issues), topic/632 (addon discussion), topic/4440 (Telegram
+  giveaway), topic/2613 (moderation).
+
 ## [0.9.7] - 2026-04-24
 
 ### Scope
