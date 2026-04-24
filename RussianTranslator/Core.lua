@@ -281,7 +281,18 @@ local function WordLookup(tok)
     local hit = ns.WORDS[tok]
     if hit then return hit end
     if db and db.liteMode then return nil end
-    if ns.WORDS_EXTRA then return ns.WORDS_EXTRA[tok] end
+    -- ns.WORDS_EXTRA_TABLES is a list of per-chunk sub-tables. We don't
+    -- merge them into one giant lookup because WoW 2.4.3's Lua caps a
+    -- single table around 2^18 = 262144 entries before insertions silently
+    -- start dropping. Keeping chunks separate means N hash lookups per
+    -- token but each is O(1), so net cost is still trivial.
+    local tables = ns.WORDS_EXTRA_TABLES
+    if tables then
+        for i = 1, #tables do
+            local h = tables[i][tok]
+            if h then return h end
+        end
+    end
     return nil
 end
 
@@ -1004,22 +1015,65 @@ f:SetScript("OnEvent", function(self, event, arg1)
             if EnsureChatLog() then chatlog = "on" end
         end
         Msg("|cffffcc00made by Grzegorz Korycki (Poczwarka)|r")
-        -- Announce vocabulary mode: FULL (core + extra Kaikki pack) or
-        -- LITE (core only). The extra pack file (Dictionary_Full.lua) may
-        -- or may not be present on disk; show both pieces of state so
-        -- user can reason about what's loaded.
-        local vocab_mode
-        if db.liteMode then
-            vocab_mode = "|cffffaa00LITE|r (core ~75k)"
-        elseif ns.WORDS_EXTRA then
-            vocab_mode = "|cff55ff55FULL|r (core + extra ~425k)"
-        else
-            vocab_mode = "|cffaaaaaa(extra pack missing)|r LITE (~75k)"
+        -- BUILD STAMP — if this doesn't change across /reload, the addon
+        -- isn't being reloaded. Update on every edit so we can tell.
+        -- Keep word chunks as SEPARATE sub-tables — never merge into one
+        -- giant lookup. WoW 2.4.3's Lua silently drops inserts past ~2^18
+        -- (262144) entries per table. WordLookup walks the list of tables.
+        ns.WORDS_EXTRA_TABLES = {}
+        local wchunks, wcount = 0, 0
+        for i = 1, 20 do
+            local k = "RT_WORDS_EXTRA_" .. (i < 10 and "0"..i or tostring(i))
+            local t = _G[k]
+            if t then
+                table.insert(ns.WORDS_EXTRA_TABLES, t)
+                wchunks = wchunks + 1
+                pcall(function()
+                    for _ in pairs(t) do wcount = wcount + 1 end
+                end)
+                _G[k] = nil
+            end
         end
-        Msg(("mode=%s. /rt lite toggles, /reload to apply.")
-            :format(vocab_mode))
-        Msg(("loaded (session %s). filters=%d chatlog=%s. /rt help"):format(
-            session.started, ok, chatlog))
+        -- Phrases (~51k total) fit in a single table — under the 262k cap.
+        ns.PHRASES_EXTRA = ns.PHRASES_EXTRA or {}
+        local pchunks = 0
+        for i = 1, 5 do
+            local k = "RT_PHRASES_EXTRA_0" .. i
+            local t = _G[k]
+            if t then
+                local ok = pcall(function()
+                    for kk, vv in pairs(t) do ns.PHRASES_EXTRA[kk] = vv end
+                end)
+                if ok then pchunks = pchunks + 1 end
+                _G[k] = nil
+            end
+        end
+        pcall(function()
+            if next(ns.PHRASES_EXTRA) then
+                ns.PHRASE_ORDER_EXTRA = {}
+                for k in pairs(ns.PHRASES_EXTRA) do
+                    table.insert(ns.PHRASE_ORDER_EXTRA, k)
+                end
+                table.sort(ns.PHRASE_ORDER_EXTRA, function(a, b) return #a > #b end)
+            end
+        end)
+        local coreWords = 0
+        pcall(function()
+            for _ in pairs(ns.WORDS or {}) do coreWords = coreWords + 1 end
+        end)
+        local totalWords = coreWords + wcount
+        local coreOK = ns.WORDS and ns.PHRASES
+        Msg("|cff55ddffRussian Translator v1.7.0|r")
+        Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
+            .. " (" .. coreWords .. " words)")
+        Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)
+            and ("|cff00ff00YES|r ("..wchunks.."/20 word, "..pchunks.."/5 phrase)")
+            or ("|cffff0000PARTIAL|r ("..wchunks.."/20 word, "..pchunks.."/5 phrase)")))
+        Msg(" total:  " .. totalWords .. " words")
+        pcall(function()
+            Msg("loaded session=" .. tostring(session.started)
+                .. " filters=" .. tostring(ok) .. " chatlog=" .. tostring(chatlog))
+        end)
     elseif event == "PLAYER_LOGOUT" then
         if session then
             session.ended = date("%Y-%m-%d_%H-%M-%S")

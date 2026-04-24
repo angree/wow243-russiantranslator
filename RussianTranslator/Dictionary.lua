@@ -29768,3 +29768,12 @@ ns.WORDS = {
     ["гангстер"]="gangster",
     ["добряк"]="good soul",
 
+}
+
+-- Prebuilt list of phrase keys sorted by length descending.
+-- Core.lua uses this so the longest phrase wins (greedy match).
+ns.PHRASE_ORDER = {}
+for k in pairs(ns.PHRASES) do
+    table.insert(ns.PHRASE_ORDER, k)
+end
+table.sort(ns.PHRASE_ORDER, function(a, b) return #a > #b end)

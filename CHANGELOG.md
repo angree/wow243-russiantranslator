@@ -4,6 +4,67 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.0] - 2026-04-25 — Kaikki Wiktionary pack actually loads
+
+Five local builds (v1.5.0 → v1.6.9) shipped and got pulled because the
+extended Kaikki pack never loaded on the 2.4.3 client. Root-caused today
+and fixed — **full ~372k-word vocabulary now active in game.**
+
+### What broke, what we tried
+
+- **v1.5.0**: single 21.7 MB `Dictionary_Full.lua` listed in TOC → silently
+  rejected. Suspected Lua parser constant-pool limit.
+- **v1.6.0–v1.6.1**: split into 10 × 2.5 MB chunks, then 30 × 700 KB chunks,
+  all per-line `ns.WORDS_EXTRA["k"]="v"` statements → none loaded.
+- **v1.6.2**: rewrote as pfQuest-tbc style (`local w={…}` + `for…pairs` merge).
+  10 × 1.5 MB. Still nothing.
+- **v1.6.3–v1.6.5**: moved loader to XML `<Include>` pattern (pfQuest mirror).
+  TOC with only `.xml` files → **entire addon stopped loading**, including
+  core. Reverted.
+
+### What actually fixed it
+
+Two separate issues stacked:
+
+1. **TOC file-list is cached at client start.** `/reload` re-runs Lua files
+   but never re-reads the TOC's file list. Every time we added chunks to the
+   TOC and hit `/reload`, WoW kept using the cached pre-chunk manifest — so
+   the new chunks were literally never handed to the parser. **Full client
+   restart is required when TOC file list changes.** Documented in
+   `WOW_2_4_3_ADDON_GUIDE.md` but we forgot to apply it during iteration.
+2. **Lua table silently caps around 2^18 = 262144 entries on WoW 2.4.3.**
+   Merging all chunks into one big `ns.WORDS_EXTRA` stopped accepting inserts
+   at ~262k — lost ~80k entries with no error. Fix: keep chunks as separate
+   sub-tables in `ns.WORDS_EXTRA_TABLES`; `WordLookup` walks the list.
+   20 hash lookups per miss, each O(1), net cost trivial.
+
+### Chunk layout
+
+- `Dictionary.lua` (1.2 MB, ~28k entries) — core WoW-specific + OpenRussian
+  top-5000 + cmangos/tbc-db locales + built-in nicks.
+- **20 × `Dictionary_Full_NN.lua`** (~800 KB each, 17,194 entries each)
+  — Kaikki Wiktionary single-word morphology pack. Each file is ONE
+  single-line top-level-global assignment `RT_WORDS_EXTRA_NN={…}`. No
+  comments, no preamble, no merge loop — gives the Lua parser the absolute
+  minimum to chew through.
+- **5 × `Dictionary_Phrases_NN.lua`** (~700 KB each, ~10.3k entries each)
+  — Multi-word Kaikki phrases. Same single-statement format.
+- `Core.lua` — pipeline + merge at PLAYER_LOGIN.
+
+### Load diagnostics at startup
+
+Replaces the old per-category spam with three lines:
+
+```
+Russian Translator v1.7.0
+ core:   YES (28189 words)
+ chunks: YES (20/20 word, 5/5 phrase)
+ total:  372056 words
+```
+
+`PARTIAL` in the chunks line flags a merge failure; `total` is the sum of
+core + every Kaikki entry across all chunks.
+
 ## [1.6.0] - 2026-04-25 — lite/full vocab toggle
 
 User feedback: v1.5.0 Dictionary.lua grew to 22.8 MB, `/reload` got
