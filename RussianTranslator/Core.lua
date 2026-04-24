@@ -161,6 +161,7 @@ end
 local function ApplyPhrases(lowered)
     local subs = {}
     local id = 0
+    -- Always iterate core phrases first (longest-first order).
     for _, key in ipairs(ns.PHRASE_ORDER) do
         local idx = lowered:find(key, 1, true)
         while idx do
@@ -169,6 +170,19 @@ local function ApplyPhrases(lowered)
             subs[ph] = ns.PHRASES[key]
             lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(idx + #key)
             idx = lowered:find(key, idx + #ph, true)
+        end
+    end
+    -- Then iterate extra (Kaikki) phrases if loaded and lite mode is off.
+    if ns.PHRASE_ORDER_EXTRA and not (db and db.liteMode) then
+        for _, key in ipairs(ns.PHRASE_ORDER_EXTRA) do
+            local idx = lowered:find(key, 1, true)
+            while idx do
+                id = id + 1
+                local ph = "\1" .. id .. "\1"
+                subs[ph] = ns.PHRASES_EXTRA[key]
+                lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(idx + #key)
+                idx = lowered:find(key, idx + #ph, true)
+            end
         end
     end
     return lowered, subs
@@ -255,6 +269,22 @@ local LEMMA_RULES = {
     {"","а"}, {"","я"}, {"","ь"},
 }
 
+-- ---------------------------------------------------------------------------
+-- WordLookup helper (consults core + optional extra dict based on liteMode)
+-- ---------------------------------------------------------------------------
+-- ns.WORDS is the always-loaded core (~75k entries: WoW-specific + top
+-- frequencies + TBC emulator DB). ns.WORDS_EXTRA is the optional Kaikki
+-- Wiktionary pack (~350k) loaded via Dictionary_Full.lua. When
+-- db.liteMode is true, we only consult core — effectively running on a
+-- reduced vocabulary even if the Full pack is loaded.
+local function WordLookup(tok)
+    local hit = ns.WORDS[tok]
+    if hit then return hit end
+    if db and db.liteMode then return nil end
+    if ns.WORDS_EXTRA then return ns.WORDS_EXTRA[tok] end
+    return nil
+end
+
 local function Lemmatize(tok)
     -- Skip tokens shorter than 4 bytes (< 2 Cyrillic letters)
     if #tok < 4 then return nil end
@@ -265,7 +295,7 @@ local function Lemmatize(tok)
             local cand = (sl == 0) and (tok .. addback)
                                     or (tok:sub(1, -sl - 1) .. addback)
             if #cand >= 4 then
-                local hit = ns.WORDS[cand]
+                local hit = WordLookup(cand)
                 if hit then return hit end
             end
         end
@@ -318,7 +348,7 @@ local function TryPerfectivePrefix(tok)
             local remainder = tok:sub(pl + 1)
             if #remainder >= 6 then  -- min 3 Cyrillic letters in base
                 -- Direct hit on base
-                local hit = ns.WORDS[remainder]
+                local hit = WordLookup(remainder)
                 if hit and IsVerbGloss(hit) then
                     return hit
                 end
@@ -349,7 +379,7 @@ local function TranslateToken(token, sampleLine, isFirstCyrillic)
         return NAME_COLOR .. token .. NAME_RESET, true
     end
 
-    local hit = ns.WORDS[token]
+    local hit = WordLookup(token)
     if hit then return hit, true end
 
     -- Lemmatization fallback: strip case endings and try again.
@@ -619,6 +649,7 @@ local function InitDB()
     if db.showOrig     == nil then db.showOrig     = true  end
     if db.debug        == nil then db.debug        = false end
     if db.autoChatLog  == nil then db.autoChatLog  = true  end  -- /chatlog on login
+    if db.liteMode     == nil then db.liteMode     = false end  -- full vocab by default
     if db.maxSessions  == nil then db.maxSessions  = 50    end
     db.sessions = db.sessions or {}
 end
@@ -721,10 +752,22 @@ local function InitUI()
         function() return db and db.debug end,
         function(v) db.debug = v; Msg("debug = "..tostring(v)) end)
 
+    local cbLite = makeCheckbox("Lite vocabulary (~75k, faster load)",
+        "Skip the extended Kaikki Wiktionary pack (~350k entries). "
+        .. "Core vocabulary (WoW slang + TBC item/NPC DB + top frequencies) "
+        .. "stays active. Requires /reload to apply.",
+        cbDebug, -4,
+        function() return db and db.liteMode end,
+        function(v)
+            db.liteMode = v
+            Msg("liteMode = "..tostring(v)
+                .." — |cffffcc00/reload|r required to apply")
+        end)
+
     -- Footnote
     local footer = panel:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
-    footer:SetPoint("TOPLEFT", cbDebug, "BOTTOMLEFT", 0, -16)
-    footer:SetText("Tip: type /rt help in chat for all commands, /rt names for the session nickname roster.")
+    footer:SetPoint("TOPLEFT", cbLite, "BOTTOMLEFT", 0, -16)
+    footer:SetText("Tip: /rt help in chat lists all commands. /rt lite toggles the lite/full vocabulary.")
 
     if type(InterfaceOptions_AddCategory) == "function" then
         InterfaceOptions_AddCategory(panel)
@@ -823,6 +866,7 @@ local function CmdHelp()
     Msg("  /rt on | off         - enable/disable translation")
     Msg("  /rt orig             - toggle showing original next to translation")
     Msg("  /rt debug            - toggle per-message debug prints in chat")
+    Msg("  /rt lite             - toggle lite vocab (~75k, faster) vs full (~425k). /reload to apply")
     Msg("  /rt chatlog on|off   - toggle auto /chatlog at login (default on)")
     Msg("  /rt status           - show current settings + counters")
     Msg("  /rt dump             - session stats + top unknowns")
@@ -851,6 +895,10 @@ SlashCmdList["RT"] = function(input)
     elseif cmd == "debug" then
         db.debug = not db.debug
         Msg("debug = " .. tostring(db.debug))
+    elseif cmd == "lite" then
+        db.liteMode = not db.liteMode
+        Msg("liteMode = " .. tostring(db.liteMode)
+            .. " — |cffffcc00/reload|r required to apply")
     elseif cmd == "chatlog" then
         local arg = (rest or ""):lower()
         if arg == "on" or arg == "" then
@@ -956,6 +1004,20 @@ f:SetScript("OnEvent", function(self, event, arg1)
             if EnsureChatLog() then chatlog = "on" end
         end
         Msg("|cffffcc00made by Grzegorz Korycki (Poczwarka)|r")
+        -- Announce vocabulary mode: FULL (core + extra Kaikki pack) or
+        -- LITE (core only). The extra pack file (Dictionary_Full.lua) may
+        -- or may not be present on disk; show both pieces of state so
+        -- user can reason about what's loaded.
+        local vocab_mode
+        if db.liteMode then
+            vocab_mode = "|cffffaa00LITE|r (core ~75k)"
+        elseif ns.WORDS_EXTRA then
+            vocab_mode = "|cff55ff55FULL|r (core + extra ~425k)"
+        else
+            vocab_mode = "|cffaaaaaa(extra pack missing)|r LITE (~75k)"
+        end
+        Msg(("mode=%s. /rt lite toggles, /reload to apply.")
+            :format(vocab_mode))
         Msg(("loaded (session %s). filters=%d chatlog=%s. /rt help"):format(
             session.started, ok, chatlog))
     elseif event == "PLAYER_LOGOUT" then

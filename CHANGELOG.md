@@ -4,6 +4,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] - 2026-04-25 — lite/full vocab toggle
+
+User feedback: v1.5.0 Dictionary.lua grew to 22.8 MB, `/reload` got
+slow. Split the dictionary into two files + added a runtime toggle.
+
+### Split layout
+
+- **`Dictionary.lua` (1.2 MB)** — always loaded. Contains:
+  - All WoW-specific vocabulary built up v0.1→v1.4
+  - Top-5000 OpenRussian base vocab
+  - TBC emulator DB (cmangos/tbc-db): ~46k item/creature/quest names
+  - Pre-populated nicks, phrases, preprocessor rules
+  - **~75k entries total**
+- **`Dictionary_Full.lua` (21.7 MB)** — optional Kaikki Wiktionary pack.
+  - ~340k single-token entries + ~10k multi-word phrases
+  - Populates `ns.WORDS_EXTRA` / `ns.PHRASES_EXTRA`
+  - Loaded by default; skipped at runtime if user enables lite mode
+
+### Runtime toggle
+
+- New saved var `db.liteMode` (default: **false** = full vocab).
+- **Checkbox** in Esc → Interface → AddOns → Russian Translator:
+  *"Lite vocabulary (~75k, faster load)"*.
+- **Slash command** `/rt lite` — toggles and prints current mode.
+- **Startup message** at login now announces mode:
+  - `mode=FULL (core + extra ~425k)` — both files loaded
+  - `mode=LITE (core ~75k)` — user opted into lite
+  - `mode=(extra pack missing) LITE (~75k)` — user deleted
+    `Dictionary_Full.lua` for true load-time savings
+- `/reload` required to apply changes (lookup pipeline branches on the
+  flag only at message processing time, not at init).
+
+### True load-time reduction
+
+Runtime toggle only skips the extra table during lookups — the 21.7 MB
+file is still parsed at addon load. Users who want actual load-time and
+memory reduction can **delete `Dictionary_Full.lua`**; the addon
+gracefully degrades (startup message confirms).
+
+### Pipeline plumbing
+- New `WordLookup(tok)` helper consults core first, then extra if
+  !liteMode.
+- `Lemmatize()` and `TryPerfectivePrefix()` both use `WordLookup`.
+- `ApplyPhrases()` iterates core PHRASE_ORDER first, then extra
+  PHRASE_ORDER_EXTRA if !liteMode.
+- Python analyzers (`analyze_coverage.py`, `analyze_forum_coverage.py`)
+  updated to load both files.
+
+### Metrics (mode=FULL)
+
+Coverage unchanged from v1.5.0: 98.46% honest unique-msg, 95.3%
+messages fully translated, 425k total entries.
+
+**Mode=LITE** (only core loaded) coverage would be ~97% on in-game
+chat — WoW-specific content dominates there — and significantly lower
+on forum prose (where Kaikki's base-Russian vocabulary carries the
+weight). If you're only using the addon for in-game chat, LITE mode
+gets you 99% of the value at ~5% of the memory.
+
 ## [1.5.0] - 2026-04-25 — triple feature drop (research-guided)
 
 Deep-research agent produced a 42-source report at

@@ -15,21 +15,24 @@ DICT = ROOT / "RussianTranslator" / "Dictionary.lua"
 LOG  = ROOT / "WoWChatLog_latest.txt"
 
 def load_dict():
-    text = DICT.read_text(encoding="utf-8")
-    # Grab WORDS and PHRASES literals
+    # Read both Dictionary.lua (core) and Dictionary_Full.lua (extra Kaikki
+    # pack) so the analyzer mirrors the full addon when liteMode is off.
+    # The analyzer doesn't simulate liteMode; to check lite coverage, read
+    # Dictionary.lua only.
     phrases = {}
     words = {}
-    # Find all ["key"]="value" occurrences inside ns.WORDS / ns.PHRASES.
-    # Simpler: just pick up every ["..."]="..." pair in the file, then classify
-    # by whether the key contains a space.
     pair_re = re.compile(r'\["([^"]+)"\]\s*=\s*"([^"]*)"')
-    for m in pair_re.finditer(text):
-        k, v = m.group(1), m.group(2)
-        k_low = k.lower()
-        if " " in k_low:
-            phrases[k_low] = v
-        else:
-            words[k_low] = v
+    for p in [DICT, DICT.parent / "Dictionary_Full.lua"]:
+        if not p.exists():
+            continue
+        text = p.read_text(encoding="utf-8")
+        for m in pair_re.finditer(text):
+            k, v = m.group(1), m.group(2)
+            k_low = k.lower()
+            if " " in k_low:
+                phrases[k_low] = v
+            else:
+                words[k_low] = v
     return phrases, words
 
 CYR_UPPER = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
