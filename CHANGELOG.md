@@ -4,6 +4,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-04-25 — OpenRussian top-20k + honest metric
+
+### User pushback
+User reported seeing ~1-in-3 words untranslated in-game, contradicting
+the 99.45% coverage claim. Checked: the aggregate metric was inflated
+by heavy spam repetition (guild recruitment templates repeated 100+
+times, each adding 20 covered tokens to the pile).
+
+### New honest metric
+`analyze_coverage_honest.py` dedupes identical messages before
+measuring. On the freshly-copied chat log from today:
+- Token-weighted (unique msgs only): **97.93%** (was reported 99.45%)
+- Messages with 100% coverage: **94.1%**
+- Messages with ≥80% coverage: **96.1%**
+- Messages with <50% coverage: **0.6%** (11 of 1,765)
+
+The 2-point gap between old and honest metrics is real; still a
+significant gap vs user's "1-in-3 miss" report. Most likely cause:
+WoW addon cache — user's Dictionary.lua in-game may not have reloaded
+after recent syncs.
+
+### OpenRussian expansion (pages 101-400)
+5 parallel agents fetched pages 101-400 (words 5001-20000 by
+frequency). 1 agent (pages 161-220) timed out; remaining 4 delivered
+~11,800 pairs. Non-destructive merge added **11,335 new single-token
+entries** (WoW-specific translations preserved as always).
+
+### Metrics
+
+| Measurement | v1.2.0 | v1.3.0 |
+|-------------|--------|--------|
+| Dictionary entries | 16,079 | **27,414** (+11,335) |
+| Chat tokens covered (raw, with spam) | 99.45% | see below |
+| Chat tokens covered (unique msgs, honest) | — | **97.93%** |
+| % messages fully translated | — | **94.1%** |
+
+### Actions for user
+1. `/reload` in game to force addon to pick up v1.3.0 Dictionary.lua.
+2. If still seeing heavy misses, share a specific message that
+   wasn't translated — the unknown-token log will show what's missing.
+
 ## [1.2.0] - 2026-04-25 — OpenRussian top-5000 fill-in
 
 5 parallel sub-agents harvested ~4970 Russian→English pairs (top 5000

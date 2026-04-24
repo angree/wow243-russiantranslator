@@ -37,11 +37,7 @@ def strip_accents(s):
     nfd = unicodedata.normalize("NFD", s)
     return "".join(ch for ch in nfd if unicodedata.category(ch) != "Mn")
 
-for i in range(1, 6):
-    p = ROOT / f"openrussian_{i}.txt"
-    if not p.exists():
-        print(f"missing {p}")
-        continue
+for p in sorted(ROOT.glob("openrussian_*.txt")):
     for line in p.read_text(encoding="utf-8").splitlines():
         if "|" not in line:
             continue
