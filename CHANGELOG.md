@@ -4,6 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-04-25 — OpenRussian top-5000 fill-in
+
+5 parallel sub-agents harvested ~4970 Russian→English pairs (top 5000
+words by frequency) from https://en.openrussian.org/list/all —
+pagination `?start=N*50`, 1.2s request spacing to avoid rate limits.
+
+### Non-destructive merge
+`merge_openrussian.py` checks existing keys before inserting.
+**Every WoW-specific translation built up over v0.1→v1.1 is preserved.**
+OpenRussian only fills genuine gaps. Added 3,886 new single-token
+entries + 1 phrase (the rest were already covered by our WoW dict or
+collided with existing slang entries).
+
+### Coverage
+
+| Measurement | v1.1.0 | v1.2.0 |
+|-------------|--------|--------|
+| Dictionary entries | 12,192 | **16,079** |
+| Forum prose corpus | 100.00% | 100.00% |
+| In-game chat (3168 lines) | 99.40% | **99.45%** |
+| Distinct unknowns in chat | 73 | 67 |
+
+### Why fill with OpenRussian after hitting 100% on forum?
+
+The forum corpus was just that — a specific ~120 KB dump. Before
+v1.2.0 the translator would handle those threads perfectly but still
+fail on freshly-scraped Russian prose outside that corpus. Top-5000
+base Russian vocabulary from a frequency-sorted source gives
+generalisation: any future forum thread, blog post, Discord message
+etc. about non-WoW subjects now has a solid baseline.
+
+Chat coverage also ticked up (99.40% → 99.45%) — even Global LFG
+chatter uses some standard Russian vocabulary beyond the WoW-slang
+core.
+
+### Accent-mark stripping
+OpenRussian marks stress with combining acute accents (U+0301) —
+`отыска́ть`. Merger strips these before insertion so lookups match
+our accent-free tokens (`отыскать`).
+
 ## [1.1.0] - 2026-04-24 (late night) — lemmatization + 100% on forum corpus
 
 ### The lemmatizer
