@@ -4,6 +4,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.7] - 2026-04-24
+
+### Scope
+User noticed lots of untranslated words while standing in Shattrath
+on /say channel. Fresh Apr 23-24 log (+3623 lines, +593 new Russian
+lines). Verified uncertain item names via Wowhead ruRU↔enUS lookup.
+
+### Added — Wowhead-verified TBC items
+- `Поющий хрустальнокованный топор` → **Singing Crystal Axe**
+  (item=31318, 2H axe world drop)
+- `Выкройка: мантия сообразительности` → **Pattern: Mantle of
+  Nimble Thought** (item=32755, tailoring)
+- `Барабаны битвы` → **Drums of Battle** (item=29529, leatherworking)
+- `Переменчивый камень` → **Mercurial Stone** (item=31080, alchemy)
+- `Накидка Иллидари` / `Гербовая накидка Иллидари` → **Tabard of
+  the Illidari** (quest reward, item=31404)
+- `Латные башмаки Бездны` → **Nether Plate Boots**
+
+### Added — Shattrath /say session
+- Gurubashi Arena tournament spam: `арена гурубаши`, `турнир до
+  50 лвл`, `кто первый добежит`, `первые 5`, `за участие`, `приз`.
+- Illidari tabard quest LFG: `собираю пати на накидку`, `за
+  накидкой иллидари`, `танк хил дд`.
+- Vanilla-dungeon Russian short-forms: `КТК` (SFK), `НП` (BFD),
+  `ОП` (RFC).
+- Shattrath banter vocabulary: `заебал`, `соболезную`, `добро
+  пожаловать в ад`, `на помойку`, `ляля в топе`, `тайм игры`,
+  `дохнет`, `внешку`, `секси`, `пиздец охуенный`.
+- Transfer talk: `перенёс сюда акк с абсируса`, `буду учиться
+  играть`, `добро пожаловать в ад`.
+- PvE boss mechanics: `на бошке третьей`, `нет дебафа на трит`,
+  `кросс фракции в рейдах`.
+- GM rules copypasta: `нецензурной лексики`, `дискредитация
+  сервера`, `являются нарушением правил сервера`.
+- Enchant/craft: `чары для перчаток`, `V ступень`, `ищу
+  енчантера`, `ресы`, `мои ресы`.
+- Trade slang: `тг` (Telegram), `слился` (bailed), `в открытом
+  мире`, `готовый куплю`, `по адекватной цене`.
+
+### Metrics
+
+| Metric | v0.9.6 | v0.9.7 |
+|--------|--------|--------|
+| Dictionary entries | 6394 | **6739** |
+| Log lines analyzed | 2772 | 3168 |
+| Coverage | 98.79% | **99.01%** |
+| Distinct unknowns | 123 | 121 (mostly nicks/typos) |
+
+### Verification
+Item-name translations cross-checked against Wowhead ruRU pages,
+confirmed by matching item IDs: 31318 (Singing Crystal Axe), 32755
+(Pattern: Mantle of Nimble Thought), 29529 (Drums of Battle), 31080
+(Mercurial Stone), 31404 (Green Trophy Tabard of the Illidari).
+
 ## [0.9.6] - 2026-04-23 (evening)
 
 ### Added
