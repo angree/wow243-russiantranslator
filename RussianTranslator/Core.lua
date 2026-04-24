@@ -515,6 +515,17 @@ local function InitSession()
         -- should be re-proven every session, not inherited forever.
         knownNames          = {},
     }
+    -- Seed known-names with Cyrillic nicks harvested from historical chat
+    -- logs. These are treated as nicknames only at message-start position
+    -- (TranslateToken's isFirstCyrillic check) — they still translate
+    -- normally mid-sentence if they happen to be regular Russian words.
+    if ns.BUILTIN_NICKS then
+        for nick, _ in pairs(ns.BUILTIN_NICKS) do
+            session.knownNames[nick] = 0  -- seed with count=0 so real
+                                           -- chat-event sightings still
+                                           -- increment normally
+        end
+    end
     table.insert(db.sessions, session)
     while #db.sessions > (db.maxSessions or 50) do
         table.remove(db.sessions, 1)

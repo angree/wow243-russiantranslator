@@ -4,6 +4,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] - 2026-04-25 — closed 20k gap, UX fix for Cyrillic nicks
+
+### Two changes
+
+**1. Closed the 20k OpenRussian gap** (+233 more entries)
+Retry agent fetched pages 161-220 (words 8001-11000) that timed out
+in v1.3.0. 247 raw pairs, 233 new after dedup.
+
+**2. Cyrillic nickname UX fix** (+125 pre-seeded nicks)
+User reported seeing ~1/3 words untranslated in Shattrath. Diagnosis:
+Lots of those "untranslated" tokens weren't translation failures —
+they were **Cyrillic player nicknames** appearing in system messages
+like `Джанкой creates Wool Bandage.` The addon correctly kept the
+nick in Cyrillic (orange), but the UX read as "broken translation."
+
+Fix: harvested all 125 Cyrillic nicks that appeared as senders or
+subjects of system messages across the training logs, added them to
+a new `ns.BUILTIN_NICKS` table. At session init, these are pre-loaded
+into `session.knownNames` with count=0. They're treated as nicknames
+**only at message-start position** (via the existing isFirstCyrillic
+check) — so `ватрушка` (cheesecake, also a nickname) still translates
+to "cheesecake" if used mid-sentence.
+
+### Per-channel honest coverage (1936 unique msgs)
+
+| Channel | Unique msgs | Coverage |
+|---------|-------------|----------|
+| Global (LFG/trade) | 1,914 | **97.97%** |
+| /say (Shatt NPC + players) | 54 | **95.04%** |
+| [Guild] | 43 | **98.67%** |
+| System (X creates Y) | 183 | 46.15%* |
+
+*System-message "coverage" is meaningless — those messages are 80%
+English with a Cyrillic nick. The nick gets kept in Cyrillic (correct
+behavior); the metric counts it as "unknown" but the user perceives
+it as just a name. v1.4.0 pre-loads 125 common nicks so they appear
+uncolored from session start.
+
+### Metrics
+
+| Measurement | v1.3.0 | v1.4.0 |
+|-------------|--------|--------|
+| Dictionary entries | 27,414 | **27,647** |
+| BUILTIN_NICKS pre-seeded | 0 | **125** |
+| Honest chat coverage (unique) | 97.93% | 97.97% (fresh log) |
+
+### Why adding 97,727 generated inflections didn't help
+
+Experimented with `expand_inflections.py` — generated all 12 case
+forms for every base-form noun in the dictionary. Result:
++0.04 percentage points of coverage for +5 MB dict bloat. The
+lemmatizer already catches these at runtime, so explicit forms are
+redundant. Reverted — kept lemmatizer as the canonical mechanism.
+
 ## [1.3.0] - 2026-04-25 — OpenRussian top-20k + honest metric
 
 ### User pushback
