@@ -181,6 +181,83 @@ local function RestorePhrases(s, subs)
     end))
 end
 
+-- ---------------------------------------------------------------------------
+-- Lemmatization fallback
+-- ---------------------------------------------------------------------------
+-- Russian inflection produces 6-18 forms per noun (6 cases × 2 numbers)
+-- and 30+ forms per adjective. Storing every form in the dictionary bloats
+-- it by ~10×. Instead, after a direct dictionary miss, try stripping common
+-- case endings and reconstructing the nominative-singular base form. The
+-- first rule whose candidate hits ns.WORDS wins.
+--
+-- Rules are ordered by: (a) longer suffixes before shorter, (b) more
+-- specific before more generic. This gives the correct resolution for
+-- the common ambiguities (e.g. "дорогу" tries добавить "-а" → "дорога"
+-- before trying bare strip → "дорог").
+--
+-- Suffixes and addbacks are UTF-8 literal strings (2 bytes per Cyrillic
+-- letter), stored in the Lua source file directly.
+local LEMMA_RULES = {
+    -- 3-letter suffixes (plural inst. / adjective forms)
+    {"ами","а"}, {"ами",""},
+    {"ями","я"}, {"ями",""},
+    {"ыми","ый"}, {"ыми","ой"}, {"ыми","ые"},
+    {"ими","ий"}, {"ими","ие"},
+    {"ого","ый"}, {"ого","ой"}, {"его","ий"}, {"его","ее"},
+    {"ому","ый"}, {"ому","ой"}, {"ему","ий"},
+    -- Past-tense reflexive
+    {"лись","ться"}, {"лась","ться"}, {"лось","ться"},
+    -- 3rd person plural reflexive
+    {"ются","ть"}, {"утся","ть"}, {"атся","ить"}, {"ятся","ить"},
+    -- 2-letter suffixes
+    {"ах","а"}, {"ах",""},
+    {"ях","я"}, {"ях",""},
+    {"ам","а"}, {"ам",""},
+    {"ям","я"}, {"ям",""},
+    {"ов",""}, {"ёв",""}, {"ев",""},
+    {"ей","ь"}, {"ей",""},
+    {"ий","ие"}, {"ий",""},
+    {"ою","а"}, {"ею","я"},
+    {"ой","а"}, {"ой","ая"}, {"ой","ой"},
+    {"ем",""}, {"ом",""}, {"ём",""},
+    {"ая","ый"}, {"яя","ий"},
+    {"ое","ый"}, {"ее","ий"},
+    {"ые","ый"}, {"ие","ий"},
+    {"ую","ая"}, {"юю","яя"}, {"ую",""},
+    -- Past-tense verbs (strip, add "-ть")
+    {"ли","ть"}, {"ла","ть"}, {"ло","ть"}, {"лся","ться"},
+    -- Present-tense 3rd person
+    {"ют","ть"}, {"ут","ть"}, {"ят","ить"}, {"ат","ать"},
+    {"ет","ть"}, {"ит","ить"}, {"ешь","ть"}, {"ишь","ить"},
+    -- 1-letter suffixes (2-byte)
+    {"у","а"}, {"у",""}, {"ю","я"}, {"ю","ь"},  {"ю",""},
+    {"а",""}, {"я",""}, {"я","й"},
+    {"е","а"}, {"е","я"}, {"е","ь"}, {"е",""},
+    {"и","а"}, {"и","я"}, {"и","ь"}, {"и",""},
+    {"ы",""},
+    {"л","ть"}, {"й",""},
+    -- Zero-ending fallbacks (add a fem nominative ending)
+    {"","а"}, {"","я"}, {"","ь"},
+}
+
+local function Lemmatize(tok)
+    -- Skip tokens shorter than 4 bytes (< 2 Cyrillic letters)
+    if #tok < 4 then return nil end
+    for i = 1, #LEMMA_RULES do
+        local suf, addback = LEMMA_RULES[i][1], LEMMA_RULES[i][2]
+        local sl = #suf
+        if sl == 0 or tok:sub(-sl) == suf then
+            local cand = (sl == 0) and (tok .. addback)
+                                    or (tok:sub(1, -sl - 1) .. addback)
+            if #cand >= 4 then
+                local hit = ns.WORDS[cand]
+                if hit then return hit end
+            end
+        end
+    end
+    return nil
+end
+
 -- isFirstCyrillic: true if this is the FIRST Cyrillic token of the message.
 -- Used for player-name disambiguation: Russian chat often starts with a name
 -- when addressing someone ("Кара, ты где?"). If we've seen that exact string
@@ -199,6 +276,11 @@ local function TranslateToken(token, sampleLine, isFirstCyrillic)
 
     local hit = ns.WORDS[token]
     if hit then return hit, true end
+
+    -- Lemmatization fallback: strip case endings and try again.
+    local lemma_hit = Lemmatize(token)
+    if lemma_hit then return lemma_hit, true end
+
     LogUnknown(token, sampleLine)
     -- Keep the original Cyrillic so the user can still read the word, but
     -- wrap it in an orange colour code so it's visually obvious that this

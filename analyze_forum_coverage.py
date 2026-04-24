@@ -20,6 +20,54 @@ TR = str.maketrans(CU, CL)
 CYR_ANY = re.compile(r"[а-яёА-ЯЁ]")
 TOKEN_RE = re.compile(r"[а-яёА-ЯЁ]+")
 
+# Mirror of LEMMA_RULES in Core.lua. Ordered longest-first, most specific
+# before most generic. Each rule: (suffix, addback). First rule whose
+# candidate exists in the dictionary wins.
+LEMMA_RULES = [
+    ("ами","а"), ("ами",""),
+    ("ями","я"), ("ями",""),
+    ("ыми","ый"), ("ыми","ой"), ("ыми","ые"),
+    ("ими","ий"), ("ими","ие"),
+    ("ого","ый"), ("ого","ой"), ("его","ий"), ("его","ее"),
+    ("ому","ый"), ("ому","ой"), ("ему","ий"),
+    ("лись","ться"), ("лась","ться"), ("лось","ться"),
+    ("ются","ть"), ("утся","ть"), ("атся","ить"), ("ятся","ить"),
+    ("ах","а"), ("ах",""),
+    ("ях","я"), ("ях",""),
+    ("ам","а"), ("ам",""),
+    ("ям","я"), ("ям",""),
+    ("ов",""), ("ёв",""), ("ев",""),
+    ("ей","ь"), ("ей",""),
+    ("ий","ие"), ("ий",""),
+    ("ою","а"), ("ею","я"),
+    ("ой","а"), ("ой","ая"),
+    ("ем",""), ("ом",""), ("ём",""),
+    ("ая","ый"), ("яя","ий"),
+    ("ое","ый"), ("ее","ий"),
+    ("ые","ый"), ("ие","ий"),
+    ("ую","ая"), ("юю","яя"), ("ую",""),
+    ("ли","ть"), ("ла","ть"), ("ло","ть"), ("лся","ться"),
+    ("ют","ть"), ("ут","ть"), ("ят","ить"), ("ат","ать"),
+    ("ет","ть"), ("ит","ить"), ("ешь","ть"), ("ишь","ить"),
+    ("у","а"), ("у",""), ("ю","я"), ("ю","ь"), ("ю",""),
+    ("а",""), ("я",""), ("я","й"),
+    ("е","а"), ("е","я"), ("е","ь"), ("е",""),
+    ("и","а"), ("и","я"), ("и","ь"), ("и",""),
+    ("ы",""),
+    ("л","ть"), ("й",""),
+    ("","а"), ("","я"), ("","ь"),
+]
+
+def lemmatize(tok, words):
+    if len(tok) < 2:  # char count (Python str)
+        return None
+    for suf, addback in LEMMA_RULES:
+        if suf == "" or tok.endswith(suf):
+            cand = (tok + addback) if suf == "" else (tok[:-len(suf)] + addback)
+            if len(cand) >= 2 and cand in words:
+                return words[cand]
+    return None
+
 
 def load_dict():
     text = DICT.read_text(encoding="utf-8")
@@ -68,6 +116,8 @@ def analyze_text(text, phrases_sorted, words):
         for tok in TOKEN_RE.findall(low):
             total += 1
             if tok in words:
+                covered += 1
+            elif lemmatize(tok, words) is not None:
                 covered += 1
             else:
                 unknowns[tok] += 1
