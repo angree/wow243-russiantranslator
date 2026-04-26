@@ -4,6 +4,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.1] - 2026-04-26 — strip Kaikki linguist-annotation zombies
+
+v1.7.0 shipped the full Kaikki Wiktionary pack but ~3.9% of in-game messages
+came out as nonsense like `guys in Shattrath have/any seller genitive plural
+of`. Root cause: ~260k Kaikki entries had bare grammatical descriptors as
+their "translation" — `воду` → `accusative singular of`, `козу` →
+`accusative singular of`, etc. Wiktionary lists these as references to a
+base form, and the ingestion script kept the descriptor and dropped the
+referenced lemma.
+
+These zombie entries were also blocking the lemmatizer: lookup hit Kaikki,
+returned the zombie gloss, and never fell through to suffix-strip logic
+that would have resolved `воду → вода → water` from the core dictionary.
+
+### Fix
+
+- **Ingestion-time scrub** (`clean_kaikki_zombies.py`): regex-filter values
+  matching the grammatical-descriptor patterns. Drops 76% of word entries
+  (344k → 85k) and 14% of phrase entries (51k → 44k). Everything dropped
+  is a flexion form the lemmatizer covers anyway.
+- **Runtime guard** (`Core.lua` `isZombieGloss`): WordLookup treats any
+  Kaikki value matching the zombie patterns as a miss and continues to the
+  lemmatizer. Belt-and-suspenders for any future Kaikki refresh.
+
+### Numbers
+
+```
+Russian Translator v1.7.1
+ core:   YES (28189 words)
+ chunks: YES (20/20 word, 5/5 phrase)
+ total:  113171 words
+```
+
+Apparent drop from v1.7.0 (372k) is illusory — those 260k extra entries
+were actively producing wrong output, not adding coverage.
+
 ## [1.7.0] - 2026-04-25 — Kaikki Wiktionary pack actually loads
 
 Five local builds (v1.5.0 → v1.6.9) shipped and got pulled because the

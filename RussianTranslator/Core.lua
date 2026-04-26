@@ -277,6 +277,28 @@ local LEMMA_RULES = {
 -- Wiktionary pack (~350k) loaded via Dictionary_Full.lua. When
 -- db.liteMode is true, we only consult core — effectively running on a
 -- reduced vocabulary even if the Full pack is loaded.
+-- Defensive: reject Kaikki values that are bare grammatical metadata
+-- ("accusative singular of", "genitive plural of", etc.) so the lemmatizer
+-- gets a chance to derive a real translation from the base form.
+-- Belt-and-suspenders alongside ingestion-time filtering.
+local function isZombieGloss(s)
+    if not s then return false end
+    if s:find("singular of$") or s:find("plural of$") then return true end
+    if s:find("^plural of") or s:find("^singular of") then return true end
+    if s:find(" form of$") or s:find("^form of") then return true end
+    if s:find(" tense of$") or s:find(" participle of$") then return true end
+    if s:find("imperative of$") or s:find("conditional of$") then return true end
+    if s:find("diminutive of$") or s:find("augmentative of$") then return true end
+    if s:find("comparative of$") or s:find("superlative of$") then return true end
+    if s:find("verbal noun of$") or s:find("pejorative of$") then return true end
+    if s:find("perfective form of$") or s:find("imperfective form of$") then return true end
+    if s:find("active participle$") or s:find("passive participle$") then return true end
+    if s:find("^short masculine") or s:find("^short feminine")
+        or s:find("^short neuter") or s:find("^short plural") then return true end
+    if s:find("^[%w%-]+%-person ") then return true end  -- "first-person ...", "second-person ..."
+    return false
+end
+
 local function WordLookup(tok)
     local hit = ns.WORDS[tok]
     if hit then return hit end
@@ -290,7 +312,7 @@ local function WordLookup(tok)
     if tables then
         for i = 1, #tables do
             local h = tables[i][tok]
-            if h then return h end
+            if h and not isZombieGloss(h) then return h end
         end
     end
     return nil
@@ -1063,7 +1085,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.0|r")
+        Msg("|cff55ddffRussian Translator v1.7.1|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)
