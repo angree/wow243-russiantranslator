@@ -158,6 +158,37 @@ end
 -- Translation pipeline
 -- ---------------------------------------------------------------------------
 
+-- Item/spell/quest/etc chat-link extraction. WoW links look like:
+--   |cffXXXXXXXX|Hitem:21853:0:0:0:0:0:0:0|h[Сапоги из ткани Пустоты]|h|r
+-- ToLower would turn the start sigil |H into |h, breaking link parsing
+-- (WoW would treat it as an unmatched end-of-link). We extract every link
+-- into a pair of byte-0x02 placeholders that survive ToLower (ascii-lower
+-- only changes letters, and our placeholder body is already lowercase),
+-- ApplyPhrases, and the token gsub (because \2 isn't in the token class).
+-- The inner [name] text is left exposed BETWEEN the placeholders so it
+-- still goes through normal translation.
+local function ExtractLinks(s)
+    local subs = {}
+    local n = 0
+    s = s:gsub("(|c%x+|H[^|]+|h)%[(.-)%](|h|r)", function(start_, name, fin)
+        n = n + 1
+        local sk = "\2ls" .. n .. "\2"
+        local ek = "\2le" .. n .. "\2"
+        subs[sk] = start_ .. "["
+        subs[ek] = "]" .. fin
+        return sk .. name .. ek
+    end)
+    return s, subs
+end
+
+local function RestoreLinks(s, subs)
+    if not subs or not next(subs) then return s end
+    for key, val in pairs(subs) do
+        s = s:gsub(key, function() return val end, 1)
+    end
+    return s
+end
+
 local function ApplyPhrases(lowered)
     local subs = {}
     local id = 0
@@ -436,6 +467,10 @@ local function Translate(msg)
     local normalized, enc = ns.NormalizeCyrillic(msg)
     if enc == "ascii" then return nil end
 
+    -- Pull item/spell links out before any case folding or substitution.
+    local linkSubs
+    normalized, linkSubs = ExtractLinks(normalized)
+
     local lowered = ToLower(normalized)
 
     -- ------------------------------------------------------------------
@@ -532,6 +567,7 @@ local function Translate(msg)
         return (TranslateToken(tok, normalized, isFirst))
     end)
     out = RestorePhrases(out, subs)
+    out = RestoreLinks(out, linkSubs)
 
     session.messagesTranslated = session.messagesTranslated + 1
     return out, normalized, enc
@@ -1085,7 +1121,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.1|r")
+        Msg("|cff55ddffRussian Translator v1.7.2|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)

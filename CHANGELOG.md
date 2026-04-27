@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.2] - 2026-04-27 — preserve item/spell links
+
+Item links in incoming Russian chat were being shredded by the
+translation pipeline. A message like `wtb |cffffffff|Hitem:21853:0:0:0:0:0:0:0|h[Сапоги из ткани Пустоты]|h|r куплю`
+came out as plain text `wtb item:21853:0:0:0:0:0:0:0[netherweave boots] WTB`
+with no clickable link, because `ToLower` converts the link-start sigil
+`|H` to `|h` (the link-end sigil) — WoW then sees an unmatched end-of-link
+and renders everything as raw characters.
+
+### Fix
+
+- New `ExtractLinks` step runs **before** ToLower. Every
+  `|c....|H....|h[name]|h|r` run is replaced by a pair of byte-`\2`
+  placeholders sandwiching the inner `name` text:
+  `\2ls<n>\2 name \2le<n>\2`.
+- `\2` is not in the token-class regex, so placeholders survive
+  tokenization. The inner `name` between them still goes through normal
+  phrase / word translation — so the rendered link reads in English.
+- New `RestoreLinks` step runs at the end of the pipeline (after
+  `RestorePhrases`). It swaps placeholders back to the original
+  `|c|H|h|r` sigils, producing a fully clickable link with translated
+  bracket text.
+
+### Result
+
+```
+wtb |cffffffff|Hitem:21853:0:0:0:0:0:0:0|h[Сапоги из ткани Пустоты]|h|r
+                          ↓
+wtb |cffffffff|Hitem:21853:0:0:0:0:0:0:0|h[netherweave boots]|h|r
+```
+
+Hover-tooltip works, shift-click works, the colour bracket renders.
+
 ## [1.7.1] - 2026-04-26 — strip Kaikki linguist-annotation zombies
 
 v1.7.0 shipped the full Kaikki Wiktionary pack but ~3.9% of in-game messages

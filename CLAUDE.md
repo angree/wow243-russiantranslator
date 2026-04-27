@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Russian-language chat translator addon for World of Warcraft 2.4.3 (The Burning Crusade, build 8606)** — targets private / emulated TBC servers where Russian-speaking player base dominates. The addon intercepts every `CHAT_MSG_*` event, rewrites Russian text into English using a bundled dictionary, and shows the result as `[Russian] <english>  (<original cyrillic>)` in the chat window.
 
-Current state: **v0.9.2** shipped on GitHub, 4409 dictionary entries, ~94-98% Cyrillic-token coverage on live WoWCircle TBC chat.
+Current state: **v1.7.1** shipped on GitHub, ~113k dictionary entries (28k core + 85k Kaikki), ~98.5% unique-message coverage on live Moonwell x5 TBC chat.
 
 ## Authoritative reference
 
@@ -50,7 +50,7 @@ When the user asks for a "test", that means a manual in-game check — there is 
 
 ### Dictionary-growth workflow (core iterative work)
 
-1. User plays on a ruRU TBC server (WoWCircle is the usual one), accumulates chat via the addon's own logging + `/chatlog` (auto-enabled).
+1. User plays on **Moonwell x5** (ruRU TBC 2.4.3 private server), accumulates chat via the addon's own logging + `/chatlog` (auto-enabled).
 2. User hands off either the live `WoWChatLog.txt` (from `C:\Gry\World of WarcraftOLD\Logs\`) or the `RussianTranslator.lua` SavedVariables dump.
 3. Claude runs the analysis simulator (Python snippet shown in-session — tokenizes messages, preprocesses numeric shorthand, matches phrases first then words, reports distinct unknown tokens with counts + sample context).
 4. Claude adds entries to `Dictionary.lua` in the appropriate category section.
