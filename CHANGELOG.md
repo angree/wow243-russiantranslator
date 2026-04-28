@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.4] - 2026-04-28 — mojibake guard against Polish/Czech false positives
+
+The Moonwell server (and likely others) sometimes mis-encodes Polish and
+Czech messages into byte sequences that read as Cyrillic on the wire.
+Reported in-game: messages from Polish-speaking guildmates were being
+tagged `[Russian]` and partially translated, producing nonsense.
+
+### Fix — word-level Russian detection
+
+Single-byte Cyrillic detection (the previous behaviour) was too eager.
+Mojibake of Polish/Czech text typically produces isolated Cyrillic-byte
+fragments interleaved with Latin. Now `Translate()` only emits the
+`[Russian]` tag when at least one of:
+
+- the normalized message contains at least one Cyrillic word of **≥3
+  consecutive characters** (UTF-8: 6 bytes of paired `[0xD0/0xD1][0x80-0xBF]`), or
+- the dictionary / lemmatizer / prefix-stripper successfully translated
+  at least one Cyrillic token in the message.
+
+If neither holds, `Translate` returns `nil` and the message passes
+through unmodified — preserving Polish/Czech text as authored.
+
+A real Russian message virtually always has at least one 3+ char word
+or one dict-translatable token; mojibake usually doesn't clear either bar.
+
 ## [1.7.3] - 2026-04-28 — extended zombie filter + chat-log batch
 
 Live chat-log analysis surfaced two issue families that v1.7.1's filter

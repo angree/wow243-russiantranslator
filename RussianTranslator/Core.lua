@@ -576,14 +576,37 @@ local function Translate(msg)
     -- one is eligible for the "is this a player name being addressed?"
     -- check. (Mid-message occurrences default to normal translation.)
     local seenFirstCyr = false
+    local translatedHits = 0
     local out = withPh:gsub("[%w\128-\255\1]+", function(tok)
         local isFirst = false
-        if (not seenFirstCyr) and HasUtf8Cyrillic(tok) and not tok:find("^\1") then
+        local isCyr = HasUtf8Cyrillic(tok) and not tok:find("^\1")
+        if (not seenFirstCyr) and isCyr then
             isFirst = true
             seenFirstCyr = true
         end
-        return (TranslateToken(tok, normalized, isFirst))
+        local result, hit = TranslateToken(tok, normalized, isFirst)
+        if isCyr and hit then translatedHits = translatedHits + 1 end
+        return result
     end)
+
+    -- Mojibake guard. The Moonwell server (and others) sometimes mangle
+    -- Polish/Czech messages into byte sequences that NormalizeCyrillic
+    -- reads as Cyrillic. We don't want to slap [Russian] on those.
+    --
+    -- Heuristic: this is a real Russian message if EITHER
+    --   (a) at least one Cyrillic word ≥3 chars exists in the normalized
+    --       text (3 chars × 2 bytes/char in UTF-8 = 6 bytes, each starting
+    --       with 0xD0/0xD1 + 0x80-0xBF continuation byte), OR
+    --   (b) at least one Cyrillic token was successfully translated by
+    --       the dictionary / lemmatizer / prefix-stripper.
+    -- If neither condition holds, skip the [Russian] tag and let the
+    -- original message pass through unmodified.
+    local hasRealCyrWord = normalized:find(
+        "[\208\209][\128-\191][\208\209][\128-\191][\208\209][\128-\191]")
+    if (not hasRealCyrWord) and translatedHits == 0 then
+        return nil
+    end
+
     out = RestorePhrases(out, subs)
     out = RestoreLinks(out, linkSubs)
 
@@ -1139,7 +1162,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.3|r")
+        Msg("|cff55ddffRussian Translator v1.7.4|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)
