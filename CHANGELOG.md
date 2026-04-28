@@ -4,6 +4,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.3] - 2026-04-28 — extended zombie filter + chat-log batch
+
+Live chat-log analysis surfaced two issue families that v1.7.1's filter
+missed and ~25 frequent inflected forms / slang terms still falling
+through to the orange-unknown fallback.
+
+### Zombie filter — 6 new families
+
+`Core.lua isZombieGloss` now also rejects bare metadata of these shapes,
+giving the lemmatizer a chance to recover the base form:
+
+- `comparative degree of` / `superlative degree of`
+  Examples: `дешевле`, `дороже`, `страшнее` — used to render as
+  `bought comparative degree of`. Now lemmatize to `cheap` / `expensive`
+  via the existing suffix-strip rules.
+- `the name of`, `the act of`, `the state of`, `the quality of`,
+  `the process of`, `the action of` — single Wiktionary stub-glosses.
+- `archaic form of`, `archaic spelling of`, `nonstandard spelling of`,
+  `pronunciation spelling of`, `obsolete spelling of`, `obsolete form of`.
+- `abbreviation of`, `syllabic abbreviation of`.
+- `a person who`, `someone who`, `one who` (bare stubs only).
+
+### Core dictionary additions
+
+Override `ной` from Kaikki's `noah` to `don't whine` — chat sense is
+imperative of `ныть`, biblical Noah doesn't come up.
+
+WoW slang: `щяс` (now), `пон` (got it), `мейт` (mate), `тбк` (TBC),
+`лк` (LK), `рд` (RFD), `циту` (citadel), `сеттек` (Sethekk),
+`морас` (Morass), `скраер` (Scryer), `незаметность` (Stealth),
+`тинькоф` (Tinkoff), `дворф` (dwarf), `доча` (daughter).
+
+Inflected forms with stem alternations the suffix-strip lemmatizer can't
+recover: `выйдет`, `жмут`, `моих`, `люблю`, `пьешь`, `пытаюсь`,
+`долбитесь`, `отзовитесь`, `научишься`, `прибежит`.
+
+Adjective/noun batch: `жирный` (fat) + 3 forms, `одетый` (geared) + 2,
+`подводка/у/и` (lead-up), `вепря/вепрь/вепри` (boar), `кабанчик/ов`
+(little boar), `безумия` (of madness), `заплатка/у` (patch enchant),
+`зачариться`, `плаки`.
+
+### Phrases
+
+`сеттек халлы` / `сеттекские залы` → Sethekk Halls,
+`черный/чёрный/блек морас` → Black Morass, `бути бэй` → Booty Bay,
+`скорость вепря` → Boar's Speed, `не ной` → don't whine,
+`боты пишут` → bots are writing.
+
 ## [1.7.2] - 2026-04-27 — preserve item/spell links
 
 Item links in incoming Russian chat were being shredded by the

@@ -321,12 +321,30 @@ local function isZombieGloss(s)
     if s:find("imperative of$") or s:find("conditional of$") then return true end
     if s:find("diminutive of$") or s:find("augmentative of$") then return true end
     if s:find("comparative of$") or s:find("superlative of$") then return true end
+    if s:find("comparative degree of$") or s:find("superlative degree of$") then return true end
     if s:find("verbal noun of$") or s:find("pejorative of$") then return true end
     if s:find("perfective form of$") or s:find("imperfective form of$") then return true end
     if s:find("active participle$") or s:find("passive participle$") then return true end
     if s:find("^short masculine") or s:find("^short feminine")
         or s:find("^short neuter") or s:find("^short plural") then return true end
     if s:find("^[%w%-]+%-person ") then return true end  -- "first-person ...", "second-person ..."
+    -- Wiktionary "the X of" / "the X of Y" stub glosses (state, name, act,
+    -- quality, process, action) — these were sometimes lifted as a value
+    -- with no following entity. The intent here is the bare-stub form;
+    -- we accept "the act of stealing" but reject "the act of$".
+    if s:find("^the name of$") or s:find("^the name of ") then return true end
+    if s:find("^the act of$") or s:find("^the state of$")
+        or s:find("^the quality of$") or s:find("^the process of$")
+        or s:find("^the action of$") then return true end
+    -- Spelling / form variants stripped to bare metadata
+    if s:find("^archaic form of$") or s:find("^archaic spelling of$") then return true end
+    if s:find("^nonstandard spelling of$") or s:find("^pronunciation spelling of$") then return true end
+    if s:find("^obsolete spelling of$") or s:find("^obsolete form of$") then return true end
+    if s:find("^abbreviation of$") or s:find("^syllabic abbreviation of$") then return true end
+    -- Person-stub glosses ("a person who", "someone who", "one who") with
+    -- nothing following, or following with no actual content.
+    if s:find("^a person who$") or s:find("^someone who$") or s:find("^one who$") then return true end
+    if s:find("^a person who ") and #s < 18 then return true end  -- "a person who is" etc, very short
     return false
 end
 
@@ -1121,7 +1139,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.2|r")
+        Msg("|cff55ddffRussian Translator v1.7.3|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)

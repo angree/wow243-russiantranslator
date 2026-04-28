@@ -66,6 +66,16 @@ end
 -- Keys lowercase UTF-8. Values English.
 -- ---------------------------------------------------------------------------
 ns.PHRASES = {
+    -- v1.7.3 zone / item / verb phrases
+    ["сеттек халлы"]="Sethekk Halls",
+    ["сеттекские залы"]="Sethekk Halls",
+    ["черный морас"]="Black Morass",
+    ["чёрный морас"]="Black Morass",
+    ["блек морас"]="Black Morass",
+    ["бути бэй"]="Booty Bay",
+    ["скорость вепря"]="Boar's Speed",
+    ["не ной"]="don't whine",
+    ["боты пишут"]="bots are writing",
     -- Guild recruitment idioms
     ["пве гильдия"]="PvE guild", ["пвп гильдия"]="PvP guild",
     ["ведет набор активных игроков"]="recruiting active players",
@@ -29747,6 +29757,32 @@ ns.WORDS = {
     ["выращивать"]="to grow",
     ["снежинка"]="snowflake",
     ["осваивать"]="master",
+    -- v1.7.3 chat-log batch (overrides + missing slang/inflections)
+    -- Override Kaikki "ной=noah" — chat sense is imperative of "ныть" (to whine)
+    ["ной"]="don't whine",
+    -- WoW slang / abbreviations
+    ["щяс"]="now", ["пон"]="got it", ["мейт"]="mate", ["мейту"]="mate",
+    ["тбк"]="TBC", ["лк"]="LK", ["рд"]="RFD",
+    ["циту"]="citadel", ["скраер"]="Scryer",
+    ["сеттек"]="Sethekk", ["морас"]="Morass",
+    ["незаметность"]="Stealth",
+    -- Inflected forms not lemmatizer-recoverable (stem alternations / unusual suffixes)
+    ["выйдет"]="will come out", ["жмут"]="they press", ["моих"]="of mine",
+    ["люблю"]="I love", ["пьешь"]="you drink", ["пытаюсь"]="I'm trying",
+    ["долбитесь"]="you're fooling around", ["отзовитесь"]="respond",
+    ["научишься"]="you'll learn", ["прибежит"]="will come running",
+    ["плаки"]="crying",
+    -- Adjectives / nouns
+    ["жирный"]="fat", ["жирная"]="fat", ["жирные"]="fat", ["жирного"]="fat",
+    ["одетый"]="geared", ["одетая"]="geared", ["одетые"]="geared",
+    ["доча"]="daughter",
+    ["подводка"]="lead-up", ["подводку"]="lead-up", ["подводки"]="lead-up",
+    ["вепря"]="boar", ["вепрь"]="boar", ["вепри"]="boars",
+    ["кабанчик"]="little boar", ["кабанчиков"]="little boars",
+    ["безумия"]="of madness",
+    ["заплатка"]="patch enchant", ["заплатку"]="patch enchant",
+    ["зачариться"]="to get enchanted",
+    ["тинькоф"]="Tinkoff", ["дворф"]="dwarf",
     ["евреика"]="hebrew woman",
     ["заразить"]="infect",
     ["насильственныи"]="forcible",
