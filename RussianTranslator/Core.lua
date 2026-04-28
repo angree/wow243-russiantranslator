@@ -595,16 +595,17 @@ local function Translate(msg)
 
     -- Mojibake guard. The Moonwell server (and others) sometimes substitute
     -- Polish/Czech diacritics with similar-looking Cyrillic letters at the
-    -- character level — so a message like "Cześć ziom" can arrive as a
-    -- string of valid-looking Cyrillic bytes. We can't tell that apart
-    -- from real Russian by byte patterns; the only reliable signal is
-    -- whether ANY word in the message resolves through our dictionary
-    -- (or lemmatizer / prefix-stripper / phrase table).
-    --
-    -- If we couldn't translate a single word, this is almost certainly
-    -- not Russian. Skip the [Russian] tag and let the original message
-    -- pass through unmodified.
-    if (translatedHits + phraseHits) == 0 then
+    -- character level. We tag [Russian] only when at least one of:
+    --   (a) the normalized message has a Cyrillic run of 3+ consecutive
+    --       characters (UTF-8: 6 bytes of paired 0xD0/0xD1 + 0x80-0xBF),
+    --       which preserves real Russian even when all words happen to
+    --       be missing from our dictionary, OR
+    --   (b) any phrase or any Cyrillic token resolved through the
+    --       dict / lemmatizer / prefix-stripper, which preserves short
+    --       Russian like "да ок" that wouldn't clear the byte threshold.
+    local hasCyrRun3 = normalized:find(
+        "[\208\209][\128-\191][\208\209][\128-\191][\208\209][\128-\191]")
+    if (not hasCyrRun3) and (translatedHits + phraseHits) == 0 then
         return nil
     end
 
@@ -1163,7 +1164,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.5|r")
+        Msg("|cff55ddffRussian Translator v1.7.6|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)

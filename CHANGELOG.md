@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.6] - 2026-04-29 — mojibake guard: 3+ char run OR dict hit
+
+v1.7.5 was too strict — required at least one dict hit to tag a message
+as Russian, which would silently swallow real Russian messages composed
+entirely of words our dictionary doesn't know (typo-heavy slang, niche
+terms, names). User pushed back: a real-Russian-with-zero-dict-hits
+message should still get tagged.
+
+### Fix
+
+`Translate()` now emits `[Russian]` when **either**:
+
+- (a) the normalized message has a Cyrillic run of **3+ consecutive
+  characters** (UTF-8: 6 bytes of paired `[0xD0/0xD1][0x80-0xBF]`),
+  preserving real Russian even when all words happen to be missing
+  from the dictionary, **or**
+- (b) any phrase or Cyrillic token resolved through the dictionary
+  / lemmatizer / prefix-stripper / phrase table, which preserves
+  short Russian like `да ок` that wouldn't clear the 3-char byte bar.
+
+Tradeoff: char-substituted Polish / Czech with a 3+ char Cyrillic run
+will still get tagged (e.g. `Cześć` → `Чешчь` → 5 Cyrillic chars).
+Accepting that to avoid false-negatives on real Russian. Future fixes
+could narrow this further by detecting Polish-specific consonant
+clusters that don't appear in Russian, but for now the 3-char threshold
+is the floor — anything tighter starts losing valid Russian.
+
 ## [1.7.5] - 2026-04-29 — mojibake guard rewritten: require dict hit, not byte pattern
 
 v1.7.4 missed the actual server behaviour. The Moonwell server doesn't
