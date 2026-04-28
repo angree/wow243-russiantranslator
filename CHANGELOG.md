@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.7.5] - 2026-04-29 — mojibake guard rewritten: require dict hit, not byte pattern
+
+v1.7.4 missed the actual server behaviour. The Moonwell server doesn't
+mangle Polish / Czech encoding — it does **character-level
+substitution**, replacing `ć`, `ś`, `ę`, etc. with similar-looking
+Cyrillic letters before the message even reaches our addon. So
+`Cześć ziom` arrives as a string of perfectly valid Cyrillic bytes —
+the v1.7.4 byte-pattern threshold (3+ consecutive Cyrillic chars) was
+trivially satisfied and the message still got tagged.
+
+### Fix — require a real dictionary hit
+
+The only reliable signal we have for "this is Russian" is whether any
+word in the message resolves through our pipeline:
+
+- a phrase substitution fired in `ApplyPhrases`, **or**
+- a Cyrillic token was translated through `WORDS` / `WORDS_EXTRA_TABLES`
+  / lemmatizer / prefix-stripper
+
+If both counts are zero, return nil from `Translate()` — message passes
+through with no `[Russian]` tag. Polish / Czech char-substituted text
+hits zero on both because their consonant clusters and vowel patterns
+don't match real Russian morphology.
+
+A real Russian message virtually always has at least one dict-resolvable
+word, because (a) the core dict has 28k WoW-tuned entries, (b) Kaikki
+adds 85k general vocabulary, (c) the lemmatizer covers most flexion,
+(d) the perfective-prefix stripper covers verbs.
+
+The byte-count threshold from v1.7.4 was removed — it was a false signal.
+
 ## [1.7.4] - 2026-04-28 — mojibake guard against Polish/Czech false positives
 
 The Moonwell server (and likely others) sometimes mis-encodes Polish and

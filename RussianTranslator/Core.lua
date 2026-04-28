@@ -572,6 +572,10 @@ local function Translate(msg)
     end
 
     local withPh, subs = ApplyPhrases(lowered)
+    -- Count phrase hits — each substituted phrase is a real-Russian
+    -- signal regardless of token-level outcome.
+    local phraseHits = 0
+    for _ in pairs(subs) do phraseHits = phraseHits + 1 end
     -- Track whether we've already seen a Cyrillic token — only the first
     -- one is eligible for the "is this a player name being addressed?"
     -- check. (Mid-message occurrences default to normal translation.)
@@ -589,21 +593,18 @@ local function Translate(msg)
         return result
     end)
 
-    -- Mojibake guard. The Moonwell server (and others) sometimes mangle
-    -- Polish/Czech messages into byte sequences that NormalizeCyrillic
-    -- reads as Cyrillic. We don't want to slap [Russian] on those.
+    -- Mojibake guard. The Moonwell server (and others) sometimes substitute
+    -- Polish/Czech diacritics with similar-looking Cyrillic letters at the
+    -- character level — so a message like "Cześć ziom" can arrive as a
+    -- string of valid-looking Cyrillic bytes. We can't tell that apart
+    -- from real Russian by byte patterns; the only reliable signal is
+    -- whether ANY word in the message resolves through our dictionary
+    -- (or lemmatizer / prefix-stripper / phrase table).
     --
-    -- Heuristic: this is a real Russian message if EITHER
-    --   (a) at least one Cyrillic word ≥3 chars exists in the normalized
-    --       text (3 chars × 2 bytes/char in UTF-8 = 6 bytes, each starting
-    --       with 0xD0/0xD1 + 0x80-0xBF continuation byte), OR
-    --   (b) at least one Cyrillic token was successfully translated by
-    --       the dictionary / lemmatizer / prefix-stripper.
-    -- If neither condition holds, skip the [Russian] tag and let the
-    -- original message pass through unmodified.
-    local hasRealCyrWord = normalized:find(
-        "[\208\209][\128-\191][\208\209][\128-\191][\208\209][\128-\191]")
-    if (not hasRealCyrWord) and translatedHits == 0 then
+    -- If we couldn't translate a single word, this is almost certainly
+    -- not Russian. Skip the [Russian] tag and let the original message
+    -- pass through unmodified.
+    if (translatedHits + phraseHits) == 0 then
         return nil
     end
 
@@ -1162,7 +1163,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.4|r")
+        Msg("|cff55ddffRussian Translator v1.7.5|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)
