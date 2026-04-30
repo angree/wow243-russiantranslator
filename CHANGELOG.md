@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.1] - 2026-04-30 — pymorphy3 form expansion + chat-log batch (503k entries)
+
+**Total dictionary size: 503,159 entries** (29k core + 2k core phrases +
+342k pre-baked inflected forms + 85k Kaikki Wiktionary + 44k Kaikki phrases).
+
+### Tier 1 — pymorphy3 inflection expansion (the big one)
+
+Replaces ~95% of the runtime suffix-strip lemmatizer's job with O(1)
+hash lookups. New offline tool `expand_forms.py` walks every curated
+core lemma in `Dictionary.lua` (29,051 entries), runs pymorphy3 over it,
+and emits the full lexeme — every case form for nouns, every conjugation
+for verbs, every adjective inflection. Result: 20 new chunk files
+`Dictionary_Forms_NN.lua` totalling **342,544 form→translation mappings**.
+
+Lookup pipeline now:
+1. `ns.WORDS` (core, 29k curated)
+2. **`Dictionary_Forms_*` (NEW, 342k pre-baked forms)** — high-confidence,
+   derived from curated lemmas
+3. `Dictionary_Full_*` (Kaikki, 85k rare lexemes)
+4. Lemmatizer (suffix-strip, 85 rules) — fallback
+5. Perfective-prefix stripper — last resort
+
+Words like `воду`, `козу`, `прочитал`, `выйдет`, `моих`, `пьешь` now hit
+the Forms table directly with the correct translation, instead of
+limping through the lemmatizer's brittle stem-mutation rules.
+
+### Tier 2 — NMT-mined chat-log phrases
+
+Installed Argos Translate (~300 MB ru-en model) locally, mined the top
+800 bigrams/trigrams from our 8 chat logs by frequency, ran each
+through Argos with a sentence template trick (`Я говорю: <phrase>`)
+to give the model context. Quality on WoW slang fragments turned out
+to be poor, so hand-filtered to **15 high-confidence additions**:
+Gurubashi tournament idioms (`гурубаши арене`, `турнир на гурубаши`,
+`приз голд`, `кто первый`, `первый добежит`), recruitment
+(`активных игроков`, `есть желающие`), zone alias (`забытый город` →
+Auchindoun), and `дальний восток примет`, `ослабить оборону`,
+`ботаника нормал`.
+
+### Chat-log batch (today's unknowns)
+
+New core entries from `WoWChatLog.txt` analysis (item / quest / NPC
+proper nouns + slang):
+- Items: `ствольноклинковая удлиненная винтовка` (Smoothbore Long
+  Rifle), `резной огрский идол` (Carved Ogre Idol), `поводья резвого
+  призрачного тигра` (Reins of the Swift Spectral Tiger), `ключ от
+  тюрьмы братства эфириум` (Key to the Ethereum Prison),
+  `астральный рог шиффара` (Astral Horn of Shaffar)
+- Bosses / NPCs: `соправитель салхадаар` (Co-Regent Salhadaar),
+  `пространствус всепоглощающий` (Pandemonius the All-Consuming),
+  `дарн ненасытный` (Darn the Insatiable),
+  `чо'вар погромщик` (Cho'war the Pillager)
+- Cooking items: `жареная ильница` (Fried Cusk), `вареный луфарь`
+  (Boiled Bluefish), `палочки из золотой рыбки` (Goldfish Sticks)
+- Zone: `арена нарганда` / `арене нарганда` (Nagrand Arena)
+- Verbs / slang: `пошел/пошла/пошли`, `почарю`, `почарить`, `читаки`,
+  `лентяй`, `кхе`, plus all derivative forms via pymorphy expansion.
+
+Coverage on `WoWChatLog.txt` after this batch: ~96% (up from 94.85%).
+
 ## [1.7.6] - 2026-04-29 — mojibake guard: 3+ char run OR dict hit
 
 v1.7.5 was too strict — required at least one dict hit to tag a message

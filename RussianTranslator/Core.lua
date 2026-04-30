@@ -1122,6 +1122,24 @@ f:SetScript("OnEvent", function(self, event, arg1)
         -- giant lookup. WoW 2.4.3's Lua silently drops inserts past ~2^18
         -- (262144) entries per table. WordLookup walks the list of tables.
         ns.WORDS_EXTRA_TABLES = {}
+        -- Forms chunks first — derived from curated core lemmas via pymorphy3,
+        -- so they're higher confidence than Wiktionary glosses. WordLookup
+        -- walks tables in order, first hit wins.
+        local fchunks, fcount = 0, 0
+        for i = 1, 20 do
+            local k = "RT_WORDS_FORMS_" .. (i < 10 and "0"..i or tostring(i))
+            local t = _G[k]
+            if t then
+                table.insert(ns.WORDS_EXTRA_TABLES, t)
+                fchunks = fchunks + 1
+                pcall(function()
+                    for _ in pairs(t) do fcount = fcount + 1 end
+                end)
+                _G[k] = nil
+            end
+        end
+        -- Then Kaikki Wiktionary chunks — covers rare lexemes that aren't
+        -- in core (so no Forms expansion exists for them).
         local wchunks, wcount = 0, 0
         for i = 1, 20 do
             local k = "RT_WORDS_EXTRA_" .. (i < 10 and "0"..i or tostring(i))
@@ -1162,11 +1180,14 @@ f:SetScript("OnEvent", function(self, event, arg1)
         pcall(function()
             for _ in pairs(ns.WORDS or {}) do coreWords = coreWords + 1 end
         end)
-        local totalWords = coreWords + wcount
+        local totalWords = coreWords + fcount + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.7.6|r")
+        Msg("|cff55ddffRussian Translator v1.8.1|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
+        Msg(" forms:  " .. ((fchunks == 20)
+            and ("|cff00ff00YES|r ("..fchunks.."/20, " .. fcount .. " forms)")
+            or ("|cffff0000PARTIAL|r ("..fchunks.."/20)")))
         Msg(" chunks: " .. ((wchunks == 20 and pchunks == 5)
             and ("|cff00ff00YES|r ("..wchunks.."/20 word, "..pchunks.."/5 phrase)")
             or ("|cffff0000PARTIAL|r ("..wchunks.."/20 word, "..pchunks.."/5 phrase)")))

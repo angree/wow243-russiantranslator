@@ -66,6 +66,39 @@ end
 -- Keys lowercase UTF-8. Values English.
 -- ---------------------------------------------------------------------------
 ns.PHRASES = {
+    -- v1.8.1 item / quest / location phrases
+    ["ствольноклинковая удлиненная винтовка"]="Smoothbore Long Rifle",
+    ["соправитель салхадаар"]="Co-Regent Salhadaar",
+    ["астральный рог шиффара"]="Astral Horn of Shaffar",
+    ["ключ от тюрьмы братства эфириум"]="Key to the Ethereum Prison",
+    ["резной огрский идол"]="Carved Ogre Idol",
+    ["поводья резвого призрачного тигра"]="Reins of the Swift Spectral Tiger",
+    ["арена нарганда"]="Nagrand Arena",
+    ["арене нарганда"]="at Nagrand Arena",
+    ["арены нарганда"]="of Nagrand Arena",
+    ["пространствус всепоглощающий"]="Pandemonius the All-Consuming",
+    ["дарн ненасытный"]="Darn the Insatiable",
+    ["чо'вар погромщик"]="Cho'war the Pillager",
+    ["жареная ильница"]="Fried Cusk",
+    ["вареный луфарь"]="Boiled Bluefish",
+    ["варёный луфарь"]="Boiled Bluefish",
+    ["палочки из золотой рыбки"]="Goldfish Sticks",
+    -- v1.8.0 NMT-mined chat-log phrases (Argos ru-en, hand-filtered)
+    ["гурубаши арене"]="Gurubashi Arena",
+    ["арена гурубаши"]="Gurubashi Arena",
+    ["на гурубаши арене"]="at Gurubashi Arena",
+    ["турнир на гурубаши"]="tournament at Gurubashi",
+    ["турнир на гурубаши арене"]="tournament at Gurubashi Arena",
+    ["приз голд"]="gold prize",
+    ["активных игроков"]="active players",
+    ["есть желающие"]="anyone interested",
+    ["кто первый"]="who's first",
+    ["первый добежит"]="first to reach",
+    ["кто первый добежит"]="who reaches first",
+    ["дальний восток примет"]="Far East will accept",
+    ["ослабить оборону"]="weaken the defense",
+    ["забытый город"]="Auchindoun",
+    ["ботаника нормал"]="Botanica normal",
     -- v1.7.3 zone / item / verb phrases
     ["сеттек халлы"]="Sethekk Halls",
     ["сеттекские залы"]="Sethekk Halls",
@@ -29757,6 +29790,39 @@ ns.WORDS = {
     ["выращивать"]="to grow",
     ["снежинка"]="snowflake",
     ["осваивать"]="master",
+    -- v1.8.1 chat-log batch (item/quest nouns, verbs, slang)
+    -- Item / loot vocabulary
+    ["ствольноклинковая"]="smoothbore", ["удлиненная"]="long", ["удлинённая"]="long",
+    ["резной"]="carved", ["резная"]="carved", ["резного"]="carved",
+    ["огрский"]="ogre", ["огрская"]="ogre", ["огрского"]="ogre",
+    ["идол"]="idol", ["идола"]="idol",
+    ["поводья"]="reins", ["поводьев"]="reins",
+    ["резвого"]="of swift", ["резвый"]="swift", ["резвая"]="swift",
+    ["призрачного"]="spectral", ["призрачный"]="spectral", ["призрачная"]="spectral",
+    ["братства"]="of brotherhood", ["братство"]="brotherhood",
+    ["тюрьмы"]="of prison", ["тюрьма"]="prison",
+    ["эфириум"]="Ethereum", ["эфириума"]="Ethereum",
+    -- Cooking item words
+    ["жареная"]="fried", ["жареный"]="fried", ["жареное"]="fried",
+    ["вареный"]="boiled", ["варёный"]="boiled", ["вареная"]="boiled",
+    ["палочки"]="sticks", ["палочка"]="stick",
+    ["золотой"]="golden", ["золотая"]="golden", ["золотое"]="golden",
+    ["рыбки"]="fish", ["рыбка"]="fish",
+    -- Quest / boss / NPC proper nouns
+    ["соправитель"]="Co-Regent", ["салхадаар"]="Salhadaar",
+    ["астральный"]="astral", ["астральная"]="astral", ["астрального"]="astral",
+    ["шиффара"]="Shaffar", ["шиффары"]="Shaffar",
+    ["пространствус"]="Pandemonius", ["всепоглощающий"]="the All-Consuming",
+    ["дарн"]="Darn", ["ненасытный"]="the Insatiable", ["ненасытная"]="insatiable",
+    ["погромщик"]="the Destroyer", ["погромщика"]="Destroyer",
+    ["нарганда"]="Nagrand", ["нарганде"]="Nagrand", ["нарганды"]="Nagrand",
+    -- Verbs (chat usage)
+    ["пошел"]="went", ["пошёл"]="went", ["пошла"]="went", ["пошли"]="went",
+    ["почарю"]="I'll enchant", ["почарить"]="enchant",
+    -- Slang
+    ["читаки"]="cheaters", ["читак"]="cheater", ["читака"]="cheater",
+    ["лентяй"]="lazy guy", ["лентяи"]="lazy guys",
+    ["кхе"]="cough",
     -- v1.7.3 chat-log batch (overrides + missing slang/inflections)
     -- Override Kaikki "ной=noah" — chat sense is imperative of "ныть" (to whine)
     ["ной"]="don't whine",
