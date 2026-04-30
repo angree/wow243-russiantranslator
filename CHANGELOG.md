@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.3] - 2026-04-30 — server-spam suppression via AddMessage hook (503,159 entries)
+
+**Total dictionary: 503,159 entries** (29,051 core + 2,096 core phrases +
+342,544 pre-baked forms + 84,982 Kaikki + 44,486 Kaikki phrases)
+
+### Server-spam suppression
+
+The Moonwell server broadcasts `1v1 arena match just ended.` every couple
+of minutes through some non-standard event — it isn't `CHAT_MSG_SYSTEM`
+(text is white not yellow) and isn't filterable through
+`ChatFrame_AddMessageEventFilter`.
+
+v1.8.2 tried event-filtering on `CHAT_MSG_SYSTEM` /
+`CHAT_MSG_BG_SYSTEM_*` — didn't catch it. v1.8.3 hooks each chat frame's
+`:AddMessage` directly: every call to display text passes through our
+wrapper, and if the normalised text matches `SUPPRESS_EXACT`, the call
+is dropped before the message reaches the rendering layer. This catches
+spam regardless of which event delivered it (or even if a server core
+addon added it directly to the frame).
+
+Normalisation: strip `|c.....|r` colour codes, trim leading/trailing
+whitespace, drop a single trailing period, lowercase. So `"1v1 arena
+match just ended"`, `"1v1 arena match just ended."`, and any colour-
+wrapped variants all match the same entry.
+
+Adding more spam strings is a one-line addition to `SUPPRESS_EXACT` in
+`Core.lua`. Currently filters:
+- `1v1 arena match just ended`
+
 ## [1.8.1] - 2026-04-30 — pymorphy3 form expansion + chat-log batch (503k entries)
 
 **Total dictionary size: 503,159 entries** (29k core + 2k core phrases +

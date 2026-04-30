@@ -714,6 +714,75 @@ local function BuildFilter(eventName)
 end
 
 -- ---------------------------------------------------------------------------
+-- Server-spam suppression
+-- ---------------------------------------------------------------------------
+-- The Moonwell server (and others) periodically broadcast notifications
+-- (e.g. "1v1 arena match just ended.") that aren't useful to read every
+-- two minutes. The text can come through any of several events depending
+-- on how the server core wraps it — sometimes CHAT_MSG_SYSTEM, sometimes
+-- a custom event, sometimes added directly to the chat frame bypassing
+-- events entirely. We can't predict the route, so we filter at the
+-- absolute last layer: hook every chat frame's :AddMessage and drop the
+-- call if the text matches.
+--
+-- Matching is content-based, normalized (lowercase, trimmed trailing
+-- whitespace+punctuation) — adding a new spam string takes one line
+-- below.
+local SUPPRESS_EXACT = {
+    ["1v1 arena match just ended"] = true,
+}
+
+local function NormalizeForSuppress(msg)
+    if type(msg) ~= "string" or msg == "" then return nil end
+    -- Strip color codes |cXXXXXXXX...|r in case the server wraps text.
+    local s = msg:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+    -- Trim leading/trailing whitespace.
+    s = s:gsub("^%s+", ""):gsub("%s+$", "")
+    -- Strip a single trailing period (so "X." == "X").
+    s = s:gsub("%.$", "")
+    return s:lower()
+end
+
+local function ShouldSuppress(msg)
+    local norm = NormalizeForSuppress(msg)
+    if not norm then return false end
+    return SUPPRESS_EXACT[norm] == true
+end
+
+local function SuppressionFilter(msg, ...)
+    local ok, hit = pcall(ShouldSuppress, msg)
+    if ok and hit then return true end
+    return false
+end
+
+-- AddMessage hook installer. This runs once at PLAYER_LOGIN (after chat
+-- frames exist) and wraps each frame's :AddMessage with a content check.
+-- We don't use hooksecurefunc here because we need to *prevent* the
+-- original call, not just observe it.
+local addMessageHooked = false
+local function HookChatFrameAddMessage()
+    if addMessageHooked then return end
+    addMessageHooked = true
+    local n = NUM_CHAT_WINDOWS or 7
+    local hooked = 0
+    for i = 1, n do
+        local frame = _G["ChatFrame" .. i]
+        if frame and frame.AddMessage and not frame.__rt_addmsg_orig then
+            local orig = frame.AddMessage
+            frame.__rt_addmsg_orig = orig
+            frame.AddMessage = function(self, text, r, g, b, id)
+                if ShouldSuppress(text) then
+                    return  -- drop entirely
+                end
+                return orig(self, text, r, g, b, id)
+            end
+            hooked = hooked + 1
+        end
+    end
+    Log("addmsg-hooked", { frames = hooked })
+end
+
+-- ---------------------------------------------------------------------------
 -- Session / SavedVariables lifecycle
 -- ---------------------------------------------------------------------------
 
@@ -898,6 +967,23 @@ local function RegisterFilters()
     for _, ev in ipairs(CHAT_EVENTS) do
         ChatFrame_AddMessageEventFilter(ev, BuildFilter(ev))
         ok = ok + 1
+    end
+    -- Suppression filter — content-based exact-match against SUPPRESS_EXACT.
+    -- We hook every event that can carry server-spam text:
+    --   CHAT_MSG_SYSTEM      — yellow announcer line (the "1v1 arena
+    --                          match just ended" case)
+    --   CHAT_MSG_CHANNEL     — already covered above for translation, the
+    --                          suppression filter runs additionally and a
+    --                          "true" return value short-circuits.
+    -- Adding more events here is cheap; suppression is tested before
+    -- translation in registration order so it always wins.
+    for _, ev in ipairs({
+        "CHAT_MSG_SYSTEM",
+        "CHAT_MSG_BG_SYSTEM_NEUTRAL",
+        "CHAT_MSG_BG_SYSTEM_ALLIANCE",
+        "CHAT_MSG_BG_SYSTEM_HORDE",
+    }) do
+        ChatFrame_AddMessageEventFilter(ev, SuppressionFilter)
     end
     Log("filters-registered", { ok = ok, fail = fail, has_api = true })
     return ok, fail
@@ -1111,6 +1197,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
     elseif event == "PLAYER_LOGIN" then
         InitSession()
         local ok, fail = RegisterFilters()
+        pcall(HookChatFrameAddMessage)
         local chatlog = "off"
         if db.autoChatLog then
             if EnsureChatLog() then chatlog = "on" end
@@ -1182,7 +1269,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + fcount + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.8.1|r")
+        Msg("|cff55ddffRussian Translator v1.8.3|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" forms:  " .. ((fchunks == 20)
