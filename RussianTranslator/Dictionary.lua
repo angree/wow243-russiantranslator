@@ -66,6 +66,21 @@ end
 -- Keys lowercase UTF-8. Values English.
 -- ---------------------------------------------------------------------------
 ns.PHRASES = {
+    -- v1.8.4 item / boss / quest / zone / ordinal phrases
+    ["боевой клинок аззинота"]="Warblade of Azzinoth",
+    ["манускрипт отмщения"]="Manuscript of Vengeance",
+    ["наплечники молниеносного удара"]="Shoulders of Lightning Strike",
+    ["выкройка наплечники"]="Pattern: Shoulders",
+    ["глыбня пустоты"]="Slag of the Void",
+    ["низвергнуть глыбня пустоты"]="Defeat the Slag of the Void",
+    ["тернистая долина"]="Stranglethorn Vale",
+    ["тернистой долины"]="of Stranglethorn Vale",
+    ["тернистой долине"]="in Stranglethorn Vale",
+    -- Ordinal phrases (covers tokenizer split of "1ый" → "1" + "ый")
+    ["1ый бос"]="1st boss", ["1й бос"]="1st boss", ["1ый босс"]="1st boss",
+    ["2ой бос"]="2nd boss", ["2й бос"]="2nd boss", ["2ой босс"]="2nd boss",
+    ["3й бос"]="3rd boss", ["3ий бос"]="3rd boss",
+    ["ласт бос"]="last boss", ["ласт босс"]="last boss",
     -- v1.8.1 item / quest / location phrases
     ["ствольноклинковая удлиненная винтовка"]="Smoothbore Long Rifle",
     ["соправитель салхадаар"]="Co-Regent Salhadaar",
@@ -29790,6 +29805,36 @@ ns.WORDS = {
     ["выращивать"]="to grow",
     ["снежинка"]="snowflake",
     ["осваивать"]="master",
+    -- v1.8.4 chat-log batch (continued — slang, typos, item proper nouns)
+    -- Common slang
+    ["шикарно"]="splendid", ["шикарный"]="splendid", ["шикарная"]="splendid",
+    ["наплечники"]="shoulders", ["наплечник"]="shoulder",
+    ["наплечниках"]="shoulders", ["наплечниках"]="shoulders",
+    ["анзой"]="with Anzu",
+    ["дядь"]="uncle",
+    ["терся"]="was rubbing",
+    ["антисетап"]="anti-setup", ["антисетапы"]="anti-setups",
+    ["скуфчик"]="old-timer", ["скуфчиков"]="old-timers",
+    ["вьебали"]="they nerfed", ["вьебал"]="he nerfed",
+    ["друн"]="drone",
+    ["танкану"]="I'll tank",
+    ["нищий"]="poor", ["нищая"]="poor", ["нищие"]="the poor",
+    ["оверпавер"]="overpower", ["оверпавера"]="overpower",
+    ["тернистой"]="of Stranglethorn", ["тернистая"]="thorny",
+    ["пидорский"]="shitty", ["пидорская"]="shitty", ["пидорские"]="shitty",
+    -- Common abbreviations / typos (≥2x in chat)
+    ["плс"]="pls",
+    ["каво"]="whom",
+    ["вреш"]="you lie",
+    ["дамаж"]="damage",
+    ["личкинг"]="Lich King",
+    ["нэт"]="net", ["нэтом"]="with internet",
+    -- Typos worth fixing (recur 2+ times, no collision risk)
+    ["сетексикие"]="Sethekk",  -- typo of сеттекские
+    ["узилише"]="Arcatraz",     -- typo of узилище (ш vs щ)
+    -- Item / quest proper nouns
+    ["аззинот"]="Azzinoth", ["аззинота"]="Azzinoth", ["аззиноту"]="Azzinoth",
+    ["глыбня"]="Slag", ["глыбни"]="Slag",
     -- v1.8.1 chat-log batch (item/quest nouns, verbs, slang)
     -- Item / loot vocabulary
     ["ствольноклинковая"]="smoothbore", ["удлиненная"]="long", ["удлинённая"]="long",

@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.4] - 2026-05-03 — chat-log batch: slang, typos, item names (503,359 entries)
+
+**Total dictionary: 503,359 entries** (29,093 core + 2,115 core phrases +
+342,683 pre-baked forms + 84,982 Kaikki + 44,486 Kaikki phrases)
+
+### Coverage gains
+
+Token-weighted coverage on live `WoWChatLog.txt`: **95.38% → 95.64%**.
+Messages 100% translated: 84.6% → 85.5%. Messages <50% translated:
+48 → 45.
+
+### New WORDS — slang & inflected forms (24 entries)
+
+`шикарно` (splendid), `наплечники/наплечник` (shoulders / pauldron),
+`анзой` (with Anzu), `дядь` (uncle), `терся` (was rubbing),
+`антисетап` (anti-setup, arena slang), `скуфчик/скуфчиков`
+(old-timer, slang), `вьебали` (they nerfed, vulgar), `друн` (drone,
+guild slang), `танкану` (I'll tank), `нищий` (poor),
+`оверпавер` (overpower), `тернистой/тернистая` (Stranglethorn),
+`пидорский` (shitty, vulgar).
+
+### New WORDS — abbreviations & typos (≥2x in chat) (8 entries)
+
+`плс` (please), `каво` (typo of `кого`, whom), `вреш` (typo of
+`врёшь`, you lie), `дамаж` (damage, English borrow), `личкинг` (Lich
+King), `нэт/нэтом` (net / with internet).
+
+Recurring typos worth fixing (collision-checked):
+- `сетексикие` → Sethekk (misspelling of `сеттекские`, 3x)
+- `узилише` → Arcatraz (misspelling of `узилище` — ш vs щ, 4x)
+
+### New WORDS — item proper nouns (5 entries)
+
+`аззинот/аззинота/аззиноту` → Azzinoth, `глыбня/глыбни` → Slag.
+
+### New PHRASES (15 entries)
+
+**Items:**
+- `боевой клинок аззинота` → Warblade of Azzinoth
+- `манускрипт отмщения` → Manuscript of Vengeance
+- `наплечники молниеносного удара` → Shoulders of Lightning Strike
+- `выкройка наплечники` → Pattern: Shoulders
+- `глыбня пустоты` → Slag of the Void
+
+**Quest:**
+- `низвергнуть глыбня пустоты` → Defeat the Slag of the Void
+
+**Zone:**
+- `тернистая долина` → Stranglethorn Vale (+ gen + loc forms)
+
+**Ordinals** (resolves tokenizer's `1ый` → `1` + `ый` split):
+- `1ый/1й бос` → 1st boss
+- `2ой/2й бос` → 2nd boss
+- `3й/3ий бос` → 3rd boss
+- `ласт бос/босс` → last boss
+
+All new lemmas auto-expanded by `expand_forms.py` (pymorphy3 lexeme
+ekspansion), so adding `танкану` also adds all 46 inflected forms of
+that verb-stem to the Forms tier.
+
 ## [1.8.3] - 2026-04-30 — server-spam suppression via AddMessage hook (503,159 entries)
 
 **Total dictionary: 503,159 entries** (29,051 core + 2,096 core phrases +
