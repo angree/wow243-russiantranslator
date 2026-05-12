@@ -24,6 +24,8 @@ def load_dict():
     pair_re = re.compile(r'\["([^"]+)"\]\s*=\s*"([^"]*)"')
     files = [DICT]
     files.extend(sorted(DICT.parent.glob("Dictionary_Full_*.lua")))
+    files.extend(sorted(DICT.parent.glob("Dictionary_Forms_*.lua")))
+    files.extend(sorted(DICT.parent.glob("Dictionary_Phrases_*.lua")))
     # Also support legacy monolith during transition
     legacy = DICT.parent / "Dictionary_Full.lua"
     if legacy.exists():
@@ -127,10 +129,30 @@ CYR_ANY = re.compile(r"[а-яёА-ЯЁ]")
 def tokenize(s):
     return TOKEN_RE.findall(s)
 
+def _is_word_char(ch):
+    if not ch: return False
+    c = ord(ch[0])
+    if 65 <= c <= 90: return True
+    if 97 <= c <= 122: return True
+    if 48 <= c <= 57: return True
+    if c >= 128: return True  # Cyrillic and other multibyte letters
+    return False
+
 def apply_phrases(s, phrases_sorted):
+    # Word-boundary aware: only substitute when surrounded by non-word chars.
+    # Mirrors Core.lua ApplyPhrases (post-1.8.5 fix). Prevents short phrases
+    # like "и то" from chewing through "или+только".
     for key in phrases_sorted:
-        if key in s:
-            s = s.replace(key, " __PH__ ")
+        idx = s.find(key)
+        while idx >= 0:
+            end = idx + len(key)
+            before_ok = idx == 0 or not _is_word_char(s[idx-1])
+            after_ok = end >= len(s) or not _is_word_char(s[end])
+            if before_ok and after_ok:
+                s = s[:idx] + " __PH__ " + s[end:]
+                idx = s.find(key, idx + len(" __PH__ "))
+            else:
+                idx = s.find(key, idx + 1)
     return s
 
 # Match every chat format `/chatlog` writes:

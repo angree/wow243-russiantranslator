@@ -4,6 +4,99 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.5] - 2026-05-03 — phrase-boundary fix, multi-gloss trim, conv batch (504,430 entries)
+
+**Total dictionary: 504,430 entries** (29,213 core + 2,115 core phrases +
+343,634 pre-baked forms + 84,982 Kaikki + 44,486 Kaikki phrases)
+
+### Critical bug fix: phrase matcher ate adjacent word letters
+
+`ApplyPhrases` in `Core.lua` used plain substring matching to find
+phrase keys in the lowered message. A short phrase like `и то`
+(meaning "and even then") would substring-match against `и` at the end
+of one word + space + `то` at the start of the next — chewing letters
+out of both. Example:
+
+- input:  `или только если кого то оскорбляешь`
+- bug:    after match → `ил [PH] лько если ...` → tokens `ил`, `лько`
+- fixed:  no match (not word-boundary) → tokens `или`, `только`
+
+Silently corrupted translations across many sessions — anywhere a 3-5
+char phrase happened to substring-match across a word boundary.
+Observed corruptions in chat: `только→лько`, `точно→чно`,
+`видел→идел`, `убийство→бийство`.
+
+**Fix**: `isWordByte()` check on bytes flanking each candidate match.
+ASCII A-Z/a-z, digits, and any UTF-8 multibyte byte (covers Cyrillic)
+count as "word". Reject matches where either flanking byte is a word
+byte.
+
+### Critical bug fix: multi-gloss output (Wiktionary multi-sense pollution)
+
+Kaikki/Wiktionary entries list every sense of a word, comma-separated.
+The addon was dumping the FULL list at translation time:
+
+- `встать` → `"to get up, to rise, to arise, to stop"`
+- `хотеть` → `"to want, to feel like, to mean"`
+- `бросить` → `"to throw, to send urgently, to give up, to abandon"`
+
+A 4-word Russian sentence `хули ты встал сука` rendered as a 13-word
+English blob.
+
+**Fix**: `trim_multigloss.py` walks all 47 dict files, trims each value
+to its first sense (paren-aware — so `"Moroes (boss, gen)"` is
+preserved). **24,146 entries trimmed** across all tiers. Now
+`хули ты встал сука` → `"why the fuck you got up bitch"` (4-for-4).
+
+### Tooling fix: analyzer wasn't loading 77 % of the dictionary
+
+`analyze_coverage.py` only loaded `Dictionary.lua` + `Dictionary_Full_*.lua`,
+ignoring 342k entries in `Dictionary_Forms_*.lua` and 44k in
+`Dictionary_Phrases_*.lua`. Reported coverage was understated by ~1pp
+and "top unknowns" included words already translated in-game. **In-game
+translation was NOT affected** — only the offline analyzer. Fixed:
+`load_dict()` now globs all `Dictionary_*.lua` chunks.
+
+### New WORDS — conversational batch (108 entries)
+
+Common-talk register that wasn't in the dict yet. Lemmas get auto-
+expanded by `expand_forms.py` (pymorphy3 lexeme expansion).
+
+**Verbs**: `чарнуть`, `провагонять`.
+
+**Adjectives**: `непроглядный`, `лютый`, `рукастый`, `ебнутый`,
+`недоразвитый`, `наивный`, `полезный`, `первичный`, `ебанный`,
+`солевой`, `верный`, `исключительный`, `прикольный`, `рисованный`,
+`покрытый`, `шаманский`, `багровый`, `молниеносный`, `перерезанный`,
+`украшенный`, `нерушимый`, `огненный`.
+
+**Nouns**: `пререйд`, `пиро`, `анролл`, `хиллсбрад`, `инспект`,
+`энчантер`, `вендор`, `варсонг`, `эклипс`, `таурен`, `цап` (ZA), `рейс`,
+`дерьмище`, `нагибатор`, `ульдаман`, `релокант`, `хуятина`,
+`пиздаболка`, `войско`, `нефарий`/`нефариус`, `сумон`, `бист`,
+`тандерфури`, `пиромаг`, `устойчивость`, `убийство`, `мертв`.
+
+**Politicians/geo** (appearing in chat — translated, no judgement):
+`жириновский`, `скабеева`, `днр`, `лнр`, `хозлы` (slur, + inflections +
+typo `хохзлы`).
+
+**Abbreviations**: `лгбт`, `бх`, `шфк`, `фмаг`, `афли`, `шадов`, `дейл`.
+
+**Slang particles**: `грац`, `сяп`, `хоспади`, `тя`, `совух`,
+`долбоёб`/`долбаёб`, `нихрена`/`нихуя`.
+
+**Vulgar verbs** (manual): `выебу`, `выебать`, `ёбнули`, `нагну`.
+
+**Recurring typos (≥2x)**: `ситекские`/`сеттики`→Sethekk,
+`огненые`→fiery, `святилише`, `длайк`→goodlike, `жто`→this,
+`лабаринт`, `разнцы`, `зделать`, `терь`→now, `идел`→saw, `дурачек`.
+
+### Coverage on live `WoWChatLog.txt`
+
+- Token-weighted: **96.79%** (true coverage with fixed analyzer)
+- Messages 100% translated: **88.7%**
+- Conversational unknowns at freq≥2 (non-nick): 85 → **13**
+
 ## [1.8.4] - 2026-05-03 — chat-log batch: slang, typos, item names (503,359 entries)
 
 **Total dictionary: 503,359 entries** (29,093 core + 2,115 core phrases +

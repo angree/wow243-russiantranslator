@@ -189,6 +189,20 @@ local function RestoreLinks(s, subs)
     return s
 end
 
+-- Returns true if byte at `pos` is part of a "word":
+-- ASCII A-Z/a-z, digits, or any UTF-8 multibyte (covers Cyrillic letters).
+-- Used to enforce word boundaries on phrase substitution so phrases like "и то"
+-- don't chew letters out of words like "или+только".
+local function isWordByte(s, pos)
+    if pos < 1 or pos > #s then return false end
+    local b = s:byte(pos)
+    if b >= 65 and b <= 90 then return true end
+    if b >= 97 and b <= 122 then return true end
+    if b >= 48 and b <= 57 then return true end
+    if b >= 128 then return true end
+    return false
+end
+
 local function ApplyPhrases(lowered)
     local subs = {}
     local id = 0
@@ -196,11 +210,18 @@ local function ApplyPhrases(lowered)
     for _, key in ipairs(ns.PHRASE_ORDER) do
         local idx = lowered:find(key, 1, true)
         while idx do
-            id = id + 1
-            local ph = "\1" .. id .. "\1"
-            subs[ph] = ns.PHRASES[key]
-            lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(idx + #key)
-            idx = lowered:find(key, idx + #ph, true)
+            local endPos = idx + #key
+            local beforeOk = (idx == 1) or not isWordByte(lowered, idx - 1)
+            local afterOk = (endPos > #lowered) or not isWordByte(lowered, endPos)
+            if beforeOk and afterOk then
+                id = id + 1
+                local ph = "\1" .. id .. "\1"
+                subs[ph] = ns.PHRASES[key]
+                lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(endPos)
+                idx = lowered:find(key, idx + #ph, true)
+            else
+                idx = lowered:find(key, idx + 1, true)
+            end
         end
     end
     -- Then iterate extra (Kaikki) phrases if loaded and lite mode is off.
@@ -208,11 +229,18 @@ local function ApplyPhrases(lowered)
         for _, key in ipairs(ns.PHRASE_ORDER_EXTRA) do
             local idx = lowered:find(key, 1, true)
             while idx do
-                id = id + 1
-                local ph = "\1" .. id .. "\1"
-                subs[ph] = ns.PHRASES_EXTRA[key]
-                lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(idx + #key)
-                idx = lowered:find(key, idx + #ph, true)
+                local endPos = idx + #key
+                local beforeOk = (idx == 1) or not isWordByte(lowered, idx - 1)
+                local afterOk = (endPos > #lowered) or not isWordByte(lowered, endPos)
+                if beforeOk and afterOk then
+                    id = id + 1
+                    local ph = "\1" .. id .. "\1"
+                    subs[ph] = ns.PHRASES_EXTRA[key]
+                    lowered = lowered:sub(1, idx - 1) .. ph .. lowered:sub(endPos)
+                    idx = lowered:find(key, idx + #ph, true)
+                else
+                    idx = lowered:find(key, idx + 1, true)
+                end
             end
         end
     end
@@ -1269,7 +1297,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + fcount + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.8.4|r")
+        Msg("|cff55ddffRussian Translator v1.8.5|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" forms:  " .. ((fchunks == 20)
