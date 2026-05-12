@@ -4,6 +4,97 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.7] - 2026-05-13 — vulgar toggle + dungeon name fixes (504,430 entries)
+
+**Total dictionary: 504,430 entries** (29,213 core + 2,136 core phrases +
+343,634 pre-baked forms + 84,982 Kaikki + 44,486 Kaikki phrases)
+
+### Vulgar-output toggle (NSFW opt-in)
+
+Dictionary values for vulgar Russian are now stored as their real English
+equivalents (`fuck`, `bitch`, `shit`, `dick`, …) — accurate to the chat
+register on Russian PvP servers. To keep public-channel output workplace-
+safe by default, the addon now post-processes every English translation
+through a **censor pass** before showing it.
+
+`db.vulgar = false` (default) — vulgar English words are softened:
+- `fuck` → `f***`, `fucking` → `f***ing`
+- `shit` → `sh**`, `shitty` → `lousy`
+- `bitch` → `b****`, `dick` → `d***`
+- `asshole` → `a**hole`, `faggot` → `f-slur`, …
+
+`db.vulgar = true` (NSFW mode) — pass-through, no censoring.
+
+**Controls**:
+- `/rt vulgar` — toggle
+- Interface Options → AddOns → RussianTranslator — checkbox
+- Persists in SavedVariables across `/reload` and logout
+- The original Cyrillic in trailing parens is **never** censored,
+  regardless of mode — censor only affects the English translation.
+
+The censor uses Lua frontier patterns (`%f[%w]…%f[%W]`) so words that
+contain a vulgar substring don't get false-positive censored (e.g.,
+`asshole` is replaced as a whole word, but words like `class` aren't).
+Longest-first ordering ensures `fucking` is censored before `fuck` so
+the latter's pattern doesn't re-match the inner `fuck` of the already-
+censored result.
+
+### Dictionary cleanup pre-censor
+
+Stripped 99 `(vulgar)` / `(rude)` annotations from dictionary values
+(they were rendering as parenthetical descriptions instead of
+translations). Re-mapped 11 specific entries:
+
+- `долбоёб`/`долбаёб` → `fucking idiot` (was: `moron`/`idiot (vulgar)`)
+- `хуй` → `dick` (was: `vulgar`)
+- `хуятина` → `fucking shit` (was: `shitstuff (vulgar)`)
+- `пиздаболка` → `bullshitter` (was: `bullshitter (vulgar)`)
+- `пидорас` → `faggot` (was: `(slur)`)
+- `выебу` → `will fuck` (was: `will fuck (vulgar)`)
+- `нагну` → `I'll fuck` (was: `I'll bend (vulgar)`)
+- `ебнутый` → `fucked up` (was: `crazy (vulgar)`)
+- `ёбнули`/`ебнули` → `fucked` (was: `they hit/fucked (vulgar)`)
+
+### Dungeon name fix: Бастионы → Ramparts
+
+`бастион` / `бастионы` and all forms were translating as `Bastion(s)` —
+the literal noun. On Russian TBC servers this is the slang name for
+**Hellfire Ramparts** (full localized name: "Бастионы Адского Огня").
+Result was nonsense like `[Russian] tank Bastions heroic. need …`.
+
+Patched 11 single-word entries across core + Forms_01.lua to map to
+`Ramparts`. Added 6 slang variants (`басты`/`баст`/`басте`/`бастов`/
+`бастами`/`бастам`) and 10 phrases:
+- `бастионы адского огня` → `Hellfire Ramparts`
+- `бастионы адского пламени` → `Hellfire Ramparts` (was `Hellfire Bastions`)
+- `бастионы гер` / `басты гер` → `Ramparts heroic`
+- `в бастионы` → `into Ramparts` (was `into Bastions`)
+- `в басты` → `into Ramparts`
+- `цитадель адского огня` → `Hellfire Citadel`
+- `адского огня` / `адским огнем` / `адском огне` → Hellfire forms
+
+### Dungeon name fix: Вода → Steamvault (context-aware)
+
+`вода` literally means "water" and is a very common word, so we can't
+blindly remap it. But in LFG-context phrases on Russian TBC servers,
+`вода` is the slang name for **The Steamvault** (Парокотельная) — the
+deepest underwater dungeon in Coilfang Reservoir.
+
+Strategy: leave the single-word `вода` as "water" (correct in 99% of
+non-LFG contexts), and add specific phrases that disambiguate to
+Steamvault when paired with WoW-context words:
+
+- `вода гер` / `воду гер` / `воды гер` → `Steamvault heroic`
+- `вода нид` / `нид вода` → `Steamvault need` / `need Steamvault`
+- `танк вода` / `хил вода` / `дд вода` / `дпс вода` → `<role> Steamvault`
+- `в воду гер` / `на воду гер` → `into/to Steamvault heroic`
+- `парокотельная` (+ forms: `парокотельной`/`парокотельную`/`парокотельне`)
+  → `Steamvault`
+
+Phrase matching is longest-first, so `вода гер` (8 chars) wins over the
+single `вода` lookup, giving `[Russian] tank Steamvault heroic +++`
+instead of `tank water heroic +++` on the actual user-reported message.
+
 ## [1.8.5] - 2026-05-03 — phrase-boundary fix, multi-gloss trim, conv batch (504,430 entries)
 
 **Total dictionary: 504,430 entries** (29,213 core + 2,115 core phrases +

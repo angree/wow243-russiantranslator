@@ -1138,10 +1138,38 @@ ns.PHRASES = {
     ["со скипом с девы"]="with skip from Maiden",
     ["с девы"]="from Maiden skip",
 
-    -- Hellfire bastion / citadel
-    ["бастионы адского пламени"]="Hellfire Bastions",
-    ["в бастионы"]="into Bastions",
+    -- Hellfire Ramparts / Citadel (Bastions = Ramparts on Russian TBC servers)
+    ["бастионы адского пламени"]="Hellfire Ramparts",
+    ["бастионы адского огня"]="Hellfire Ramparts",
+    ["в бастионы"]="into Ramparts",
+    ["в басты"]="into Ramparts",
+    ["бастионы гер"]="Ramparts heroic",
+    ["басты гер"]="Ramparts heroic",
     ["цитадель адского пламени"]="Hellfire Citadel",
+    ["цитадель адского огня"]="Hellfire Citadel",
+    ["цитадели адского огня"]="Hellfire Citadel",
+    ["адского огня"]="of Hellfire",
+    ["адским огнем"]="with Hellfire",
+    ["адском огне"]="in Hellfire",
+
+    -- Coilfang Reservoir: вода ("water") = Steamvault slang on ruRU TBC.
+    -- The single token "вода" stays as "water" (literal); WoW-context
+    -- compounds disambiguate to Steamvault.
+    ["вода гер"]="Steamvault heroic",
+    ["воду гер"]="Steamvault heroic",
+    ["воды гер"]="Steamvault heroic",
+    ["вода нид"]="Steamvault need",
+    ["нид вода"]="need Steamvault",
+    ["танк вода"]="tank Steamvault",
+    ["хил вода"]="heal Steamvault",
+    ["дд вода"]="dps Steamvault",
+    ["дпс вода"]="dps Steamvault",
+    ["в воду гер"]="into Steamvault heroic",
+    ["на воду гер"]="to Steamvault heroic",
+    ["парокотельная"]="Steamvault",
+    ["парокотельной"]="Steamvault",
+    ["парокотельную"]="Steamvault",
+    ["парокотельне"]="Steamvault",
 
     -- Gurok / Gruul side bosses
     ["гурок узурпатор"]="Gurok the Usurper",
@@ -2918,7 +2946,7 @@ ns.WORDS = {
     -- Emotional / insult
     -- ================================================================
     ["идиот"]="idiot", ["дурак"]="fool", ["тупица"]="moron", ["козёл"]="jerk",
-    ["урод"]="freak", ["мудак"]="asshole", ["долбоёб"]="moron", ["конченый"]="loser",
+    ["урод"]="freak", ["мудак"]="asshole", ["долбоёб"]="fucking idiot", ["конченый"]="loser",
     ["лох"]="loser", ["лошара"]="loser", ["дебил"]="retard", ["быдло"]="scum",
     ["нуб"]="noob", ["нубас"]="noob", ["нубло"]="noob", ["нубяра"]="scrub",
     ["новичок"]="newbie", ["новенький"]="newbie", ["ракан"]="bad player",
@@ -3175,7 +3203,7 @@ ns.WORDS = {
 
     -- Insults and derogatory terms seen in log (translated for completeness)
     ["хохлушку"]="(slur)", ["хохол"]="(slur)", ["хохлы"]="(slur)",
-    ["пидорасят"]="", ["пидорас"]="(slur)",
+    ["пидорасят"]="", ["пидорас"]="faggot",
     ["телочка"]="(slur for woman)",
 
     -- Extra common verbs and pronouns spotted
@@ -4077,7 +4105,7 @@ ns.WORDS = {
     ["этом"]="this", ["том"]="that",
     ["таким"]="such (ins)", ["такими"]="such (ins pl)",
     ["нахуй"]="fuck", ["нахуй?"]="what the fuck",
-    ["хуя"]="vulgar", ["хуй"]="vulgar",
+    ["хуя"]="vulgar", ["хуй"]="dick",
     ["хуеш"]="bullshit",
     ["чисто"]="cleanly", ["чистый"]="clean", ["чистая"]="clean",
 
@@ -5082,8 +5110,11 @@ ns.WORDS = {
     ["мала"]="mal (Ata'mal)",
     ["атамал"]="Ata'mal",
     ["магистер"]="Magister's",
-    ["бастион"]="Bastion",
-    ["бастионы"]="Bastions",
+    ["бастион"]="Ramparts",
+    ["бастионы"]="Ramparts",
+    -- Slang short forms ("басты" = "Ramparts" — same meaning, common in LFG)
+    ["басты"]="Ramparts", ["баст"]="Ramparts", ["басте"]="Ramparts",
+    ["бастов"]="Ramparts", ["бастами"]="Ramparts", ["бастам"]="Ramparts",
     ["гномреган"]="Gnomeregan",
     ["некроситет"]="Necromancy-city (Necropolis)",
     ["некросит"]="Necropolis",
@@ -6063,7 +6094,7 @@ ns.WORDS = {
     ["ищет"]="searches",
     ["инстов"]="of instances",
     ["сходить"]="to go",
-    ["бастионы"]="bastions",
+    ["бастионы"]="Ramparts",
     ["дароуу"]="heyy",
     ["повысился"]="rose",
     ["епть"]="bruh",
@@ -29818,7 +29849,7 @@ ns.WORDS = {
 
     -- Adjectives (lemmas — pymorphy3 expands to all genders/cases)
     ["непроглядный"]="opaque", ["лютый"]="fierce", ["рукастый"]="handy",
-    ["ебнутый"]="crazy (vulgar)", ["недоразвитый"]="underdeveloped",
+    ["ебнутый"]="fucked up", ["недоразвитый"]="underdeveloped",
     ["наивный"]="naive", ["полезный"]="useful", ["первичный"]="primary",
     ["ебанный"]="fucking", ["солевой"]="salty",
     ["верный"]="faithful", ["исключительный"]="exclusive",
@@ -29837,7 +29868,7 @@ ns.WORDS = {
     ["цап"]="ZA", ["рейс"]="route/flight",
     ["дерьмище"]="shitstuff", ["нагибатор"]="bender (slang)",
     ["ульдаман"]="Uldaman", ["релокант"]="relocant",
-    ["хуятина"]="shitstuff (vulgar)", ["пиздаболка"]="bullshitter (vulgar)",
+    ["хуятина"]="fucking shit", ["пиздаболка"]="bullshitter",
     ["войско"]="troop", ["нефарий"]="Nefarius", ["нефариус"]="Nefarius",
     ["нефариуса"]="Nefarius",
     ["сумон"]="summon", ["сумонк"]="summon",
@@ -29859,13 +29890,13 @@ ns.WORDS = {
     ["грац"]="grats", ["сяп"]="thanks (slang)",
     ["хоспади"]="oh Lord (slang)", ["тя"]="you (slang)",
     ["совух"]="owl-thing (slang)",
-    ["долбоёб"]="idiot (vulgar)", ["долбаёб"]="idiot (vulgar)",
+    ["долбоёб"]="idiot", ["долбаёб"]="fucking idiot",
 
     -- Vulgar verb forms (won't expand cleanly via pymorphy3, add directly)
-    ["выебу"]="will fuck (vulgar)", ["выебать"]="to fuck (vulgar)",
-    ["ёбнули"]="they hit/fucked (vulgar)", ["ебнули"]="they hit/fucked (vulgar)",
-    ["нагну"]="I'll bend (vulgar)",
-    ["нихрена"]="fuck-all (slang)", ["нихуя"]="fuck-all (vulgar)",
+    ["выебу"]="will fuck", ["выебать"]="to fuck",
+    ["ёбнули"]="fucked", ["ебнули"]="fucked",
+    ["нагну"]="I'll fuck",
+    ["нихрена"]="fuck-all (slang)", ["нихуя"]="fuck-all",
 
     -- Common nouns that pymorphy3 missed for some reason
     ["устойчивость"]="stability", ["устойчивости"]="stability",

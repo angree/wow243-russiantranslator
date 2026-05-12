@@ -645,6 +645,60 @@ local function Translate(msg)
 end
 
 -- ---------------------------------------------------------------------------
+-- Vulgar-output censor
+-- ---------------------------------------------------------------------------
+-- Dictionary values for vulgar Russian are stored as their real English
+-- equivalents ("fuck", "bitch", "shit", etc.) -- accurate to the chat
+-- register on Russian PvP servers. To keep public-channel output workplace-
+-- safe by default, we post-process every English translation through this
+-- censor before showing it. db.vulgar = true bypasses the censor entirely.
+--
+-- Longest-first ordering matters: "fucking" must be censored before "fuck"
+-- so the latter's pattern doesn't re-match the inner "fuck" substring of
+-- the censored result. Each entry is gsub'd with a word-boundary check
+-- (frontier pattern %f[%w] / %f[%W]) to avoid mangling words that happen
+-- to contain the bad substring (e.g. "asshole" containing "ass").
+local CENSOR_ORDER = {
+    -- f-bomb family (longest first)
+    { "motherfucker", "m-fer" },
+    { "motherfucking", "m-fing" },
+    { "fucking",  "f***ing"  },
+    { "fucker",   "f***er"   },
+    { "fucked",   "f***ed"   },
+    { "fuck",     "f***"     },
+    -- shit family
+    { "shitstuff", "trash"  },
+    { "shitty",    "lousy"  },
+    { "shitter",   "sh**ter"},
+    { "shitting",  "sh**ing"},
+    { "shitted",   "sh**ted"},
+    { "shit",      "sh**"   },
+    { "bullshitter", "BS-talker" },
+    { "bullshitting","BS-ing" },
+    { "bullshit",  "BS"     },
+    -- other
+    { "asshole",   "a**hole"},
+    { "dickhead",  "d***head"},
+    { "bitches",   "b****es"},
+    { "bitch",     "b****"  },
+    { "cunt",      "c***"   },
+    { "pussy",     "p****"  },
+    { "dick",      "d***"   },
+    { "faggot",    "f-slur" },
+    { "fag",       "f-slur" },
+    { "whore",     "w****"  },
+    { "slut",      "s***"   },
+}
+
+local function CensorOutput(s)
+    if type(s) ~= "string" or s == "" then return s end
+    for _, e in ipairs(CENSOR_ORDER) do
+        s = s:gsub("(%f[%w])" .. e[1] .. "(%f[%W])", "%1" .. e[2] .. "%2")
+    end
+    return s
+end
+
+-- ---------------------------------------------------------------------------
 -- Chat filter
 -- ---------------------------------------------------------------------------
 -- IMPORTANT — filter signature on WoW 2.4.3 is  function(msg, ...)  where
@@ -712,6 +766,13 @@ local function FilterImpl(eventName, msg, ...)
 
     if not translated then
         return false
+    end
+
+    -- Censor vulgar English unless user explicitly opted in. Applied
+    -- only to the English translation -- the Cyrillic (original) in
+    -- the trailing parens stays as-is regardless.
+    if not (db and db.vulgar) then
+        translated = CensorOutput(translated)
     end
 
     local out = PREFIX .. translated
@@ -859,6 +920,7 @@ local function InitDB()
     if db.debug        == nil then db.debug        = false end
     if db.autoChatLog  == nil then db.autoChatLog  = true  end  -- /chatlog on login
     if db.liteMode     == nil then db.liteMode     = false end  -- full vocab by default
+    if db.vulgar       == nil then db.vulgar       = false end  -- censor by default
     if db.maxSessions  == nil then db.maxSessions  = 50    end
     db.sessions = db.sessions or {}
 end
@@ -973,10 +1035,21 @@ local function InitUI()
                 .." — |cffffcc00/reload|r required to apply")
         end)
 
+    local cbVulgar = makeCheckbox("Vulgar",
+        "Uncensored vulgar output (NSFW). When off (default), words like "
+        .. "'fuck' / 'shit' / 'bitch' in translations are softened to "
+        .. "'f***' / 'sh**' / 'b****'. The original Cyrillic in parens is "
+        .. "never censored.",
+        cbLite, -4,
+        function() return db and db.vulgar end,
+        function(v) db.vulgar = v
+            Msg("vulgar output = "..(v and "ON (uncensored)" or "OFF (censored)"))
+        end)
+
     -- Footnote
     local footer = panel:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
-    footer:SetPoint("TOPLEFT", cbLite, "BOTTOMLEFT", 0, -16)
-    footer:SetText("Tip: /rt help in chat lists all commands. /rt lite toggles the lite/full vocabulary.")
+    footer:SetPoint("TOPLEFT", cbVulgar, "BOTTOMLEFT", 0, -16)
+    footer:SetText("Tip: /rt help in chat lists all commands. /rt lite toggles vocabulary; /rt vulgar toggles censorship.")
 
     if type(InterfaceOptions_AddCategory) == "function" then
         InterfaceOptions_AddCategory(panel)
@@ -1093,6 +1166,7 @@ local function CmdHelp()
     Msg("  /rt orig             - toggle showing original next to translation")
     Msg("  /rt debug            - toggle per-message debug prints in chat")
     Msg("  /rt lite             - toggle lite vocab (~75k, faster) vs full (~425k). /reload to apply")
+    Msg("  /rt vulgar           - toggle uncensored vulgar output (default: censored)")
     Msg("  /rt chatlog on|off   - toggle auto /chatlog at login (default on)")
     Msg("  /rt status           - show current settings + counters")
     Msg("  /rt dump             - session stats + top unknowns")
@@ -1125,6 +1199,9 @@ SlashCmdList["RT"] = function(input)
         db.liteMode = not db.liteMode
         Msg("liteMode = " .. tostring(db.liteMode)
             .. " — |cffffcc00/reload|r required to apply")
+    elseif cmd == "vulgar" then
+        db.vulgar = not db.vulgar
+        Msg("vulgar output = " .. (db.vulgar and "ON (uncensored)" or "OFF (censored)"))
     elseif cmd == "chatlog" then
         local arg = (rest or ""):lower()
         if arg == "on" or arg == "" then
@@ -1194,9 +1271,10 @@ SlashCmdList["RT"] = function(input)
         if session and session.knownNames then
             for _ in pairs(session.knownNames) do nameCount = nameCount + 1 end
         end
-        Msg(("enabled=%s  showOrig=%s  debug=%s  autoChatLog=%s  chatlog-now=%s  sessions=%d  nicks=%d"):format(
+        Msg(("enabled=%s  showOrig=%s  debug=%s  autoChatLog=%s  vulgar=%s  chatlog-now=%s  sessions=%d  nicks=%d"):format(
             tostring(db.enabled), tostring(db.showOrig),
             tostring(db.debug), tostring(db.autoChatLog),
+            tostring(db.vulgar),
             chatlog_now, #db.sessions, nameCount))
         if session then
             Msg(("current: seen=%d translated=%d filterCalls=%d"):format(
@@ -1297,7 +1375,7 @@ f:SetScript("OnEvent", function(self, event, arg1)
         end)
         local totalWords = coreWords + fcount + wcount
         local coreOK = ns.WORDS and ns.PHRASES
-        Msg("|cff55ddffRussian Translator v1.8.5|r")
+        Msg("|cff55ddffRussian Translator v1.8.7|r")
         Msg(" core:   " .. (coreOK and "|cff00ff00YES|r" or "|cffff0000NO|r")
             .. " (" .. coreWords .. " words)")
         Msg(" forms:  " .. ((fchunks == 20)
