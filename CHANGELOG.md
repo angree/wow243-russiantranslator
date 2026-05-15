@@ -4,6 +4,79 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.8.8] - 2026-05-15 — TBC dungeon abbreviation matrix overhaul
+
+**Major LFG-context fix.** Deep-dive on Moonwell x5 chat log identified
+mass mistranslations of TBC dungeon abbreviations. ~290 phrase entries
+added covering every 5-man × {heroic, normal, об, нм, нид, в, на}
+combination, plus word-form fixes.
+
+### Mistranslations fixed
+
+- `БМ` ("BM hunter") → context-aware. `бм гер` was `Blood Furnace heroic`
+  → now `Black Morass heroic` (Moonwell convention: BM = Black Morass,
+  the CoT escort dungeon).
+- `Черные топи` ("swamp") → context-aware. `черные топи гер` now
+  `Black Morass heroic` (literally "Black Swamps" = TBM dungeon name).
+- `Кузня крови` → was tokenized as `кузня`="smithing" + `крови`="blood"
+  giving nonsense "smithing blood". Now phrase `кузня крови` →
+  `Blood Furnace`, plus all case forms + diff modifiers.
+- `Разрушенный/Разрушенных/Разрушенную` etc. were marked as `disenchant`
+  in 12 form entries (wrong sense — that's enchanting, not destruction).
+  Fixed to `shattered`. Plus phrases `в разрушенные` / `разрушенные об` /
+  `разрушенные гер` for Shattered Halls disambiguation.
+- `СП` standalone stays `SP (shadow priest)` for class context, but
+  added phrases `сп гер` / `в сп` / `сп нормал` etc. → Slave Pens.
+- `ЛКТ` was unmapped → now `Blackwing Lair` (Логово Крыла Тьмы).
+- `Ариона` (= НЕFАРИОНА with Latin F mid-word splitting on tokenization)
+  → `Nefarian`.
+
+### Comprehensive dungeon × modifier matrix added
+
+For each TBC 5-man, all of {гер, нормал, норма, нм, об, нид, в, на}
+modifiers + English abbrev (BF/SH/SV/UB/SP/SL/HR/BM/MT/MN/AZ/BOT/...)
+× hc/n/hr/нм. ~290 new phrase entries covering:
+
+- **Hellfire Citadel**: Hellfire Ramparts, Blood Furnace, Shattered Halls
+- **Coilfang**: Slave Pens, Underbog, Steamvault
+- **Auchindoun**: Mana-Tombs, Sethekk Halls, Shadow Labyrinth, Auchenai Crypts
+- **CoT**: Old Hillsbrad, Black Morass
+- **Tempest Keep**: Mechanar, Botanica, Arcatraz
+- **Magisters' Terrace**
+- **Raids**: Zul'Aman (з/Зул Аман/зуламан), Blackwing Lair (ЛКТ/БВЛ/BWL),
+  Onyxia's Lair
+
+### Bosses
+
+`Нефарион` / `Нефариона` / `Нефарионом` → Nefarian (BWL endboss).
+`Ариона` (mojibake form) → Nefarian. `Скайрисс` → Skyriss (Arcatraz
+endboss). `Онки` / `Онихция` → Onyxia.
+
+### Quest names
+
+- `охотник на крупную дичь` → Big Game Hunter (Nagrand daily)
+- `лагеря легиона` → Legion Camps (Hellfire daily)
+- `удар исподтишка` → Backstab
+- `терраса ата'мала` → Terrace of Atamal
+- `разыскивается уварус` → Wanted: Uvarus
+- `уварус бич долины призрачной луны` → Uvarus, Scourge of Shadowmoon Valley
+
+### LFG slang single tokens
+
+`похилить`/`похилил`/`похилили`/`похилишь` → heal verb forms.
+`тык`/`тыкнуть`/`тыкни` → poke/click.
+`скипер` → skipper (rogue).
+`скип ран`/`скипран` → skip run (speedrun).
+`сэт`/`сэта`/`сэту`/`сэтом` → set (gear set).
+`такики` → tactics (typo of `тактики`).
+`благославлениий` → Blessings (typo of `благословений`).
+`в крысу`/`крысу` → ninja-style (loot slang).
+
+### Nagrand Arena
+
+`награнд арена` / `арена награнд` / `на награнд арену` → Nagrand Arena
+(PvP arena, daily/weekly objective).
+
 ## [1.8.7] - 2026-05-13 — vulgar toggle + dungeon name fixes (504,430 entries)
 
 **Total dictionary: 504,430 entries** (29,213 core + 2,136 core phrases +
